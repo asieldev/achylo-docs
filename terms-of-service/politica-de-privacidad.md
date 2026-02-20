@@ -1,6 +1,6 @@
 ---
-title: "Política de Privacidad"
-last_updated: "14 de noviembre de 2025"
+"Política de Privacidad"
+Actualizado: "14 de noviembre de 2025"
 ---
 
 # Política de Privacidad — Achylo Protocol

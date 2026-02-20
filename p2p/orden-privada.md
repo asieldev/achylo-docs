@@ -1,4 +1,4 @@
-# 🔒 Orden Privada
+#  Orden Privada
 
 ## Crear una orden privada (Dirigida a una contraparte de confianza)
 
@@ -22,11 +22,11 @@ Las órdenes privadas son la herramienta ideal cuando ya tienes un comprador o v
 
 ---
 
-### 💡 Consideraciones Importantes
+###  Consideraciones Importantes
 * **Privacidad:** Las órdenes privadas **no aparecen en el marketplace público**. Solo la contraparte especificada podrá ver la orden en su tablero.
 * **Notificaciones:** Si la contraparte tiene las notificaciones activadas, recibirá un aviso automático al momento de la creación.
 
-### ✅ Ventajas
+###  Ventajas
 * **Control total:** Tú eliges exactamente con quién operas.
 * **Sin ruido:** Tu oferta se mantiene fuera del radar general del marketplace.
 * **Seguridad:** Disfrutas de la misma protección de un contrato inteligente que en las órdenes públicas.

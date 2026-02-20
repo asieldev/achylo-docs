@@ -1,6 +1,6 @@
 ---
-title: "Términos de uso"
-last_updated: "14 de noviembre de 2025"
+"Términos de uso"
+Actualizado: "14 de noviembre de 2025"
 ---
 
 # Términos de uso de Achylo Protocol
