@@ -9,6 +9,27 @@
   <style>
     :root {
       --achylo-accent: #ff8c00;
+      --achylo-bg: #ffffff;
+      --achylo-surface: #f6f7fb;
+      --achylo-text: #1c1f26;
+      --achylo-muted: #5c6370;
+    }
+
+    body {
+      background-color: var(--achylo-bg);
+      color: var(--achylo-text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .sidebar,
+    .sidebar-toggle {
+      background-color: var(--achylo-surface);
+      color: var(--achylo-text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .sidebar-nav li > a {
+      color: var(--achylo-muted);
     }
 
     .sidebar-nav li.active > a,
@@ -19,9 +40,87 @@
     .sidebar-nav li.active > a::before {
       background-color: var(--achylo-accent);
     }
+
+    body[data-theme='dark'] {
+      --achylo-bg: #050608;
+      --achylo-surface: #0f1117;
+      --achylo-text: #f6f8fa;
+      --achylo-muted: #9da5b4;
+    }
+
+    body[data-theme='dark'] .content {
+      background-color: transparent;
+      color: var(--achylo-text);
+    }
+
+    body[data-theme='dark'] a {
+      color: #ffd8a1;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    body[data-theme='light'] .theme-toggle .icon-moon,
+    body[data-theme='dark'] .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    body[data-theme='dark'] .theme-toggle {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffd8a1;
+    }
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro">
+    <span class="icon-sun" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+    </span>
+    <span class="icon-moon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+      </svg>
+    </span>
+  </button>
   <div id="app"></div>
 
   <script>
@@ -37,5 +136,37 @@
 
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script>
+    (function () {
+      const applyTheme = (theme) => {
+        document.body.dataset.theme = theme;
+        localStorage.setItem('achylo-theme', theme);
+      };
+
+      const resolveInitialTheme = () => {
+        const stored = localStorage.getItem('achylo-theme');
+        if (stored) return stored;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      };
+
+      const init = () => {
+        applyTheme(resolveInitialTheme());
+        const toggle = document.getElementById('themeToggle');
+        if (!toggle) return;
+        toggle.addEventListener('click', () => {
+          const nextTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+          applyTheme(nextTheme);
+        });
+      };
+
+      if (document.readyState !== 'loading') {
+        init();
+      } else {
+        document.addEventListener('DOMContentLoaded', init);
+      }
+    })();
+  </script>
 </body>
 </html>
