@@ -43,4 +43,4 @@ Al abrir tu perfil, verás las siguientes opciones para gestionar tus activos:
   <img src="../assets/images/wallet.png" alt="Vista de la sección 'My Wallet' con el saldo principal" width="75%" />
 </p>
 
-> **Img. No.1 Saldo en Wallet.**
+<p align="center"><strong>📍 Img. No.1 Saldo en Wallet.</strong></p>

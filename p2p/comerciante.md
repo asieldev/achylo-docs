@@ -27,11 +27,15 @@ Es importante entender cómo funciona el bloqueo de tus fondos de garantía:
 
 
 
-![Vista del proceso para convertirse en Merchant](../assets/images/merchant.png)
+<p align="center">
+  <img src="../assets/images/merchant.png" alt="Vista del proceso para convertirse en Merchant" width="75%" />
+</p>
 
-> **Img No.1. Convertirse en un comerciante.**
+<p align="center"><strong>📍 Img. No.1. Convertirse en un comerciante.</strong></p>
 
 
-![Vista del Merchant Dashboard](../assets/images/merchant_dashboard.png)
+<p align="center">
+  <img src="../assets/images/merchant_dashboard.png" alt="Vista del Merchant Dashboard" width="75%" />
+</p>
 
-> **Img No.2. Dashboard del comerciante.**
+<p align="center"><strong>📍 Img. No.2. Dashboard del comerciante.</strong></p>

@@ -16,9 +16,11 @@
 4.  **Iniciar Negociaciones:** * Con la wallet conectada y con fondos, dirígete al menú: `Tools` -> `P2P`.
     * La app mostrará tu dirección y desbloqueará los menús principales.
 
-![Ruta hacia el módulo P2P en el menú principal](../assets/images/p2p_menu.png)
+<p align="center">
+  <img src="../assets/images/p2p_menu.png" alt="Ruta hacia el módulo P2P en el menú principal" width="75%" />
+</p>
 
-> **📍 Img. No.1. Ruta P2P.**
+<p align="center"><strong>📍 Img. No.1. Ruta P2P.</strong></p>
 
 ---
 
