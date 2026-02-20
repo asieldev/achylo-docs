@@ -114,6 +114,6 @@ Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios qu
 ---
 
 <p align="center">
-  <img src="../assets/images/accept_order.png" alt="Vista del card 'Accept Order'" width="75%" />
+  <img src="../assets/images/card_accept.png" alt="Vista del card 'Accept Order'" width="75%" />
 </p>
 <p align="center"><strong>📍 Img. No.2. Aceptar una orden pública</strong></p>
