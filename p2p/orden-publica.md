@@ -83,4 +83,37 @@ Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios qu
 <p align="center">
   <img src="../assets/images/order.png" alt="Vista del modal 'Create Public Order'" width="75%" />
 </p>
-<p align="center"><strong>📍 Img. No.2. Aceptar una orden pública.</strong></p>
+<p align="center"><strong>📍 Img. No.1. Vista del modal 'Create Public Order.</strong></p>
+
+
+##  Aceptar una Orden Pública
+
+Si has encontrado una oferta que se ajusta a tus necesidades, sigue estos pasos para realizar el intercambio de forma segura:
+
+### Pasos para realizar la operación:
+
+1.  **Búsqueda:** Localiza la orden de tu interés en el marketplace. Puedes utilizar los **filtros** para segmentar por moneda fiat o tipo de operación.
+2.  **Selección:** Asegúrate de estar en la pestaña **“Marketplace”** y haz clic en el botón **“Accept Order”** de la publicación elegida.
+3.  **Configuración del monto:**
+    * Introduce la cantidad que deseas transaccionar. 
+    * El monto debe estar dentro del rango **mínimo y máximo** definido por el Merchant.
+    * Puedes usar el botón **MAX** para tomar todo el cupo disponible de la orden.
+4.  **Datos de cobro:** * Si estás aceptando una orden de tipo **Buy** (donde tú vendes USDC), deberás ingresar los datos de tu cuenta o tarjeta donde el Merchant debe enviarte el dinero fiat.
+5.  **Revisión y Tarifas:** * Verifica el resumen detallado de la transacción. 
+    * La aplicación te mostrará automáticamente los **descuentos en comisiones** si estás operando con **CUBT**.
+6.  **Confirmación:** Pulsa **“Accept Order”**. 
+    * Una vez procesado, la dApp te enviará una notificación confirmando que el **escrow** (contrato inteligente de garantía) se ha creado con éxito.
+
+---
+
+###  Órdenes “Merchant Only”
+Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios que ya tienen el estatus de **Merchant**. 
+* Si ves una **advertencia roja** en una orden, significa que es exclusiva para comerciantes. 
+* Si deseas acceder a ellas, debes registrarte previamente en el menú *Become a Merchant*.
+
+---
+
+<p align="center">
+  <img src="../assets/images/accept_order.png" alt="Vista del card 'Accept Order'" width="75%" />
+</p>
+<p align="center"><strong>📍 Img. No.2. Aceptar una orden pública</strong></p>
