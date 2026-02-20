@@ -1,12 +1,12 @@
-# 🔐 Acceso y Configuración Inicial
+# Acceso y Configuración Inicial
 
-### 🌐 Red Disponible
+### Red Disponible
 * **Base Sepolia** (Hasta nuevo comunicado).
-* ⚠️ **Aviso:** Antes de enviar USDC a tu cartera, verifica siempre la red disponible.
+* **Aviso:** Antes de enviar USDC a tu cartera, verifica siempre la red disponible.
 
 ---
 
-## 🚀 Cómo entrar a la aplicación Achylo
+## Cómo entrar a la aplicación Achylo
 
 1.  **Accede al sitio oficial:** Abre [www.achylo.com](http://www.achylo.com) en tu navegador.
 2.  **Conecta tu Wallet:** * Haz clic en el botón **“Connect”**. 
@@ -22,7 +22,7 @@
 
 ---
 
-## 💱 Monedas Fiat Soportadas
+## Monedas Fiat Soportadas
 El Marketplace P2P acepta múltiples divisas para operar en distintos países:
 
 | Moneda | Descripción |
