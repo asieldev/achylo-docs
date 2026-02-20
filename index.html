@@ -13,6 +13,8 @@
       --achylo-surface: #f6f7fb;
       --achylo-text: #1c1f26;
       --achylo-muted: #5c6370;
+      --achylo-search-bg: #ffffff;
+      --achylo-search-border: rgba(28, 31, 38, 0.12);
     }
 
     body {
@@ -46,6 +48,8 @@
       --achylo-surface: #0f1117;
       --achylo-text: #f6f8fa;
       --achylo-muted: #9da5b4;
+      --achylo-search-bg: rgba(255, 255, 255, 0.04);
+      --achylo-search-border: rgba(255, 255, 255, 0.15);
     }
 
     body[data-theme='dark'] .content {
@@ -55,6 +59,25 @@
 
     body[data-theme='dark'] a {
       color: #ffd8a1;
+    }
+
+    .search .input-wrap input {
+      background-color: var(--achylo-search-bg) !important;
+      border: 1px solid var(--achylo-search-border) !important;
+      color: var(--achylo-text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: border-color 0.2s ease, background-color 0.3s ease;
+    }
+
+    .search .input-wrap input:focus {
+      border-color: var(--achylo-accent) !important;
+      box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.15);
+    }
+
+    .search .input-wrap input::placeholder {
+      color: var(--achylo-muted);
+      opacity: 0.8;
     }
 
     .theme-toggle {
