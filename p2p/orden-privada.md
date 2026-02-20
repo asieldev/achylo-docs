@@ -34,6 +34,6 @@ Las órdenes privadas son la herramienta ideal cuando ya tienes un comprador o v
 ---
 
 <p align="center">
-  <img src="../assets/images/active_orders.png" alt="Vista del modal 'Create New Escrow'" width="75%" />
+  <img src="../assets/images/active-orders.png" alt="Vista del modal 'Create New Escrow'" width="75%" />
 </p>
 <p align="center"><strong>📍 Img. No.1. Vista del modal 'Create New Escrow'.</strong></p>
