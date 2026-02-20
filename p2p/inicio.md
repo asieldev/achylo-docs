@@ -39,6 +39,8 @@ Al abrir tu perfil, verás las siguientes opciones para gestionar tus activos:
 > **Nota:** La seguridad de tus activos depende de tu gestión responsable como propietario único.
 
 
-<img src="../assets/images/wallet.png" alt="Vista de la sección 'My Wallet' con el saldo principal" width="25%" />
+<p align="center">
+  <img src="../assets/images/wallet.png" alt="Vista de la sección 'My Wallet' con el saldo principal" width="75%" />
+</p>
 
 > **Img. No.1 Saldo en Wallet.**
