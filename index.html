@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Achylo Protocol Docs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
+  <style>
+    :root {
+      --achylo-accent: #ff8c00;
+    }
+
+    .sidebar-nav li.active > a,
+    .sidebar-nav li > a:hover {
+      color: var(--achylo-accent);
+    }
+
+    .sidebar-nav li.active > a::before {
+      background-color: var(--achylo-accent);
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    window.$docsify = {
+      name: 'Achylo Protocol',
+      repo: '',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      search: 'auto'
+    }
+  </script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+</body>
+</html>
