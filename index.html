@@ -121,9 +121,95 @@
       border-color: rgba(255, 255, 255, 0.2);
       color: #ffd8a1;
     }
+
+    .language-switcher {
+      position: fixed;
+      top: 16px;
+      right: 80px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .language-switcher:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .language-switcher span {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    .language-options {
+      position: fixed;
+      top: 62px;
+      right: 80px;
+      background: rgba(5, 6, 8, 0.95);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 1000;
+      min-width: 150px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .language-options button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .language-options button.active,
+    .language-options button:hover {
+      background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+      box-shadow: 0 8px 18px rgba(255, 107, 53, 0.3);
+    }
+
+    .goog-te-banner-frame.skiptranslate,
+    .goog-logo-link,
+    .goog-te-gadget-icon {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+    }
   </style>
 </head>
 <body>
+  <div class="language-switcher" id="languageSwitcher" aria-expanded="false">
+    <span id="languageLabel">Español</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  </div>
+  <div class="language-options" id="languageOptions" role="menu">
+    <button data-lang="es" role="menuitem">🇪🇸 Español</button>
+    <button data-lang="en" role="menuitem">🇺🇸 English</button>
+    <button data-lang="pt" role="menuitem">🇧🇷 Português</button>
+  </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro">
     <span class="icon-sun" aria-hidden="true">
       <svg viewBox="0 0 24 24">
@@ -145,6 +231,7 @@
     </span>
   </button>
   <div id="app"></div>
+  <div id="google_translate_container" style="display:none"></div>
 
   <script>
     window.$docsify = {
@@ -187,6 +274,66 @@
       } else {
         document.addEventListener('DOMContentLoaded', init);
       }
+    })();
+  </script>
+  <script>
+    (function () {
+      const LANG_KEY = 'achylo-docs-lang';
+      const languageSwitcher = document.getElementById('languageSwitcher');
+      const languageOptions = document.getElementById('languageOptions');
+      const languageLabel = document.getElementById('languageLabel');
+      const langMap = { es: 'Español', en: 'English', pt: 'Português' };
+
+      const applyLang = (lang) => {
+        const combo = document.querySelector('#google_translate_container select.goog-te-combo');
+        if (combo) {
+          combo.value = lang;
+          combo.dispatchEvent(new Event('change'));
+        }
+        languageLabel.textContent = langMap[lang] || 'Español';
+        [...languageOptions.querySelectorAll('button')].forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        localStorage.setItem(LANG_KEY, lang);
+        languageOptions.style.display = 'none';
+        languageSwitcher.setAttribute('aria-expanded', 'false');
+      };
+
+      const toggleOptions = () => {
+        const isOpen = languageOptions.style.display === 'flex';
+        languageOptions.style.display = isOpen ? 'none' : 'flex';
+        languageSwitcher.setAttribute('aria-expanded', String(!isOpen));
+      };
+
+      languageSwitcher.addEventListener('click', toggleOptions);
+
+      languageOptions.addEventListener('click', (event) => {
+        const target = event.target.closest('button');
+        if (!target) return;
+        applyLang(target.dataset.lang);
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!languageSwitcher.contains(event.target) && !languageOptions.contains(event.target)) {
+          languageOptions.style.display = 'none';
+          languageSwitcher.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      window.googleTranslateElementInit = function () {
+        new google.translate.TranslateElement({
+          pageLanguage: 'es',
+          includedLanguages: 'es,en,pt',
+          autoDisplay: false
+        }, 'google_translate_container');
+
+        const storedLang = localStorage.getItem(LANG_KEY) || 'es';
+        setTimeout(() => applyLang(storedLang), 50);
+      };
+
+      const script = document.createElement('script');
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.body.appendChild(script);
     })();
   </script>
 </body>
