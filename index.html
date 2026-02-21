@@ -169,9 +169,7 @@
       const resolveInitialTheme = () => {
         const stored = localStorage.getItem('achylo-theme');
         if (stored) return stored;
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light';
+        return 'light';
       };
 
       const init = () => {
