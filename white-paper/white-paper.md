@@ -1,7 +1,8 @@
 ---
-title: "Achylo Protocol White Paper"
-version: "1.0"
-last_updated: "February 2026"
+"Achylo Protocol White Paper"
+version: "v1.0.0"
+Actualizado: "14 de noviembre de 2025"
+---
 ---
 
 # Achylo Protocol — Peer-to-Peer Escrow and Stablecoin Infrastructure
