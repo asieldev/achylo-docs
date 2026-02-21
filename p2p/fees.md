@@ -38,9 +38,8 @@ Si la comisión cambia, el backend actualiza la página de Stats para que lo vea
 ---
 
 ## 📏 Estructura de la tarifa
-- **Tarifa plana en USDC:** mismo monto para todas las acciones patrocinadas.
-- **Sin porcentajes variables:** no depende de la moneda fiat ni del tamaño de la operación.
-- **Requisito básico:** tener saldo USDC suficiente en tu Smart Account para cubrir la tarifa cuando corresponda.
+- **Tarifa definida por contrato:** mismo monto para todas las operaciones finalizadas, pueden ser consultados desde Stats > Protocol > P2P Escrow Protocol > Fixed Fee y Percentage Fee. El valor es definido por el protocolo y varia de acuerdo al valor de order(Ex: 0.1 USDC para ordenes < 100 USDC y 0.1% para ordenes > 100 USDC).
+- **Requisito básico:** estas se descuentan automáticamente desde el contrato cuando se ejecuta alguna acción de compra/venta.
 
 > **Tip:** Antes de liberar fondos o aceptar una orden grande, revisa el panel de Stats para confirmar que el valor "Fee por escrow" no ha cambiado.
 
