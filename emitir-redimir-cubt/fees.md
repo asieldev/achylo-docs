@@ -26,12 +26,12 @@ La tarjeta de simulación indica claramente ambos conceptos (`Protocol Fee` y `O
 
 ---
 
-##  Descuentos automáticos
-- **Cuentas feeExempt:** no pagan comisiones.
-- **Staking activo:** reduce la tarifa al 50% (Mint ≈ 0.25%, Redeem ≈ 0.5%).
-- **Holder ≥ 1 CUBT:** reduce la tarifa al 75% (Mint ≈ 0.375%, Redeem ≈ 0.75%).
+##  Descuentos y Exenciones
+- **Cuentas feeExempt:** no pagan comisiones (0% fee). Son configuradas por los administradores.
+- **Staking Activo:** Los usuarios que tienen un stake activo en el contrato reciben automáticamente un 50% de descuento en las comisiones de Mint y Redeem.
+- **Holder CUBT:** Los usuarios que poseen al menos 1 CUBT en su wallet reciben un descuento en las comisiones de Mint y Redeem (la configuración actual del contrato otorga un 25% de descuento).
 
-El backend verifica estas condiciones en cada llamada y la dApp refleja el resultado en tiempo real.
+El backend verifica estas condiciones en cada llamada y la dApp refleja el resultado en tiempo real indicándolo en el simulador.
 
 ---
 

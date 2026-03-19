@@ -11,22 +11,19 @@ Las comisiones del módulo P2P financian el sistema de **patrocinio de gas** de 
 
 > **Importante:** No debes preocuparte por variaciones de gas de la red; Achylo se encarga de cubrirlas mientras mantenga saldo en el pool.
 
----
-
 ## ⏱️ ¿Cuándo se descuentan los fees?
-El contrato de escrow cobra internamente la tarifa cada vez que la acción patrocinada llega a su punto de cobro. Ejemplos típicos:
+El contrato de escrow cobra la tarifa **una única vez** al finalizar exitosamente la transacción o al resolverse una disputa. Específicamente, el descuento del monto ocurre en los siguientes casos:
 
-1. **Al completar una compra/venta:** cuando el vendedor libera los fondos al comprador.
-2. **Al cerrar una orden pública con éxito:** el fee se descuenta en la confirmación final.
-3. **Otras acciones patrocinadas:** si la lógica requiere gas cubierto por el protocolo, el contrato añade automáticamente la tarifa.
+1. **Al completar una compra/venta:** Se descuenta (del monto total en custodia) en el momento exacto en que el vendedor **libera los fondos** al comprador (`releaseFunds`).
+2. **Despúes de una disputa:** Si una orden entra en disputa, la comisión se descuenta del monto final antes de ser enviado al ganador (`_resolveDispute`).
 
-Si la comisión cambia, el backend actualiza la página de Stats para que lo veas antes de interactuar.
+*Otras acciones en la plataforma (como crear una orden, solicitar cancelar o registrarse como merchant) **no** tienen cobro de comisión por parte del Escrow.*
 
 ---
 
 ## 👥 ¿Quién paga y quién está exento?
-- El **usuario que ejecuta la acción** paga el fee (por ejemplo, el vendedor cuando libera fondos, el merchant al registrar su colateral, etc.).
-- **Usuarios Gold:** definidos por el equipo, están exentos del cobro. Si alguno de los participantes es Gold, el contrato omite la tarifa para esa operación.
+- El **usuario que ejecuta la acción** paga el fee (por ejemplo, el vendedor cuando libera los fondos al comprador o al aceptar una orden).
+- **Usuarios Gold:** están exentos del cobro y disfrutan de 0% en comisiones del protocolo. Puedes obtener el estatus Gold comprando la membresía o a través del sistema de referidos mensualmente. Si eres Gold, el contrato omite la tarifa para tus operaciones.
 
 ---
 
