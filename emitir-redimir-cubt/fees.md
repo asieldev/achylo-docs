@@ -28,7 +28,7 @@ La tarjeta de simulación indica claramente ambos conceptos (`Protocol Fee` y `O
 
 ##  Descuentos y Exenciones
 - **Usuarios Gold:** los usuarios con estatus Gold activo en el P2P son exentos automáticamente de todas las comisiones (0% fee). Esta verificación se realiza en tiempo real mediante la consulta al contrato P2PEscrow.
-- **Cuentas feeExempt:** exención manual de comisiones (0% fee) configurada por los administradores, independiente del estatus Gold.
+- **Cuentas feeExempt:** exención manual de comisiones (0% fee) configurada por la Gobernanza (compuesta por usuarios Gold, usuarios con stake y holders), independiente del estatus Gold.
 - **Staking Activo:** Los usuarios que tienen un stake activo en el contrato reciben automáticamente un 50% de descuento en las comisiones de Mint y Redeem.
 - **Holder CUBT:** Los usuarios que poseen al menos 1 CUBT en su wallet reciben un descuento en las comisiones de Mint y Redeem (la configuración actual del contrato otorga un 25% de descuento).
 

@@ -45,7 +45,7 @@ El contrato de escrow cobra la tarifa **una única vez** al finalizar exitosamen
 ## 🧾 Resumen rápido
 | Pregunta | Respuesta |
 | :--- | :--- |
-| ¿Quién define el monto? | El equipo de protocolo; se publica en la página de Stats. |
+| ¿Quién define el monto? | La Gobernanza (compuesta por usuarios Gold, usuarios con stake y holders); se publica en la página de Stats. |
 | ¿Quién lo paga? | El usuario que ejecuta la acción patrocinada, salvo que sea Gold. |
 | ¿Para qué sirve? | Cubrir gas on-chain y mantener el servicio de patrocinio. |
 | ¿Cuándo se cobra? | En el momento clave de cada flujo (ej. liberar fondos). |
