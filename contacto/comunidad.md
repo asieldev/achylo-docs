@@ -10,7 +10,7 @@ La comunidad de Achylo reúne a usuarios, comerciantes y desarrolladores que col
 | E-mail de contacto | Consultas generales y soporte de producto | contact@achylo.com |
 | Comunidad Telegram | Noticias, anuncios y soporte de la comunidad | https://t.me/achyloprotocol |
 | Soporte Telegram | Atención directa del equipo de Achylo Labs | https://t.me/achylolabs |
-| X (Twitter) | Actualizaciones oficiales y cobertura en tiempo real | https://x.com/achylolabs |
+| X (Twitter) | Actualizaciones oficiales y cobertura en tiempo real | https://x.com/0xachylo |
 
 > **Recomendación:** guarda estos enlaces en tus marcadores para acceder rápidamente a los canales oficiales y evitar suplantaciones.
 
