@@ -4,11 +4,9 @@ API Keys allow your servers to interact with the Achylo API without requiring a 
 
 ---
 
-<p align="center">
-  <img src="../assets/images/ui-api-key.png" alt="API Key" width="75%" />
-</p>
+![API Key](../assets/images/ui-api-key.png ':size=75% :class=img-center')
 
-<p align="center"><strong> Img. No.1. API Key.</strong></p>
+*Img. No.1. API Key.*
 
 ## Key format
 
