@@ -2,6 +2,8 @@
   "name": "achylo-docs",
   "compatibility_date": "2026-02-20",
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
   }
 }
