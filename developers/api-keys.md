@@ -32,11 +32,14 @@ achylo_a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2
 4. Enter an optional label (e.g. `"Production"`, `"Staging"`)
 5. Click **New Key** — the key is displayed **once only**
 
+---
+
 <p align="center">
   <img src="/assets/images/ui-api-key.png" alt="API Key" width="75%" />
 </p>
 
 <p align="center"><strong>Img. No.1. API Key.</strong></p>
+
 ---
 
 ## Using the API Key
