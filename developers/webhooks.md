@@ -1,0 +1,460 @@
+# Webhooks
+
+Webhooks let Achylo notify your server in real time when a payment is confirmed on-chain. Instead of polling the API, your endpoint receives a `POST` request the moment the transaction is verified.
+
+---
+
+## Setup
+
+When creating a payment link, provide two fields:
+
+```json
+{
+  "webhookUrl": "https://yoursite.com/webhooks/achylo",
+  "webhookSecret": "your32to64hexcharsecret"
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `webhookUrl` | Your public HTTPS endpoint. Must be reachable from the internet |
+| `webhookSecret` | Shared secret used to sign and verify payloads (32–64 hex chars). You can reuse the same secret across all your payment links |
+
+> If you omit `webhookSecret`, one is auto-generated and returned **once** in the create response. Store it securely.
+
+---
+
+## Webhook secret strategy
+
+You have two options:
+
+**Option A — One secret for all links (recommended)**
+Generate one secret and reuse it for every payment link. Your webhook handler verifies with the same key always.
+
+```bash
+# Generate a secure secret (32 bytes = 64 hex chars)
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# → a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2
+```
+
+```python
+import secrets
+print(secrets.token_hex(32))
+```
+
+**Option B — Unique secret per link**
+Omit `webhookSecret` in the request. Achylo generates one and returns it once. You must store the mapping `paymentId → secret`.
+
+---
+
+## Delivery
+
+- Achylo sends a `POST` request with `Content-Type: application/json`
+- If your endpoint returns a non-`2xx` status, delivery is retried with exponential backoff
+- Retry schedule: `30s → 5min → 30min → 2h → 6h` (5 attempts total)
+- Delivery is considered successful on the first `2xx` response
+
+**Your endpoint must respond within 10 seconds.** For long-running operations, respond immediately with `200` and process asynchronously.
+
+---
+
+## Request headers
+
+| Header | Example | Description |
+|--------|---------|-------------|
+| `x-achylo-signature` | `sha256=a3f2c8...` | HMAC-SHA256 signature of the raw body |
+| `x-achylo-timestamp` | `1777935861` | Unix timestamp of the delivery |
+| `x-achylo-event` | `payment.completed` | Event type |
+| `content-type` | `application/json` | Always JSON |
+| `user-agent` | `Achylo-Webhooks/1.0` | Identifies Achylo |
+
+---
+
+## Event payload
+
+### `payment.completed`
+
+```json
+{
+  "id": "a541ad6d-b079-431c-9e40-baafb307e5ba",
+  "event": "payment.completed",
+  "created_at": "2026-05-06T23:04:21.855Z",
+  "data": {
+    "payment_link_id": "be66da05-9590-437a-a557-f83c34de45d7",
+    "amount": "10000000",
+    "amount_usdc": "10.000000",
+    "payer_address": "0xdbe692a992c70b952a2af7f470d9caf177f38b58",
+    "receiver": "0x992b874a816e6a6d4ebcb1eb6977962f061df51f",
+    "tx_hash": "0x75a8696162fa7920d0a587665c9c560a0ae571e47e6262611e9b50b2ed28464d",
+    "chain_id": 8453,
+    "block_number": 45573241,
+    "paid_at": "2026-05-06T23:04:21.855Z",
+    "description": "Order #1234"
+  }
+}
+```
+
+---
+
+## Signature verification
+
+**Always verify the signature before processing the event.** This ensures the request comes from Achylo and the payload has not been tampered with.
+
+The signature is computed as:
+```
+HMAC-SHA256(key = webhookSecret, message = rawRequestBody)
+```
+
+The `x-achylo-signature` header contains `sha256=<hex_digest>`.
+
+---
+
+### TypeScript / Node.js (Express)
+
+```typescript
+import express, { Request, Response } from 'express';
+import crypto from 'crypto';
+
+const app = express();
+
+// IMPORTANT: use express.raw() to get the unmodified body for signature verification
+app.post('/webhooks/achylo', express.raw({ type: 'application/json' }), (req: Request, res: Response) => {
+  const signature = req.headers['x-achylo-signature'] as string;
+  const timestamp  = req.headers['x-achylo-timestamp'] as string;
+
+  if (!verifyAchyloSignature(req.body, process.env.ACHYLO_WEBHOOK_SECRET!, signature)) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // Optional: reject requests older than 5 minutes
+  const age = Math.abs(Date.now() / 1000 - parseInt(timestamp));
+  if (age > 300) {
+    return res.status(400).json({ error: 'Timestamp too old' });
+  }
+
+  const event = JSON.parse(req.body.toString());
+
+  switch (event.event) {
+    case 'payment.completed': {
+      const { payment_link_id, amount_usdc, payer_address, tx_hash } = event.data;
+      console.log(`✅ Payment received: ${amount_usdc} USDC from ${payer_address}`);
+      console.log(`   Payment Link: ${payment_link_id}`);
+      console.log(`   TX: ${tx_hash}`);
+      // → fulfill order, update DB, send confirmation email, etc.
+      break;
+    }
+    default:
+      console.log(`Unknown event type: ${event.event}`);
+  }
+
+  res.status(200).json({ received: true });
+});
+
+function verifyAchyloSignature(
+  rawBody: Buffer,
+  secret: string,
+  signature: string
+): boolean {
+  if (!signature || !signature.startsWith('sha256=')) return false;
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(expected, 'utf8'),
+      Buffer.from(signature, 'utf8')
+    );
+  } catch {
+    return false;
+  }
+}
+
+app.listen(3000);
+```
+
+> ⚠️ Do **not** use `express.json()` before the webhook route — it parses the body and you lose the raw bytes needed for verification.
+
+---
+
+### Python (Flask)
+
+```python
+import os
+import hmac
+import hashlib
+import time
+from flask import Flask, request, jsonify, abort
+
+app = Flask(__name__)
+
+ACHYLO_WEBHOOK_SECRET = os.environ['ACHYLO_WEBHOOK_SECRET']
+
+
+def verify_achylo_signature(raw_body: bytes, secret: str, signature: str) -> bool:
+    if not signature or not signature.startswith('sha256='):
+        return False
+    expected = 'sha256=' + hmac.new(
+        secret.encode('utf-8'),
+        raw_body,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)
+
+
+@app.route('/webhooks/achylo', methods=['POST'])
+def achylo_webhook():
+    raw_body  = request.get_data()  # raw bytes, before any parsing
+    signature = request.headers.get('X-Achylo-Signature', '')
+    timestamp = request.headers.get('X-Achylo-Timestamp', '0')
+
+    if not verify_achylo_signature(raw_body, ACHYLO_WEBHOOK_SECRET, signature):
+        abort(401)
+
+    # Optional: reject stale events (>5 minutes)
+    age = abs(time.time() - int(timestamp))
+    if age > 300:
+        abort(400)
+
+    event = request.get_json()
+
+    if event['event'] == 'payment.completed':
+        data = event['data']
+        print(f"✅ Payment received: {data['amount_usdc']} USDC")
+        print(f"   From:    {data['payer_address']}")
+        print(f"   Link ID: {data['payment_link_id']}")
+        print(f"   TX:      {data['tx_hash']}")
+        # → fulfill order, update database, send email, etc.
+
+    return jsonify({'received': True}), 200
+
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+---
+
+### Python (FastAPI)
+
+```python
+import os
+import hmac
+import hashlib
+import time
+from fastapi import FastAPI, Request, HTTPException, Header
+from typing import Optional
+
+app = FastAPI()
+
+ACHYLO_WEBHOOK_SECRET = os.environ['ACHYLO_WEBHOOK_SECRET']
+
+
+def verify_signature(raw_body: bytes, secret: str, signature: str) -> bool:
+    if not signature.startswith('sha256='):
+        return False
+    expected = 'sha256=' + hmac.new(
+        secret.encode(), raw_body, hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)
+
+
+@app.post('/webhooks/achylo')
+async def achylo_webhook(
+    request: Request,
+    x_achylo_signature: Optional[str] = Header(None),
+    x_achylo_timestamp: Optional[str] = Header(None),
+):
+    raw_body = await request.body()
+
+    if not verify_signature(raw_body, ACHYLO_WEBHOOK_SECRET, x_achylo_signature or ''):
+        raise HTTPException(status_code=401, detail='Invalid signature')
+
+    age = abs(time.time() - int(x_achylo_timestamp or 0))
+    if age > 300:
+        raise HTTPException(status_code=400, detail='Timestamp too old')
+
+    event = await request.json()
+
+    if event['event'] == 'payment.completed':
+        data = event['data']
+        # Process payment...
+        print(f"✅ {data['amount_usdc']} USDC — TX: {data['tx_hash']}")
+
+    return {'received': True}
+```
+
+---
+
+### PHP (raw)
+
+```php
+<?php
+
+define('ACHYLO_WEBHOOK_SECRET', getenv('ACHYLO_WEBHOOK_SECRET'));
+
+function verifyAchyloSignature(string $rawBody, string $secret, string $signature): bool
+{
+    if (empty($signature) || strpos($signature, 'sha256=') !== 0) {
+        return false;
+    }
+    $expected = 'sha256=' . hash_hmac('sha256', $rawBody, $secret);
+    return hash_equals($expected, $signature);
+}
+
+// Read raw body BEFORE any parsing
+$rawBody  = file_get_contents('php://input');
+$signature = $_SERVER['HTTP_X_ACHYLO_SIGNATURE'] ?? '';
+$timestamp = (int) ($_SERVER['HTTP_X_ACHYLO_TIMESTAMP'] ?? 0);
+
+if (!verifyAchyloSignature($rawBody, ACHYLO_WEBHOOK_SECRET, $signature)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
+    exit;
+}
+
+// Reject stale events (>5 minutes)
+if (abs(time() - $timestamp) > 300) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Timestamp too old']);
+    exit;
+}
+
+$event = json_decode($rawBody, true);
+
+if ($event['event'] === 'payment.completed') {
+    $data = $event['data'];
+    error_log("✅ Payment received: {$data['amount_usdc']} USDC");
+    error_log("   From: {$data['payer_address']}");
+    error_log("   TX:   {$data['tx_hash']}");
+
+    // → Update order in DB, send confirmation email, etc.
+    // $order = Order::find($data['payment_link_id']);
+    // $order->markAsPaid($data['tx_hash']);
+}
+
+http_response_code(200);
+echo json_encode(['received' => true]);
+```
+
+### PHP (Laravel)
+
+```php
+<?php
+// routes/api.php
+Route::post('/webhooks/achylo', [AchyloWebhookController::class, 'handle']);
+
+// Add to VerifyCsrfToken $except (or use withoutMiddleware in the route)
+```
+
+```php
+<?php
+// app/Http/Controllers/AchyloWebhookController.php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
+class AchyloWebhookController extends Controller
+{
+    public function handle(Request $request): JsonResponse
+    {
+        $rawBody  = $request->getContent();
+        $signature = $request->header('X-Achylo-Signature', '');
+        $timestamp = (int) $request->header('X-Achylo-Timestamp', 0);
+        $secret   = config('services.achylo.webhook_secret');
+
+        if (!$this->verifySignature($rawBody, $secret, $signature)) {
+            return response()->json(['error' => 'Invalid signature'], 401);
+        }
+
+        if (abs(now()->timestamp - $timestamp) > 300) {
+            return response()->json(['error' => 'Timestamp too old'], 400);
+        }
+
+        $event = json_decode($rawBody, true);
+
+        match ($event['event']) {
+            'payment.completed' => $this->handlePaymentCompleted($event['data']),
+            default             => Log::info('Unknown Achylo event', ['event' => $event['event']]),
+        };
+
+        return response()->json(['received' => true]);
+    }
+
+    private function handlePaymentCompleted(array $data): void
+    {
+        Log::info('✅ Achylo payment completed', $data);
+        // Order::where('achylo_link_id', $data['payment_link_id'])->update([
+        //     'status' => 'paid',
+        //     'tx_hash' => $data['tx_hash'],
+        //     'paid_at' => $data['paid_at'],
+        // ]);
+    }
+
+    private function verifySignature(string $rawBody, string $secret, string $signature): bool
+    {
+        if (!str_starts_with($signature, 'sha256=')) {
+            return false;
+        }
+        $expected = 'sha256=' . hash_hmac('sha256', $rawBody, $secret);
+        return hash_equals($expected, $signature);
+    }
+}
+```
+
+---
+
+## Testing webhooks locally
+
+Use [ngrok](https://ngrok.com) or [localtunnel](https://theboroer.github.io/localtunnel-www/) to expose your local server:
+
+```bash
+ngrok http 3000
+# → https://abc123.ngrok.io
+```
+
+Then create a payment link with `webhookUrl: "https://abc123.ngrok.io/webhooks/achylo"`.
+
+---
+
+## Idempotency
+
+Achylo may deliver the same event more than once (e.g. during retries). Always check that you haven't already processed an event:
+
+```typescript
+// TypeScript example
+const eventId = event.id; // unique per delivery attempt
+
+if (await redis.get(`processed:${eventId}`)) {
+  return res.status(200).json({ received: true }); // already processed
+}
+
+await processPayment(event.data);
+await redis.setex(`processed:${eventId}`, 86400, '1'); // 24h TTL
+```
+
+```python
+# Python example
+event_id = event['id']
+
+if redis_client.get(f'processed:{event_id}'):
+    return jsonify({'received': True}), 200
+
+process_payment(event['data'])
+redis_client.setex(f'processed:{event_id}', 86400, '1')
+```
+
+---
+
+## Security checklist
+
+- [x] Verify `x-achylo-signature` on every request
+- [x] Use `timingSafeEqual` / `hash_equals` / `hmac.compare_digest` to prevent timing attacks
+- [x] Check that the timestamp is not older than 5 minutes (prevents replay attacks)
+- [x] Read the **raw body** before any JSON parsing
+- [x] Implement idempotency using `event.id`
+- [x] Respond with `200` before processing long operations
+- [x] Store webhook secret in environment variables, never in code

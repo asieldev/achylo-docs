@@ -13,6 +13,11 @@
   * [Mint](emitir-redimir-cubt/mint.md)
   * [Redeem](emitir-redimir-cubt/redeem.md)
   * [Fees](emitir-redimir-cubt/fees.md)
+* DEVELOPERS
+  * [Quickstart](developers/quickstart.md)
+  * [API Keys](developers/api-keys.md)
+  * [Payment Links](developers/payment-links.md)
+  * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)
 * CONTACTO
