@@ -40,7 +40,7 @@ Al abrir el modal, verás un resumen de tu capacidad operativa basada en tu gara
 ---
 
 <p align="center">
-  <img src="../assets/images/order.png" alt="Vista del modal 'Create Public Order'" width="75%" />
+  <img src="/assets/images/order.png" alt="Vista del modal 'Create Public Order'" width="75%" />
 </p>
 
 <p align="center"><strong>📍 Img. No.1. Vista de Create Public Order.</strong></p>
@@ -82,6 +82,6 @@ Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios qu
 ---
 
 <p align="center">
-  <img src="../assets/images/card_accept.png" alt="Vista del card 'Accept Order'" width="50%" />
+  <img src="/assets/images/card_accept.png" alt="Vista del card 'Accept Order'" width="50%" />
 </p>
 <p align="center"><strong>📍 Img. No.2. Aceptar una orden pública</strong></p>

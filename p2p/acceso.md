@@ -17,7 +17,7 @@
     * La app mostrará tu dirección y desbloqueará los menús principales.
 
 <p align="center">
-  <img src="../assets/images/p2p_menu.png" alt="Ruta hacia el módulo P2P en el menú principal" width="75%" />
+  <img src="/assets/images/p2p_menu.png" alt="Ruta hacia el módulo P2P en el menú principal" width="75%" />
 </p>
 
 <p align="center"><strong>📍 Img. No.1. Ruta P2P.</strong></p>
