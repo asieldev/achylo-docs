@@ -4,15 +4,6 @@ Achylo usa una **tarifa plana en porcentaje** para cada flujo y, en el caso del 
 
 ---
 
-##  Tasas base
-- **Mint Fee:** `0.5%` sobre el monto en USDC.
-- **Redeem Fee:** `1%` sobre el monto en CUBT que canjeas.
-- **Overcollateralization (solo Mint):** `1%` del USDC depositado se envía al Treasury como respaldo adicional.
-
-> **Importante:** Estas tasas pueden actualizarse (máximo 10% para las comisiones) y la app siempre muestra el valor vigente en el simulador.
-
----
-
 ##  Cómo se calculan
 1. **Mint**
    - Se descuenta primero la comisión (`mintFee`).
