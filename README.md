@@ -5,7 +5,7 @@
 ---
 
 ### 🌐 Red disponible
-* **Base Sepolia** (Hasta nuevo comunicado).
+* **Base Mainnet**.
 * **Aviso:** Antes de enviar USDC a tu cartera, verifica siempre la red disponible.
 
 ---
@@ -26,7 +26,7 @@ Achylo es una plataforma Web3 con tres superpoderes principales:
 ### 2. Mint/Redeem de CUBT (Stablecoin respaldada por USDC)
 * **Conversión:** Cambia `USDC ↔️ CUBT` en cualquier momento.
 * **Descuentos:** Obtén rebajas en las comisiones del P2P al operar con CUBT.
-* **Utilidad:** Ideal para usuarios que quieren moverse entre el mundo *on-chain* y la economía real cubana.
+* **Utilidad:** Ideal para usuarios que quieren moverse entre el mundo *on-chain* en una stablecoin con rendimiento programado (yield-bearing).
 
 ### 3. Payment Links (Para Comerciantes y Desarrolladores)
 * **Cobros programáticos:** Crea links de pago en USDC sobre Base y compártelos con tus clientes.
