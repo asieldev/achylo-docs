@@ -73,8 +73,29 @@ This endpoint is **public** — no authentication required. It is used by the ho
 | Status | Meaning |
 |--------|---------|
 | `pending` | Awaiting payment |
-| `completed` | Payment confirmed on-chain |
+| `paid` | Payment confirmed on-chain |
 | `expired` | Link expired before payment |
+| `cancelled` | Cancelled by the creator |
+
+---
+
+## Cancel a payment link
+
+```http
+DELETE /api/payment-links/:id
+X-API-Key: achylo_...
+```
+
+Cancels a `pending` payment link. Only the creator can cancel it. Links that are already `paid` or `expired` cannot be cancelled.
+
+### Response `200`
+
+```json
+{
+  "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
+  "status": "cancelled"
+}
+```
 
 ---
 
@@ -91,6 +112,30 @@ X-API-Key: achylo_...
 |-------|---------|-----|
 | `limit` | 50 | 100 |
 | `offset` | 0 | — |
+
+### Response `200`
+
+```json
+{
+  "links": [
+    {
+      "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
+      "amount": "10000000",
+      "receiver": "0x992b874a816e6a6d4ebcb1eb6977962f061df51f",
+      "description": "Order #1234",
+      "status": "paid",
+      "chainId": 8453,
+      "createdAt": "2026-05-06T00:00:00.000Z",
+      "expiresAt": "2026-05-07T00:00:00.000Z",
+      "paidAt": "2026-05-06T12:30:00.000Z",
+      "txHash": "0x1234...abcd",
+      "payerAddress": "0xabc...",
+      "paymentUrl": "https://achylo.com/#/pay/be66da05-..."
+    }
+  ],
+  "total": 1
+}
+```
 
 ---
 
@@ -156,6 +201,24 @@ const link = await createPaymentLink({
 
 console.log('Payment URL:', link.paymentUrl);
 // → https://achylo.com/#/pay/be66da05-...
+
+async function cancelPaymentLink(paymentId: string): Promise<void> {
+  const response = await fetch(
+    `https://api.achylo.com/api/payment-links/${paymentId}`,
+    {
+      method: 'DELETE',
+      headers: { 'X-API-Key': process.env.ACHYLO_API_KEY! },
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Achylo API error: ${error.error}`);
+  }
+
+  const result = await response.json();
+  console.log('Cancelled:', result.paymentId, '→', result.status);
+}
 ```
 
 ---
@@ -223,6 +286,20 @@ link = create_payment_link(
 )
 
 print('Payment URL:', link['paymentUrl'])
+
+
+def cancel_payment_link(payment_id: str) -> dict:
+    response = requests.delete(
+        f'{ACHYLO_BASE_URL}/api/payment-links/{payment_id}',
+        headers={'X-API-Key': ACHYLO_API_KEY},
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+# Cancel a link
+result = cancel_payment_link('be66da05-9590-437a-a557-f83c34de45d7')
+print('Status:', result['status'])  # → cancelled
 ```
 
 ---
@@ -255,6 +332,11 @@ class AchyloClient
     public function listPaymentLinks(int $limit = 50, int $offset = 0): array
     {
         return $this->request('GET', "/api/payment-links/history?limit={$limit}&offset={$offset}");
+    }
+
+    public function cancelPaymentLink(string $paymentId): array
+    {
+        return $this->request('DELETE', "/api/payment-links/{$paymentId}");
     }
 
     private function request(string $method, string $path, ?array $body = null): array
@@ -302,6 +384,10 @@ $link = $achylo->createPaymentLink([
 ]);
 
 echo 'Payment URL: ' . $link['paymentUrl'] . PHP_EOL;
+
+// Cancel a link
+$result = $achylo->cancelPaymentLink('be66da05-9590-437a-a557-f83c34de45d7');
+echo 'Status: ' . $result['status'] . PHP_EOL; // → cancelled
 ```
 
 ---
@@ -316,5 +402,7 @@ echo 'Payment URL: ' . $link['paymentUrl'] . PHP_EOL;
 | `400` | `Invalid webhookUrl` | URL failed SSRF validation |
 | `400` | `webhookSecret must be a hex string between 32 and 64 characters` | Invalid secret format |
 | `401` | `No autorizado` | Missing or invalid API Key / JWT |
+| `403` | `Forbidden — only the creator can cancel this link` | Trying to cancel someone else's link |
+| `409` | `Cannot cancel a link with status '...'` | Link is already `paid`, `expired`, or `cancelled` |
 | `429` | Too many requests | Rate limit exceeded |
 | `500` | `Failed to create payment link` | Internal server error |
