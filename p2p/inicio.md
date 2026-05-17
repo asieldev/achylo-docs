@@ -11,6 +11,40 @@ Asegúrate de tener **USDC** (token estable) disponible en la red **Base**. Depe
 ##  Gestión de Fondos
 Puedes adicionar fondos a tu Wallet desde cualquier fuente externa (Exchange u otra wallet).
 
+###  Depósitos Multi-Chain (LiFi Integration)
+
+Achylo soporta **depósitos multi-cadena** a través de la integración con **LiFi Protocol**, permitiéndote depositar fondos desde múltiples blockchains y recibirlos automáticamente como **USDC en la red Base**.
+
+####  ¿Cómo funciona?
+
+1. **Selecciona tu cadena de origen:** Elige entre las cadenas soportadas por LiFi (Ethereum, Arbitrum, Optimism, Polygon, BSC, Avalanche, y más).
+
+2. **Envía tus tokens:** Puedes depositar tokens nativos de cualquier cadena soportada (ETH, MATIC, BNB, etc.) o stablecoins (USDT, USDC, DAI).
+
+3. **Conversión automática:** LiFi realiza el bridging y swap automáticamente. Tus fondos se convierten a USDC y llegan directamente a tu wallet en la red **Base**.
+
+4. **Un solo balance:** Todo tu capital se unifica en USDC en Base, listo para usar en el protocolo.
+
+####  Cadenas Soportadas para Depósito
+
+| Cadena | Tokens Comunes |
+|--------|----------------|
+| **Ethereum** | ETH, USDC, USDT, DAI |
+| **Arbitrum** | ETH, USDC, USDT |
+| **Optimism** | ETH, USDC |
+| **Polygon** | MATIC, USDC, USDT |
+| **BSC** | BNB, USDT, BUSD |
+| **Avalanche** | AVAX, USDC |
+
+> **Nota:** La lista completa de cadenas y tokens soportados se actualiza dinámicamente según la disponibilidad de LiFi.
+
+####  Beneficios del Depósito Multi-Chain
+
+* **Sin necesidad de bridges manuales:** Olvídate de usar múltiples plataformas para mover fondos entre cadenas.
+* **Sin preocuparte por gas en otras redes:** El proceso optimiza automáticamente las rutas de menor costo.
+* **Capital unificado:** Todo tu saldo está en USDC en Base, simplificando la gestión.
+* **Acceso global:** Usuarios de cualquier ecosistema pueden participar sin fronteras.
+
 ### Características de tu Wallet:
 * **Sin costos extra:** Desde la Wallet puedes recibir y retirar fondos sin comisiones adicionales por parte de la plataforma.
 * **Autocustodia total:** Achylo Protocol **no es el dueño** de tu Wallet ni tiene control sobre ella. 
