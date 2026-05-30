@@ -222,6 +222,69 @@ Veja documentação completa em [Webhooks →](webhooks.md)
 
 ---
 
+## 🔐 Segurança (Validação por Merchant)
+
+O widget usa um sistema **seguro e genérico** que não requer mudanças globais no servidor:
+
+### Como funciona
+
+1. **Você cria um Widget** no dashboard
+2. **Sistema gera um Merchant ID** único (ex: `achylo_cv80520f`)
+3. **Você define os domínios permitidos** (whitelist):
+   - `https://sualoja.com`
+   - `https://www.sualoja.com`
+   - `*.sualoja.com` (suporta wildcards)
+4. **Quando o usuário clica no botão**, o widget envia o `Origin` do navegador
+5. **Backend valida**: "Este origin está na whitelist deste merchant?"
+   - ✅ Sim → Cria payment link
+   - ❌ Não → Rejeita com erro
+
+### Vantagens
+
+| Aspecto | Benefício |
+|---------|-----------|
+| **Seguro** | Cada merchant controla seus domínios |
+| **Genérico** | Funciona em qualquer plataforma (Wix, Shopify, etc) |
+| **Sem mudanças globais** | Não precisa de alterações no servidor |
+| **Rate limiting** | 10 links/minuto por merchant |
+| **Timeout** | Links expiram em 15 minutos |
+
+### Exemplo: Adicionando domínios
+
+```
+1. Acesse seu Widget no dashboard
+2. Clique em "Editar domínios"
+3. Adicione:
+   - https://minha-loja.wixsite.com
+   - https://minha-loja.com
+   - *.minha-loja.com
+4. Clique "Salvar"
+5. Pronto! Widget funciona nestes domínios
+```
+
+### Suportando wildcards
+
+O sistema suporta wildcards para subdomínios:
+
+```
+Whitelist: *.exemplo.com
+
+✅ Aceita:
+- https://www.exemplo.com
+- https://loja.exemplo.com
+- https://api.exemplo.com
+
+❌ Rejeita:
+- https://exemplo.com (sem subdomínio)
+- https://outro.com
+```
+
+> 💡 **Dica**: Se usar `https://exemplo.com`, adicione AMBOS:
+> - `https://exemplo.com`
+> - `*.exemplo.com`
+
+---
+
 ## Exemplos por Framework
 
 ### React

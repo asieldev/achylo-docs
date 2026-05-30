@@ -18,6 +18,7 @@
   * [API Keys](developers/api-keys.md)
   * [Payment Links](developers/payment-links.md)
   * [Payment Widgets](developers/payment-widgets.md)
+  * [Widget Security](developers/widget-security.md)
   * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)
