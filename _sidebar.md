@@ -17,6 +17,7 @@
   * [Quickstart](developers/quickstart.md)
   * [API Keys](developers/api-keys.md)
   * [Payment Links](developers/payment-links.md)
+  * [Payment Widgets](developers/payment-widgets.md)
   * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)

@@ -14,7 +14,7 @@
 Esta guía te acompaña paso a paso para que puedas usar la dApp **Achylo** (Red de Base). Tómate tu tiempo y ve siguiendo las instrucciones en orden.
 
 ## ¿Qué puedes hacer con Achylo?
-Achylo es una plataforma Web3 con tres superpoderes principales:
+Achylo es una plataforma Web3 con seis superpoderes principales:
 
 ### 1. Marketplace P2P (Descentralizado y Anónimo)
 * **Compra/Venta:** Intercambia USDC usando monedas fiat locales.
@@ -50,9 +50,33 @@ curl -X POST https://achylo-gunjs-relay.fly.dev/api/payment-links \
 
 📖 Documentación completa: [Payment Links](developers/payment-links.md)
 
+### 4. Payment Widgets (Botón "Pagar con Crypto")
+* **Integración sin código:** Copia y pega un simple botón HTML en cualquier sitio web.
+* **Para todos los niveles:** Desde usuarios sin conocimientos técnicos hasta desarrolladores avanzados.
+* **SDK JavaScript:** Control total con eventos, personalización de tema y montos dinámicos.
+* **Seguridad por dominio:** Whitelist de dominios para proteger tu Widget ID.
+* **Ideal para:** Tiendas online, landing pages, botones de donativo y servicios digitales.
+
+```html
+<!-- Ejemplo rápido: Botón de pago -->
+<script src="https://achylo.com/achylo.js"></script>
+
+<button 
+  class="achylo-pay-button"
+  data-merchant-id="wm_TU_WIDGET_ID"
+  data-amount="10.00"
+  data-currency="USDC"
+  data-description="Orden #1234"
+>
+  💳 Pagar con Crypto
+</button>
+```
+
+📖 Documentación completa: [Payment Widgets](developers/payment-widgets.md)
+
 ---
 
-### 4. Webhooks
+### 5. Webhooks
 * **Notificaciones en tiempo real:** Recibe un `POST` en tu servidor cuando un payment link es pagado.
 * **Verificación de firma:** Cada entrega incluye `X-Achylo-Signature` (HMAC-SHA256) para validar autenticidad.
 * **Reintentos automáticos:** El sistema reintenta hasta 3 veces ante fallos de tu endpoint.
@@ -70,6 +94,6 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 
 ---
 
-### 5. Staking CUBT
+### 6. Staking CUBT
 * **Rendimiento:** Recibe interés por mantener tus CUBT en la red.
 * **Estado:** *(En desarrollo)*.
