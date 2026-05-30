@@ -57,10 +57,35 @@ Substitua no código:
 
 ### Paso 4 – Cole no seu site
 
+#### 🟣 Wix (Passo a passo detalhado)
+
+1. **No Editor Wix**, clique no botão **"+ Adicionar"** (Add)
+2. Selecione **"Embed"** → **"Embed HTML"** ou **"Código HTML"**
+3. Clique em **"Inserir código"** ou **"Enter Code"**
+4. Cole o código do widget:
+
+```html
+<script src="https://achylo.com/achylo.js"></script>
+<achylo-button
+  merchant-id="achylo_SEU_WIDGET_ID"
+  amount="29.99"
+  currency="USDC"
+  label="💳 Pagar com Crypto">
+</achylo-button>
+```
+
+5. Clique em **"Aplicar"** ou **"Update"**
+6. Posicione o botão onde deseja na página
+7. **Publicar** o site para ver funcionando
+
+> 💡 **Dica**: Se o botão não aparecer, verifique se o domínio `seusite.wixsite.com` foi adicionado na whitelist do widget.
+
+---
+
 | Plataforma | Como adicionar |
 |------------|----------------|
 | **WordPress** | Editor → "HTML personalizado" |
-| **Wix** | Configurações → "Código personalizado" |
+| **Wix** | Ver guia detalhado acima ↑ |
 | **Shopify** | Tema → Editar código → Snippet novo |
 | **HTML puro** | Dentro do `<body>` |
 
