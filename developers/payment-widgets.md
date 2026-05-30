@@ -322,14 +322,6 @@ export function AchyloButton({ amount }: { amount: string }) {
 
 ---
 
-## Suporte
-
-- 📚 **Docs**: [docs.achylo.com](https://docs.achylo.com)
-- 💬 **Discord**: [discord.gg/achylo](https://discord.gg/achylo)
-- ✉️ **Email**: developers@achylo.com
-
----
-
 ## Recursos Relacionados
 
 - [Payment Links API →](payment-links.md) – Links de pagamento programáticos
