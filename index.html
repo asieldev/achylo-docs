@@ -482,6 +482,7 @@
 
     /* Code Blocks */
     .markdown-section pre {
+      position: relative;
       background: var(--achylo-code-bg);
       border: 1px solid var(--achylo-code-border);
       border-radius: var(--achylo-radius);
@@ -494,9 +495,13 @@
     .markdown-section pre code {
       background: transparent;
       padding: 0;
-      font-size: 13px;
-      line-height: 1.6;
+      font-size: 13.5px;
+      line-height: 1.65;
       color: var(--achylo-text);
+      font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: 'liga' 1, 'calt' 1;
     }
 
     .markdown-section code {
@@ -507,6 +512,89 @@
       font-weight: 500;
       color: var(--achylo-accent-dark);
       border: 1px solid var(--achylo-border);
+      font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, Consolas, monospace !important;
+    }
+
+    /* Copy Button on Code Blocks */
+    .markdown-section pre .copy-code-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      color: var(--achylo-accent);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      z-index: 2;
+    }
+
+    .markdown-section pre:hover .copy-code-btn {
+      opacity: 1;
+    }
+
+    .markdown-section pre .copy-code-btn:hover {
+      background: var(--achylo-accent);
+      color: #fff;
+      border-color: var(--achylo-accent);
+    }
+
+    .markdown-section pre .copy-code-btn.copied {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+
+    /* Override docsify default green syntax highlighting with orange */
+    .token.string,
+    .token.attr-value,
+    .token.selector,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #ff6b35 !important;
+    }
+
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #94a3b8 !important;
+    }
+
+    .token.number,
+    .token.boolean {
+      color: #f59e0b !important;
+    }
+
+    .token.keyword,
+    .token.atrule,
+    .token.attr-name {
+      color: #6366f1 !important;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #0ea5e9 !important;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .token.variable {
+      color: var(--achylo-text) !important;
+    }
+
+    .token.punctuation {
+      color: var(--achylo-muted) !important;
     }
 
     /* Blockquotes */
@@ -593,6 +681,49 @@
     body[data-theme='dark'] .markdown-section code {
       background: var(--achylo-surface-elevated);
       color: #ff8c42;
+    }
+
+    body[data-theme='dark'] .token.string,
+    body[data-theme='dark'] .token.attr-value,
+    body[data-theme='dark'] .token.selector,
+    body[data-theme='dark'] .token.char,
+    body[data-theme='dark'] .token.builtin,
+    body[data-theme='dark'] .token.inserted {
+      color: #ff8c42 !important;
+    }
+
+    body[data-theme='dark'] .token.comment,
+    body[data-theme='dark'] .token.prolog,
+    body[data-theme='dark'] .token.doctype,
+    body[data-theme='dark'] .token.cdata {
+      color: #64748b !important;
+    }
+
+    body[data-theme='dark'] .token.number,
+    body[data-theme='dark'] .token.boolean {
+      color: #fbbf24 !important;
+    }
+
+    body[data-theme='dark'] .token.keyword,
+    body[data-theme='dark'] .token.atrule,
+    body[data-theme='dark'] .token.attr-name {
+      color: #818cf8 !important;
+    }
+
+    body[data-theme='dark'] .token.function,
+    body[data-theme='dark'] .token.class-name {
+      color: #38bdf8 !important;
+    }
+
+    body[data-theme='dark'] .token.operator,
+    body[data-theme='dark'] .token.entity,
+    body[data-theme='dark'] .token.url,
+    body[data-theme='dark'] .token.variable {
+      color: #e2e8f0 !important;
+    }
+
+    body[data-theme='dark'] .token.punctuation {
+      color: #64748b !important;
     }
 
     /* Mobile Responsive */
@@ -764,6 +895,65 @@
       const script = document.createElement('script');
       script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       document.body.appendChild(script);
+    })();
+  </script>
+
+  <!-- Copy-to-Clipboard for Code Blocks -->
+  <script>
+    (function () {
+      const addCopyButtons = () => {
+        const codeBlocks = document.querySelectorAll('.markdown-section pre');
+        codeBlocks.forEach((pre) => {
+          if (pre.querySelector('.copy-code-btn')) return; // already added
+
+          const btn = document.createElement('button');
+          btn.className = 'copy-code-btn';
+          btn.setAttribute('type', 'button');
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>`;
+
+          btn.addEventListener('click', () => {
+            const code = pre.querySelector('code');
+            if (!code) return;
+            const text = code.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+              btn.classList.add('copied');
+              btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>`;
+              setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>`;
+              }, 2000);
+            }).catch(() => {
+              // Fallback
+              const ta = document.createElement('textarea');
+              ta.value = text;
+              ta.style.position = 'fixed';
+              ta.style.opacity = '0';
+              document.body.appendChild(ta);
+              ta.select();
+              try { document.execCommand('copy'); } catch (e) {}
+              document.body.removeChild(ta);
+            });
+          });
+
+          pre.appendChild(btn);
+        });
+      };
+
+      // Re-run after docsify renders new content
+      const observer = new MutationObserver(() => {
+        addCopyButtons();
+      });
+
+      if (document.readyState !== 'loading') {
+        observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
+        setTimeout(addCopyButtons, 500);
+      } else {
+        document.addEventListener('DOMContentLoaded', () => {
+          observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
+          setTimeout(addCopyButtons, 500);
+        });
+      }
     })();
   </script>
 </body>
