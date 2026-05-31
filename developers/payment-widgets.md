@@ -8,7 +8,7 @@ Adicione um botão **"Pagar com Crypto"** a qualquer website. Os seus clientes c
 
 | Ideal para | Ejemplo |
 |------------|---------|
-| **Lojas online** | Shopify, WooCommerce, PrestaShop |
+| **Lojas online** | Wix, Shopify, WooCommerce, PrestaShop |
 | **Landing pages** | Páginas de venda, funis de conversão |
 | **Botões de donativo** | ONGs, creadores de conteúdo |
 | **Serviços digitais** | SaaS, cursos, assinaturas |
