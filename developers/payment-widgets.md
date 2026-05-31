@@ -29,7 +29,8 @@ Para quem não sabe programar. Funciona em WordPress, Wix, Shopify, ou HTML puro
   merchant-id="achylo_SEU_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pagar com Crypto">
+  label="💳 Pagar com Crypto"
+  description="Pagamento do pedido #1234">
 </achylo-button>
 ```
 
@@ -51,6 +52,7 @@ Substitua no código:
   amount="50.00"                    <!-- Valor em USDC -->
   currency="USDC"                     <!-- Sempre USDC -->
   label="💳 Pagar agora"              <!-- Texto do botão -->
+  description="Assinatura mensal"    <!-- Descrição do pagamento -->
   color="#6366f1">                  <!-- Cor do botão (opcional) -->
 </achylo-button>
 ```
@@ -70,7 +72,8 @@ Substitua no código:
   merchant-id="achylo_SEU_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pagar com Crypto">
+  label="💳 Pagar com Crypto"
+  description="Pagamento do pedido #1234">
 </achylo-button>
 ```
 
@@ -110,6 +113,7 @@ Para desenvolvedores que precisam escutar eventos ou controlar o fluxo.
 | `amount` | ✅ | Valor em USDC (ex: `"10.50"`) |
 | `currency` | ✅ | Sempre `"USDC"` |
 | `label` | — | Texto do botão (padrão: "Pay with Crypto") |
+| `description` | — | Descrição personalizada do pagamento (opcional) |
 | `color` | — | Cor hexadecimal (padrão: `#ff7f41`) |
 
 ### Eventos JavaScript
@@ -150,6 +154,7 @@ btn.setAttribute('merchant-id', 'achylo_cv80520f');
 btn.setAttribute('amount', '100.00');
 btn.setAttribute('currency', 'USDC');
 btn.setAttribute('label', 'Pagar R$ 100,00');
+btn.setAttribute('description', 'Assinatura anual');
 btn.setAttribute('color', '#10b981');
 
 document.getElementById('container').appendChild(btn);
@@ -222,69 +227,6 @@ Veja documentação completa em [Webhooks →](webhooks.md)
 
 ---
 
-## 🔐 Segurança (Validação por Merchant)
-
-O widget usa um sistema **seguro e genérico** que não requer mudanças globais no servidor:
-
-### Como funciona
-
-1. **Você cria um Widget** no dashboard
-2. **Sistema gera um Merchant ID** único (ex: `achylo_cv80520f`)
-3. **Você define os domínios permitidos** (whitelist):
-   - `https://sualoja.com`
-   - `https://www.sualoja.com`
-   - `*.sualoja.com` (suporta wildcards)
-4. **Quando o usuário clica no botão**, o widget envia o `Origin` do navegador
-5. **Backend valida**: "Este origin está na whitelist deste merchant?"
-   - ✅ Sim → Cria payment link
-   - ❌ Não → Rejeita com erro
-
-### Vantagens
-
-| Aspecto | Benefício |
-|---------|-----------|
-| **Seguro** | Cada merchant controla seus domínios |
-| **Genérico** | Funciona em qualquer plataforma (Wix, Shopify, etc) |
-| **Sem mudanças globais** | Não precisa de alterações no servidor |
-| **Rate limiting** | 10 links/minuto por merchant |
-| **Timeout** | Links expiram em 15 minutos |
-
-### Exemplo: Adicionando domínios
-
-```
-1. Acesse seu Widget no dashboard
-2. Clique em "Editar domínios"
-3. Adicione:
-   - https://minha-loja.wixsite.com
-   - https://minha-loja.com
-   - *.minha-loja.com
-4. Clique "Salvar"
-5. Pronto! Widget funciona nestes domínios
-```
-
-### Suportando wildcards
-
-O sistema suporta wildcards para subdomínios:
-
-```
-Whitelist: *.exemplo.com
-
-✅ Aceita:
-- https://www.exemplo.com
-- https://loja.exemplo.com
-- https://api.exemplo.com
-
-❌ Rejeita:
-- https://exemplo.com (sem subdomínio)
-- https://outro.com
-```
-
-> 💡 **Dica**: Se usar `https://exemplo.com`, adicione AMBOS:
-> - `https://exemplo.com`
-> - `*.exemplo.com`
-
----
-
 ## Exemplos por Framework
 
 ### React
@@ -292,7 +234,7 @@ Whitelist: *.exemplo.com
 ```jsx
 import { useEffect, useRef } from 'react';
 
-export function BotaoPagamento({ amount, orderId }) {
+export function BotaoPagamento({ amount, orderId, description }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -301,15 +243,16 @@ export function BotaoPagamento({ amount, orderId }) {
     btn.setAttribute('amount', amount);
     btn.setAttribute('currency', 'USDC');
     btn.setAttribute('label', '💳 Pagar com Crypto');
-    
+    btn.setAttribute('description', description || `Pagamento do pedido ${orderId}`);
+
     btn.addEventListener('achylo:success', () => {
       marcarPedidoComoPago(orderId);
     });
 
     containerRef.current.appendChild(btn);
-    
+
     return () => btn.remove();
-  }, [amount, orderId]);
+  }, [amount, orderId, description]);
 
   return <div ref={containerRef} />;
 }
@@ -325,7 +268,7 @@ export function BotaoPagamento({ amount, orderId }) {
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const props = defineProps({ amount: String });
+const props = defineProps({ amount: String, description: String });
 const widgetContainer = ref(null);
 
 onMounted(() => {
@@ -333,11 +276,12 @@ onMounted(() => {
   btn.setAttribute('merchant-id', import.meta.env.VITE_ACHYLO_WIDGET_ID);
   btn.setAttribute('amount', props.amount);
   btn.setAttribute('currency', 'USDC');
-  
+  btn.setAttribute('description', props.description || 'Pagamento');
+
   btn.addEventListener('achylo:success', (e) => {
     console.log('Pago:', e.detail);
   });
-  
+
   widgetContainer.value.appendChild(btn);
 });
 </script>
@@ -350,20 +294,21 @@ onMounted(() => {
 
 import { useEffect, useRef } from 'react';
 
-export function AchyloButton({ amount }: { amount: string }) {
+export function AchyloButton({ amount, description }: { amount: string; description?: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current || typeof window === 'undefined') return;
-    
+
     const btn = document.createElement('achylo-button');
     btn.setAttribute('merchant-id', process.env.NEXT_PUBLIC_ACHYLO_WIDGET_ID!);
     btn.setAttribute('amount', amount);
     btn.setAttribute('currency', 'USDC');
-    
+    btn.setAttribute('description', description || 'Pagamento');
+
     ref.current.appendChild(btn);
     return () => btn.remove();
-  }, [amount]);
+  }, [amount, description]);
 
   return <div ref={ref} />;
 }
@@ -395,6 +340,7 @@ export function AchyloButton({ amount }: { amount: string }) {
   amount="10.00"                <!-- ✅ Obrigatório -->
   currency="USDC"              <!-- ✅ Obrigatório -->
   label="💳 Pagar"              <!-- Opcional -->
+  description="Descrição"      <!-- Opcional -->
   color="#ff7f41">             <!-- Opcional -->
 </achylo-button>
 ```
