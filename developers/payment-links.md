@@ -4,6 +4,62 @@ Payment links let you generate a hosted USDC checkout page on Base. Share the UR
 
 ---
 
+## Métodos de Creación de Payment Links
+
+Achylo ofrece **3 formas** de generar links de pago, dependiendo de tus necesidades técnicas:
+
+### 1. Via Widget (No-Code)
+
+Ideal para merchants que no quieren integrar APIs. Embed un botón de pago en tu sitio web sin código backend.
+
+- **Endpoint**: `POST /api/payment-links/widget`
+- **Autenticación**: No requiere API Key (usa Merchant ID)
+- **Configuración**: Crea un widget merchant desde la dApp de Achylo
+- **Uso**: Embed HTML en tu sitio, el usuario hace click y paga sin salir
+
+**Ejemplo de uso:**
+```html
+<script async src="https://achylo.com/v1/achylo.js"></script>
+<achylo-button
+  merchant-id="achylo_cv80520f"
+  amount="29.99"
+  currency="USDC">
+</achylo-button>
+```
+
+**Ver documentación completa**: [Payment Widgets](./payment-widgets.md)
+
+---
+
+### 2. Via Enlace Directo (Desde la dApp)
+
+Ideal para usuarios que prefieren generar links manualmente desde la interfaz de Achylo sin integraciones técnicas.
+
+- **Cómo funciona**: Accede a la dApp de Achylo → Tools → Payment Links
+- **Autenticación**: Login con wallet (sin API Key)
+- **Configuración**: Define monto, descripción, expiración desde la UI
+- **Uso**: Copia el link generado y compártelo por email, WhatsApp, etc.
+
+**Ejemplo de link generado:**
+```
+https://achylo.com/#/pay/f7c3a8e1-2b4d-4f9a-8c1e-9d7f2a5b3c6e
+```
+
+---
+
+### 3. Via API (Para desarrolladores)
+
+Ideal para integraciones backend, automatización de pagos, y sistemas personalizados.
+
+- **Endpoint**: `POST /api/payment-links`
+- **Autenticación**: Requiere API Key
+- **Configuración**: Control total sobre parámetros (webhooks, expiración custom, etc.)
+- **Uso**: Integra con tu backend, e-commerce, CRM, o sistema de facturación
+
+**Ver documentación completa**: [API Reference](#create-a-payment-link)
+
+---
+
 ## Create a payment link
 
 ```http
