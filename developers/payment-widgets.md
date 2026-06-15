@@ -110,40 +110,138 @@ Para desenvolvedores que precisam escutar eventos ou controlar o fluxo.
 | Atributo | Obrigatório | Descrição |
 |----------|-------------|-----------|
 | `merchant-id` | ✅ | Seu Widget ID (`achylo_...`) |
-| `amount` | ✅ | Valor em USDC (ex: `"10.50"`) |
+| `amount` | ✅* | Valor em USDC (ex: `"10.50"`). Ignorado se `amount-from` estiver definido. |
 | `currency` | ✅ | Sempre `"USDC"` |
-| `label` | — | Texto do botão (padrão: "Pay with Crypto") |
+| `label` | — | Texto do botão (padrão: `"Pay with Crypto"`) |
 | `description` | — | Descrição personalizada do pagamento (opcional) |
 | `color` | — | Cor hexadecimal (padrão: `#ff7f41`) |
+| `amount-from` | — | Seletor CSS do elemento que contém o total do carrinho. O valor é lido no momento do clique. Símbolos `$`, `€`, `£`, `,` são removidos automaticamente. |
 
-### Eventos JavaScript
+### Eventos DOM
+
+O botão emite eventos DOM personalizados que pode escutar. Todos os dados do evento estão disponíveis em `e.detail`.
+
+| Evento | `e.detail` | Quando |
+|--------|-----------|--------|
+| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Pagamento confirmado na blockchain |
+| `achylo:payment-error` | `error, paymentId` | Pagamento falhou ou foi rejeitado |
+| `achylo:payment-cancelled` | `paymentId` | Usuário fechou o modal sem pagar |
+| `achylo:opened` | `paymentId, mode, url` | Modal ou aba aberta |
 
 ```html
-<achylo-button id="meu-botao" merchant-id="achylo_cv80520f" amount="25.00">
+<achylo-button
+  id="pay-btn"
+  merchant-id="achylo_cv80520f"
+  amount="25.00"
+  currency="USDC">
 </achylo-button>
 
 <script>
-  const botao = document.getElementById('meu-botao');
+  const btn = document.getElementById('pay-btn');
 
-  // Pagamento concluído com sucesso
-  botao.addEventListener('achylo:success', (e) => {
-    console.log('✅ Pagamento OK:', e.detail.paymentId);
-    // Redirecionar para página de obrigado
-    window.location.href = '/obrigado';
+  // Pagamento confirmado on-chain
+  btn.addEventListener('achylo:payment-success', (e) => {
+    console.log('TX hash:', e.detail.txHash);
+    console.log('Amount:', e.detail.amount, e.detail.token);
+    console.log('Chain ID:', e.detail.chainId);
+    window.location.href = '/obrigado?tx=' + e.detail.txHash;
   });
 
   // Erro no pagamento
-  botao.addEventListener('achylo:error', (e) => {
-    console.error('❌ Erro:', e.detail.message);
+  btn.addEventListener('achylo:payment-error', (e) => {
+    console.error('❌ Erro:', e.detail.error);
     alert('Pagamento falhou. Tente novamente.');
   });
 
   // Usuário fechou o modal
-  botao.addEventListener('achylo:cancel', () => {
+  btn.addEventListener('achylo:payment-cancelled', () => {
     console.log('Usuário cancelou');
   });
 </script>
 ```
+
+---
+
+## Carrinho Dinâmico
+
+Use `amount-from` para ler automaticamente o total do carrinho da página. O valor é capturado no momento do clique — sem JavaScript adicional.
+
+```html
+<script async src="https://achylo.com/achylo.js"></script>
+
+<!-- Substitua #cartTotal pelo ID/seletor do seu elemento de total -->
+<achylo-button
+  merchant-id="achylo_SEU_WIDGET_ID"
+  amount-from="#cartTotal"
+  currency="USDC">
+</achylo-button>
+```
+
+> 💡 **Não captura o total?** Clique com o botão direito no total do carrinho → Inspecionar. O código destacado mostrará `id="alguma-coisa"`. Use `#alguma-coisa` em `amount-from`.
+
+### Controlo manual via JavaScript
+
+Se precisar de controlo programático total (ex.: o total não está visível na página):
+
+```html
+<achylo-button
+  id="checkout-btn"
+  merchant-id="achylo_SEU_WIDGET_ID"
+  currency="USDC">
+</achylo-button>
+
+<script>
+  // Atualiza o amount quando o carrinho muda
+  function atualizarCheckout(total) {
+    document.getElementById('checkout-btn')
+      .setAttribute('amount', total.toFixed(2));
+  }
+
+  // Redirecionar após pagamento
+  document.getElementById('checkout-btn')
+    .addEventListener('achylo:payment-success', (e) => {
+      window.location.href = '/obrigado?tx=' + e.detail.txHash;
+    });
+</script>
+```
+
+---
+
+## Múltiplos Produtos
+
+Carregue o script uma vez e adicione quantos botões precisar. Cada um funciona independentemente.
+
+```html
+<script async src="https://achylo.com/achylo.js"></script>
+
+<!-- Produto A -->
+<achylo-button
+  merchant-id="achylo_SEU_WIDGET_ID"
+  amount="19.99"
+  currency="USDC"
+  label="Comprar Produto A"
+  description="Produto A - Plano Básico">
+</achylo-button>
+
+<!-- Produto B -->
+<achylo-button
+  merchant-id="achylo_SEU_WIDGET_ID"
+  amount="49.99"
+  currency="USDC"
+  label="Comprar Produto B"
+  description="Produto B - Plano Pro">
+</achylo-button>
+
+<!-- Donativo (valor variável via amount-from) -->
+<achylo-button
+  merchant-id="achylo_SEU_WIDGET_ID"
+  amount-from="#donationInput"
+  currency="USDC"
+  label="Fazer Donativo">
+</achylo-button>
+```
+
+---
 
 ### Criar botão dinamicamente
 
@@ -337,22 +435,26 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 ```html
 <achylo-button
   merchant-id="achylo_SEU_ID"      <!-- ✅ Obrigatório -->
-  amount="10.00"                <!-- ✅ Obrigatório -->
-  currency="USDC"              <!-- ✅ Obrigatório -->
-  label="💳 Pagar"              <!-- Opcional -->
-  description="Descrição"      <!-- Opcional -->
-  color="#ff7f41">             <!-- Opcional -->
+  amount="10.00"                    <!-- ✅ Obrigatório (ou use amount-from) -->
+  currency="USDC"                  <!-- ✅ Obrigatório -->
+  amount-from="#cartTotal"         <!-- Opcional: lê total do DOM -->
+  label="💳 Pagar"                 <!-- Opcional -->
+  description="Descrição"          <!-- Opcional -->
+  color="#ff7f41">                 <!-- Opcional -->
 </achylo-button>
 ```
 
 ### Eventos
 
-| Evento | Quando dispara |
-|--------|----------------|
-| `achylo:success` | Pagamento confirmado on-chain |
-| `achylo:error` | Erro no processamento |
-| `achylo:cancel` | Usuário fechou o modal |
-| `achylo:ready` | Script carregado e pronto |
+| Evento | `e.detail` | Quando dispara |
+|--------|-----------|----------------|
+| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Pagamento confirmado on-chain |
+| `achylo:payment-error` | `error, paymentId` | Erro no processamento |
+| `achylo:payment-cancelled` | `paymentId` | Usuário fechou o modal |
+| `achylo:opened` | `paymentId, mode, url` | Modal ou aba aberta |
+| `achylo:ready` | — | Script carregado e pronto |
+
+> ℹ️ Os eventos `achylo:success`, `achylo:error` e `achylo:cancel` ainda são emitidos para compatibilidade com versões anteriores.
 
 ---
 
