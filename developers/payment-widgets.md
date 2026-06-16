@@ -23,7 +23,7 @@ Para quem não sabe programar. Funciona em WordPress, Wix, Shopify, ou HTML puro
 
 ```html
 <!-- Achylo Payment Widget -->
-<script src="https://achylo.com/achylo.js"></script>
+<script src="https://achylo.com/achylo.js?v=5"></script>
 
 <achylo-button
   merchant-id="achylo_SEU_WIDGET_ID"
@@ -67,7 +67,7 @@ Substitua no código:
 4. Cole o código do widget:
 
 ```html
-<script src="https://achylo.com/achylo.js"></script>
+<script src="https://achylo.com/achylo.js?v=5"></script>
 <achylo-button
   merchant-id="achylo_SEU_WIDGET_ID"
   amount="29.99"
@@ -167,7 +167,7 @@ O botão emite eventos DOM personalizados que pode escutar. Todos os dados do ev
 Use `amount-from` para ler automaticamente o total do carrinho da página. O valor é capturado no momento do clique — sem JavaScript adicional.
 
 ```html
-<script async src="https://achylo.com/achylo.js"></script>
+<script async src="https://achylo.com/achylo.js?v=5"></script>
 
 <!-- Substitua #cartTotal pelo ID/seletor do seu elemento de total -->
 <achylo-button
@@ -212,7 +212,7 @@ Se precisar de controlo programático total (ex.: o total não está visível na
 Carregue o script uma vez e adicione quantos botões precisar. Cada um funciona independentemente.
 
 ```html
-<script async src="https://achylo.com/achylo.js"></script>
+<script async src="https://achylo.com/achylo.js?v=5"></script>
 
 <!-- Produto A -->
 <achylo-button
