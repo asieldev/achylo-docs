@@ -1,6 +1,6 @@
 #  Token CUBT
 
-CUBT es una **stablecoin con rendimiento programado (yield-bearing)** cuyo valor inicial se fijó tomando como referencia el precio del CUP (Peso Cubano) en la fecha de lanzamiento del protocolo. Desde entonces, su precio se aprecia gradualmente gracias al rendimiento generado por el Tesoro del protocolo.
+CUBT es una **stablecoin con rendimiento programado (yield-bearing)** cuyo valor inicial se estableció de acuerdo a la liquidez inicial del protocolo. Desde entonces, su precio se aprecia gradualmente gracias al rendimiento generado por el Tesoro del protocolo.
 
 ##  Mecanismo de apreciación
 - Cada **28 días** el contrato de Treasury destina el **25%** de los fondos acumulados para aumentar el colateral que respalda CUBT.
