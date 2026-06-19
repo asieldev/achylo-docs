@@ -493,23 +493,29 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 2px 4px rgba(0,0,0,0.03);
     }
 
-    .markdown-section pre::after {
-      content: '';
+    .code-dots {
       position: absolute;
       top: 12px;
       left: 16px;
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .code-dots span {
       width: 10px;
       height: 10px;
       min-width: 10px;
       min-height: 10px;
       border-radius: 50%;
-      background: #ff5f56;
-      box-shadow: 16px 0 #ffbd2e, 32px 0 #27c93f;
-      opacity: 0.85;
+      display: block;
       box-sizing: border-box;
-      z-index: 1;
+      box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.08);
     }
+    .code-dots span:nth-child(1) { background: #ff5f56; }
+    .code-dots span:nth-child(2) { background: #ffbd2e; }
+    .code-dots span:nth-child(3) { background: #27c93f; }
 
     .markdown-section pre[data-lang]::before {
       content: attr(data-lang);
