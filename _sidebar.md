@@ -19,6 +19,7 @@
   * [Payment Links](developers/payment-links.md)
   * [Payment Widgets](developers/payment-widgets.md)
   * [Payment Widgets V2](developers/payment-widgets-v2.md)
+  * [Postman Guide](developers/postman-guide.md)
   * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)

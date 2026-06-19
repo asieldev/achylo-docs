@@ -162,6 +162,174 @@ The button emits custom DOM events you can listen to. All event data is availabl
 
 ---
 
+## Option 3: API (Backend Integration)
+
+For developers who need to create and manage widgets programmatically from their backend.
+
+> **Authentication**: All endpoints accept `X-API-Key` header. See [API Keys →](api-keys.md)
+
+### Step 1 — Create a Widget
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/widget-merchants', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    origins: [
+      'https://yourstore.com',
+      'https://www.yourstore.com'
+    ],
+    payoutAddress: '0x...YOUR_SMART_ACCOUNT_ADDRESS'
+  })
+});
+
+const widget = await response.json();
+console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
+```
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "merchantId": "achylo_a1b2c3d4",
+  "creatorAddress": "0x...",
+  "payoutAddress": "0x...",
+  "origins": ["https://yourstore.com", "https://www.yourstore.com"],
+  "active": true,
+  "createdAt": "2025-06-19T00:00:00.000Z"
+}
+```
+
+### Step 2 — List Your Widgets
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/widget-merchants', {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+
+const data = await response.json();
+console.log(data.merchants);
+```
+
+### Step 3 — Update Widget Origins
+
+```javascript
+await fetch('https://api.achylo.com/api/widget-merchants/achylo_a1b2c3d4', {
+  method: 'PATCH',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    origins: ['https://yourstore.com', 'https://newdomain.com']
+  })
+});
+```
+
+### Step 4 — Deactivate Widget
+
+```javascript
+await fetch('https://api.achylo.com/api/widget-merchants/achylo_a1b2c3d4', {
+  method: 'DELETE',
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+```
+
+### Step 5 — Create a Payment Link (Programmatic)
+
+If you need to create payment links from your backend (instead of using the embed button):
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/payment-links', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    amount: '10000000',            // 10 USDC (in micro-units: 1 USDC = 1000000)
+    receiver: '0x...YOUR_SMART_ACCOUNT',
+    description: 'Order #1234',
+    expiresInMinutes: 60,          // Optional: expires in 1 hour
+    webhookUrl: 'https://yourserver.com/webhooks/achylo'  // Optional
+  })
+});
+
+const link = await response.json();
+console.log('Payment URL:', link.paymentUrl);
+// → https://achylo.com/#/pay/be66da05-...
+```
+
+**Response:**
+
+```json
+{
+  "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
+  "paymentUrl": "https://achylo.com/#/pay/be66da05-...",
+  "amount": "10000000",
+  "receiver": "0x...",
+  "description": "Order #1234",
+  "status": "pending",
+  "chainId": 8453,
+  "createdAt": "2025-06-19T00:00:00.000Z",
+  "expiresAt": "2025-06-19T01:00:00.000Z",
+  "webhookUrl": "https://yourserver.com/webhooks/achylo",
+  "webhookSecret": "auto_generated_hex_secret"
+}
+```
+
+> 💡 **Amount format**: Use micro-units. `1 USDC = 1000000`. So `"29990000"` = 29.99 USDC.
+
+### Step 6 — Check Payment Status
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/payment-links/be66da05-...');
+const link = await response.json();
+console.log('Status:', link.status); // pending | paid | expired | cancelled
+```
+
+### Step 7 — List Payment History
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/payment-links/history?limit=50', {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+
+const data = await response.json();
+console.log(data.links); // Array of payment links with status, txHash, etc.
+```
+
+### Step 8 — Cancel a Payment Link
+
+```javascript
+await fetch('https://api.achylo.com/api/payment-links/be66da05-...', {
+  method: 'DELETE',
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+```
+
+### API Endpoints Summary
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/api/widget-merchants` | API Key | Create widget |
+| `GET` | `/api/widget-merchants` | API Key | List your widgets |
+| `GET` | `/api/widget-merchants/:id` | Public | Get widget info |
+| `PATCH` | `/api/widget-merchants/:id` | API Key | Update origins |
+| `DELETE` | `/api/widget-merchants/:id` | API Key | Deactivate widget |
+| `POST` | `/api/payment-links` | API Key | Create payment link |
+| `GET` | `/api/payment-links/:id` | Public | Get payment status |
+| `GET` | `/api/payment-links/history` | API Key | List payment history |
+| `DELETE` | `/api/payment-links/:id` | API Key | Cancel payment link |
+
+> See [Payment Links API →](payment-links.md) for full documentation and code examples in Python, PHP, and TypeScript.
+
+---
+
 ## Dynamic Cart
 
 Use `amount-from` to automatically read the cart total from the page. The value is captured at click time — no additional JavaScript.
