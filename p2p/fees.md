@@ -1,54 +1,54 @@
-# 💸 Fees del Marketplace P2P
+# 💸 P2P Marketplace Fees
 
-Las comisiones del módulo P2P financian el sistema de **patrocinio de gas** de Achylo. Cada vez que confirmas una acción on-chain desde la app (crear/aceptar órdenes, liberar fondos, registrar merchants, iniciar disputas, etc.), el protocolo cubre el gas por ti y recupera ese costo con una **tarifa plana en USDC por escrow**. Consulta siempre la sección **Stats** para conocer el valor actualizado (por ejemplo, "Fee por escrow: X USDC").
-
----
-
-## 🧠 ¿En qué se usan estas comisiones?
-- Pago del gas on-chain cuando el usuario firma acciones patrocinadas.
-- Mantenimiento y monitoreo del pool de gas para garantizar disponibilidad.
-- Sostenimiento del Transaction Guard y otras capas anti-abuso.
-
-> **Importante:** No debes preocuparte por variaciones de gas de la red; Achylo se encarga de cubrirlas mientras mantenga saldo en el pool.
-
-## ⏱️ ¿Cuándo se descuentan los fees?
-El contrato de escrow cobra la tarifa **una única vez** al finalizar exitosamente la transacción o al resolverse una disputa. Específicamente, el descuento del monto ocurre en los siguientes casos:
-
-1. **Al completar una compra/venta:** Se descuenta (del monto total en custodia) en el momento exacto en que el vendedor **libera los fondos** al comprador (`releaseFunds`).
-2. **Despúes de una disputa:** Si una orden entra en disputa, la comisión se descuenta del monto final antes de ser enviado al ganador (`_resolveDispute`).
-
-*Otras acciones en la plataforma (como crear una orden, solicitar cancelar o registrarse como merchant) **no** tienen cobro de comisión por parte del Escrow.*
+P2P module fees fund Achylo's **gas sponsorship** system. Every time you confirm an on-chain action from the app (create/accept orders, release funds, register merchants, start disputes, etc.), the protocol covers the gas for you and recovers that cost with a **flat USDC fee per escrow**. Always check the **Stats** section for the current value (for example, "Fee per escrow: X USDC").
 
 ---
 
-## 👥 ¿Quién paga y quién está exento?
-- El **usuario que ejecuta la acción** paga el fee (por ejemplo, el vendedor cuando libera los fondos al comprador o al aceptar una orden).
-- **Usuarios Gold:** están exentos del cobro y disfrutan de 0% en comisiones del protocolo. Puedes obtener el estatus Gold comprando la membresía o a través del sistema de referidos mensualmente. Si eres Gold, el contrato omite la tarifa para tus operaciones.
+## 🧠 What are these fees used for?
+- Payment of on-chain gas when the user signs sponsored actions.
+- Maintenance and monitoring of the gas pool to ensure availability.
+- Sustaining the Transaction Guard and other anti-abuse layers.
+
+> **Important:** You don't need to worry about network gas fluctuations; Achylo covers them as long as there is balance in the pool.
+
+## ⏱️ When are fees deducted?
+The escrow contract charges the fee **only once** when the transaction is successfully completed or a dispute is resolved. Specifically, the amount is deducted in the following cases:
+
+1. **When completing a buy/sell:** It is deducted (from the total amount in custody) at the exact moment the seller **releases the funds** to the buyer (`releaseFunds`).
+2. **After a dispute:** If an order enters a dispute, the fee is deducted from the final amount before being sent to the winner (`_resolveDispute`).
+
+*Other actions on the platform (such as creating an order, requesting cancellation, or registering as a merchant) **do not** incur a fee from the Escrow.*
 
 ---
 
-## 👀 Cómo se muestra en la UI
-- Cada modal de acción (Accept Order, Release Funds, Register Merchant, etc.) incluye un resumen donde aparece la tarifa exacta.
-- Los tooltips explican el destino del fee y el monto neto que llegará al comprador.
-- Si eres Gold o la acción está exenta, la interfaz lo marca con el badge "⭐ Gold User - No protocol fees".
+## 👥 Who pays and who is exempt?
+- The **user who executes the action** pays the fee (for example, the seller when releasing funds to the buyer or when accepting an order).
+- **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly referral system. If you are Gold, the contract omits the fee for your operations.
 
 ---
 
-## 📏 Estructura de la tarifa
-- **Tarifa definida por contrato:** mismo monto para todas las operaciones finalizadas, pueden ser consultados desde Stats > Protocol > P2P Escrow Protocol > Fixed Fee y Percentage Fee. El valor es definido por el protocolo y varia de acuerdo al valor de la orden (Ex: 0.1 USDC para ordenes < 100 USDC y 0.1% para ordenes > 100 USDC).
-- **Requisito básico:** estas se descuentan automáticamente desde el contrato cuando se ejecuta alguna acción de compra/venta.
-
-> **Tip:** Antes de liberar fondos o aceptar una orden grande, revisa el panel de Stats para confirmar que el valor "Fee por escrow" no ha cambiado.
+## 👀 How it appears in the UI
+- Each action modal (Accept Order, Release Funds, Register Merchant, etc.) includes a summary showing the exact fee.
+- Tooltips explain the fee destination and the net amount that will reach the buyer.
+- If you are Gold or the action is exempt, the interface marks it with the badge "⭐ Gold User - No protocol fees".
 
 ---
 
-## 🧾 Resumen rápido
-| Pregunta | Respuesta |
+## 📏 Fee Structure
+- **Contract-defined fee:** same amount for all completed operations, can be checked at Stats > Protocol > P2P Escrow Protocol > Fixed Fee and Percentage Fee. The value is defined by the protocol and varies according to the order value (e.g. 0.1 USDC for orders < 100 USDC and 0.1% for orders > 100 USDC).
+- **Basic requirement:** these are automatically deducted from the contract when any buy/sell action is executed.
+
+> **Tip:** Before releasing funds or accepting a large order, check the Stats panel to confirm that the "Fee per escrow" value hasn't changed.
+
+---
+
+## 🧾 Quick Summary
+| Question | Answer |
 | :--- | :--- |
-| ¿Quién define el monto? | La Gobernanza (compuesta por usuarios Gold, usuarios con stake y holders); se publica en la página de Stats. |
-| ¿Quién lo paga? | El usuario que ejecuta la acción patrocinada, salvo que sea Gold. |
-| ¿Para qué sirve? | Cubrir gas on-chain y mantener el servicio de patrocinio. |
-| ¿Cuándo se cobra? | En el momento clave de cada flujo (ej. liberar fondos). |
-| ¿Puedo evitarlo? | Solo si tienes estatus Gold; de lo contrario se descuenta automáticamente. |
+| Who defines the amount? | Governance (composed of Gold users, stakers, and holders); published on the Stats page. |
+| Who pays it? | The user who executes the sponsored action, unless they are Gold. |
+| What is it for? | Cover on-chain gas and maintain the sponsorship service. |
+| When is it charged? | At the key moment of each flow (e.g. releasing funds). |
+| Can I avoid it? | Only if you have Gold status; otherwise it is deducted automatically. |
 
-Con este esquema los usuarios disfrutan de transacciones patrocinadas sin preocuparse por el gas ni por cálculos complejos de comisiones variables.
+With this scheme, users enjoy sponsored transactions without worrying about gas or complex variable fee calculations.

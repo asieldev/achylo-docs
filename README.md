@@ -1,99 +1,99 @@
-# Guía inicial para usar Achylo Protocol
+# Getting Started with Achylo Protocol
 
-> **IMPORTANTE:** Antes de comenzar, lee los **TÉRMINOS DE USO**.
+> **IMPORTANT:** Before you begin, please read the **TERMS OF USE**.
 
 ---
 
-### 🌐 Red disponible
+### 🌐 Available Network
 * **Base Mainnet**.
-* **Aviso:** Antes de enviar USDC a tu cartera, verifica siempre la red disponible.
+* **Note:** Before sending USDC to your wallet, always verify the available network.
 
 ---
 
-## 📖 Introducción
-Esta guía te acompaña paso a paso para que puedas usar la dApp **Achylo** (Red de Base). Tómate tu tiempo y ve siguiendo las instrucciones en orden.
+## 📖 Introduction
+This guide walks you step by step so you can use the **Achylo** dApp (Base Network). Take your time and follow the instructions in order.
 
-## ¿Qué puedes hacer con Achylo?
-Achylo es una plataforma Web3 con seis superpoderes principales:
+## What Can You Do with Achylo?
+Achylo is a Web3 platform with six core superpowers:
 
-### 1. Marketplace P2P (Descentralizado y Anónimo)
-* **Compra/Venta:** Intercambia USDC usando monedas fiat locales.
-* **Sin intermediarios:** El *escrow* inteligente mantiene los fondos seguros hasta que ambas partes confirman.
-* **Tipos de órdenes:**
-    * **Públicas:** Visibles para todos los merchants.
-    * **Privadas:** Solo para tu contraparte de confianza.
+### 1. P2P Marketplace (Decentralized and Anonymous)
+* **Buy/Sell:** Exchange USDC using local fiat currencies.
+* **No intermediaries:** The smart escrow keeps funds safe until both parties confirm.
+* **Order types:**
+    * **Public:** Visible to all merchants.
+    * **Private:** Only for your trusted counterparty.
 
-### 2. Mint/Redeem de CUBT (Stablecoin respaldada por USDC)
-* **Conversión:** Cambia `USDC ↔️ CUBT` en cualquier momento.
-* **Descuentos:** Obtén rebajas en las comisiones del P2P al operar con CUBT.
-* **Utilidad:** Ideal para usuarios que quieren moverse entre el mundo *on-chain* en una stablecoin con rendimiento programado (yield-bearing).
+### 2. Mint/Redeem CUBT (Stablecoin backed by USDC)
+* **Conversion:** Swap `USDC ↔️ CUBT` at any time.
+* **Discounts:** Get lower P2P fees when operating with CUBT.
+* **Utility:** Ideal for users who want to move across the *on-chain* world in a yield-bearing stablecoin.
 
-### 3. Payment Links (Para Comerciantes y Desarrolladores)
-* **Cobros programáticos:** Crea links de pago en USDC sobre Base y compártelos con tus clientes.
-* **Sin wallet del cliente:** El pagador solo necesita una wallet compatible con Base.
-* **Autenticación flexible:** Usa tu JWT de sesión o una API Key para crear links desde tu backend.
-* **Expiración configurable:** Define el tiempo de vida del link (por defecto 24 h).
-* **Referencia personalizada:** Incluye tu propio ID de orden para reconciliación.
+### 3. Payment Links (For Merchants and Developers)
+* **Programmatic collections:** Create USDC payment links on Base and share them with your customers.
+* **No customer wallet required:** The payer only needs a Base-compatible wallet.
+* **Flexible authentication:** Use your session JWT or an API Key to create links from your backend.
+* **Configurable expiration:** Set the link lifetime (default 24 h).
+* **Custom reference:** Include your own order ID for reconciliation.
 
 ```bash
-# Ejemplo rápido
+# Quick example
 curl -X POST https://achylo-gunjs-relay.fly.dev/api/payment-links \
-  -H "X-API-Key: achylo_<tu_key>" \
+  -H "X-API-Key: achylo_<your_key>" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": "10000000",
-    "receiver": "0xTuDireccion",
+    "receiver": "0xYourAddress",
     "reference": "order-001",
     "expiresInSeconds": 86400
   }'
 ```
 
-📖 Documentación completa: [Payment Links](developers/payment-links.md)
+📖 Full documentation: [Payment Links](developers/payment-links.md)
 
-### 4. Payment Widgets (Botón "Pagar con Crypto")
-* **Integración sin código:** Copia y pega un simple botón HTML en cualquier sitio web.
-* **Para todos los niveles:** Desde usuarios sin conocimientos técnicos hasta desarrolladores avanzados.
-* **SDK JavaScript:** Control total con eventos, personalización de tema y montos dinámicos.
-* **Seguridad por dominio:** Whitelist de dominios para proteger tu Widget ID.
-* **Ideal para:** Tiendas online, landing pages, botones de donativo y servicios digitales.
+### 4. Payment Widgets ("Pay with Crypto" Button)
+* **No-code integration:** Copy and paste a simple HTML button into any website.
+* **For all levels:** From non-technical users to advanced developers.
+* **JavaScript SDK:** Full control with events, theme customization, and dynamic amounts.
+* **Domain security:** Domain whitelist to protect your Widget ID.
+* **Ideal for:** Online stores, landing pages, donation buttons, and digital services.
 
 ```html
-<!-- Ejemplo rápido: Botón de pago -->
+<!-- Quick example: Payment button -->
 <script src="https://achylo.com/achylo.js"></script>
 
 <button 
   class="achylo-pay-button"
-  data-merchant-id="wm_TU_WIDGET_ID"
+  data-merchant-id="wm_YOUR_WIDGET_ID"
   data-amount="10.00"
   data-currency="USDC"
-  data-description="Orden #1234"
+  data-description="Order #1234"
 >
-  💳 Pagar con Crypto
+  💳 Pay with Crypto
 </button>
 ```
 
-📖 Documentación completa: [Payment Widgets](developers/payment-widgets.md)
+📖 Full documentation: [Payment Widgets](developers/payment-widgets.md)
 
 ---
 
 ### 5. Webhooks
-* **Notificaciones en tiempo real:** Recibe un `POST` en tu servidor cuando un payment link es pagado.
-* **Verificación de firma:** Cada entrega incluye `X-Achylo-Signature` (HMAC-SHA256) para validar autenticidad.
-* **Reintentos automáticos:** El sistema reintenta hasta 3 veces ante fallos de tu endpoint.
-* **Test manual:** Puedes disparar una entrega de prueba desde el API.
+* **Real-time notifications:** Receive a `POST` on your server when a payment link is paid.
+* **Signature verification:** Each delivery includes `X-Achylo-Signature` (HMAC-SHA256) to validate authenticity.
+* **Automatic retries:** The system retries up to 3 times if your endpoint fails.
+* **Manual test:** You can trigger a test delivery from the API.
 
 ```ts
-// Verificar firma (TypeScript)
+// Verify signature (TypeScript)
 import crypto from 'crypto';
 const sig = crypto.createHmac('sha256', webhookSecret)
   .update(rawBody).digest('hex');
 if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signature');
 ```
 
-📖 Documentación completa: [Webhooks](developers/webhooks.md)
+📖 Full documentation: [Webhooks](developers/webhooks.md)
 
 ---
 
-### 6. Staking CUBT
-* **Rendimiento:** Recibe interés por mantener tus CUBT en la red.
-* **Estado:** *(En desarrollo)*.
+### 6. CUBT Staking
+* **Yield:** Earn interest by holding your CUBT on the network.
+* **Status:** *(In development)*.

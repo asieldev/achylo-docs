@@ -1,2 +1,2 @@
 ## Staking
-> Esta funcionalidad está en desarrollo.
+> This feature is under development.

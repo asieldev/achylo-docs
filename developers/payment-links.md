@@ -4,20 +4,20 @@ Payment links let you generate a hosted USDC checkout page on Base. Share the UR
 
 ---
 
-## Métodos de Creación de Payment Links
+## Payment Link Creation Methods
 
-Achylo ofrece **3 formas** de generar links de pago, dependiendo de tus necesidades técnicas:
+Achylo offers **3 ways** to generate payment links, depending on your technical needs:
 
 ### 1. Via Widget (No-Code)
 
-Ideal para merchants que no quieren integrar APIs. Embed un botón de pago en tu sitio web sin código backend.
+Ideal for merchants who don't want to integrate APIs. Embed a payment button on your website without backend code.
 
 - **Endpoint**: `POST /api/payment-links/widget`
-- **Autenticación**: No requiere API Key (usa Merchant ID)
-- **Configuración**: Crea un widget merchant desde la dApp de Achylo
-- **Uso**: Embed HTML en tu sitio, el usuario hace click y paga sin salir
+- **Authentication**: No API Key required (uses Merchant ID)
+- **Configuration**: Create a merchant widget from the Achylo dApp
+- **Usage**: Embed HTML on your site; the user clicks and pays without leaving
 
-**Ejemplo de uso:**
+**Usage example:**
 ```html
 <script async src="https://achylo.com/v1/achylo.js"></script>
 <achylo-button
@@ -27,36 +27,36 @@ Ideal para merchants que no quieren integrar APIs. Embed un botón de pago en tu
 </achylo-button>
 ```
 
-**Ver documentación completa**: [Payment Widgets](./payment-widgets.md)
+**Full documentation**: [Payment Widgets](./payment-widgets.md)
 
 ---
 
-### 2. Via Enlace Directo (Desde la dApp)
+### 2. Via Direct Link (From the dApp)
 
-Ideal para usuarios que prefieren generar links manualmente desde la interfaz de Achylo sin integraciones técnicas.
+Ideal for users who prefer to generate links manually from the Achylo interface without technical integrations.
 
-- **Cómo funciona**: Accede a la dApp de Achylo → Tools → Payment Links
-- **Autenticación**: Login con wallet (sin API Key)
-- **Configuración**: Define monto, descripción, expiración desde la UI
-- **Uso**: Copia el link generado y compártelo por email, WhatsApp, etc.
+- **How it works**: Go to the Achylo dApp → Tools → Payment Links
+- **Authentication**: Wallet login (no API Key)
+- **Configuration**: Set amount, description, and expiration from the UI
+- **Usage**: Copy the generated link and share it via email, WhatsApp, etc.
 
-**Ejemplo de link generado:**
+**Generated link example:**
 ```
 https://achylo.com/#/pay/f7c3a8e1-2b4d-4f9a-8c1e-9d7f2a5b3c6e
 ```
 
 ---
 
-### 3. Via API (Para desarrolladores)
+### 3. Via API (For Developers)
 
-Ideal para integraciones backend, automatización de pagos, y sistemas personalizados.
+Ideal for backend integrations, payment automation, and custom systems.
 
 - **Endpoint**: `POST /api/payment-links`
-- **Autenticación**: Requiere API Key
-- **Configuración**: Control total sobre parámetros (webhooks, expiración custom, etc.)
-- **Uso**: Integra con tu backend, e-commerce, CRM, o sistema de facturación
+- **Authentication**: Requires API Key
+- **Configuration**: Full control over parameters (webhooks, custom expiration, etc.)
+- **Usage**: Integrate with your backend, e-commerce, CRM, or billing system
 
-**Ver documentación completa**: [API Reference](#create-a-payment-link)
+**Full documentation**: [API Reference](#create-a-payment-link)
 
 ---
 
@@ -457,7 +457,7 @@ echo 'Status: ' . $result['status'] . PHP_EOL; // → cancelled
 | `400` | `Invalid receiver address` | Malformed Ethereum address |
 | `400` | `Invalid webhookUrl` | URL failed SSRF validation |
 | `400` | `webhookSecret must be a hex string between 32 and 64 characters` | Invalid secret format |
-| `401` | `No autorizado` | Missing or invalid API Key / JWT |
+| `401` | `Unauthorized` | Missing or invalid API Key / JWT |
 | `403` | `Forbidden — only the creator can cancel this link` | Trying to cancel someone else's link |
 | `409` | `Cannot cancel a link with status '...'` | Link is already `paid`, `expired`, or `cancelled` |
 | `429` | Too many requests | Rate limit exceeded |

@@ -1,15 +1,15 @@
-* [Bienvenido](README.md)
+* [Welcome](README.md)
 * P2P
-  * [Acceso](p2p/acceso.md)
-  * [Inicio](p2p/inicio.md)
-  * [Comerciante](p2p/comerciante.md)
-  * [Orden Pública](p2p/orden-publica.md)
-  * [Orden Privada](p2p/orden-privada.md)
-  * [Compra y Venta](p2p/compra-y-venta.md)
-  * [Límites de transacciones](p2p/limites-de-transacciones.md)
+  * [Access](p2p/acceso.md)
+  * [Getting Started](p2p/inicio.md)
+  * [Merchant](p2p/comerciante.md)
+  * [Public Order](p2p/orden-publica.md)
+  * [Private Order](p2p/orden-privada.md)
+  * [Buy and Sell](p2p/compra-y-venta.md)
+  * [Transaction Limits](p2p/limites-de-transacciones.md)
   * [Fees](p2p/fees.md)
-* EMITIR Y REDIMIR CUBT
-  * [Token CUBT](emitir-redimir-cubt/token-cubt.md)
+* MINT AND REDEEM CUBT
+  * [CUBT Token](emitir-redimir-cubt/token-cubt.md)
   * [Mint](emitir-redimir-cubt/mint.md)
   * [Redeem](emitir-redimir-cubt/redeem.md)
   * [Fees](emitir-redimir-cubt/fees.md)
@@ -22,10 +22,10 @@
   * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)
-* CONTACTO
-  * [Comunidad](contacto/comunidad.md)
+* CONTACT
+  * [Community](contacto/comunidad.md)
 * WHITE PAPER
   * [White Paper](white-paper/white-paper.md)
 * TERMS OF SERVICE
-  * [Términos de uso](terms-of-service/terminos-de-uso.md)
-  * [Política de Privacidad](terms-of-service/politica-de-privacidad.md)
+  * [Terms of Use](terms-of-service/terminos-de-uso.md)
+  * [Privacy Policy](terms-of-service/politica-de-privacidad.md)

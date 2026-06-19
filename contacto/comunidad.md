@@ -1,31 +1,31 @@
-## Comunidad Achylo
+## Achylo Community
 
-La comunidad de Achylo reúne a usuarios, comerciantes y desarrolladores que colaboran para construir un ecosistema financiero transparente. Aquí encontrarás los canales oficiales para mantenerte informado, solicitar ayuda y participar en las conversaciones del protocolo.
+The Achylo community brings together users, merchants, and developers who collaborate to build a transparent financial ecosystem. Here you will find the official channels to stay informed, request help, and participate in protocol conversations.
 
-### Canales principales
+### Main Channels
 
-| Canal | Propósito | Enlace |
+| Channel | Purpose | Link |
 | --- | --- | --- |
-| Web dApp | Acceso a la aplicación oficial de Achylo | https://www.achylo.com |
-| E-mail de contacto | Consultas generales y soporte de producto | contact@achylo.com |
-| Comunidad Telegram | Noticias, anuncios y soporte de la comunidad | https://t.me/achyloprotocol |
-| Soporte Telegram | Atención directa del equipo de Achylo Labs | https://t.me/achylolabs |
-| X (Twitter) | Actualizaciones oficiales y cobertura en tiempo real | https://x.com/0xachylo |
+| dApp Web | Access to the official Achylo application | https://www.achylo.com |
+| Contact email | General inquiries and product support | contact@achylo.com |
+| Telegram Community | News, announcements, and community support | https://t.me/achyloprotocol |
+| Telegram Support | Direct attention from the Achylo Labs team | https://t.me/achylolabs |
+| X (Twitter) | Official updates and real-time coverage | https://x.com/0xachylo |
 
-> **Recomendación:** guarda estos enlaces en tus marcadores para acceder rápidamente a los canales oficiales y evitar suplantaciones.
+> **Recommendation:** save these links in your bookmarks to quickly access the official channels and avoid impersonations.
 
-### Cómo participar
+### How to Participate
 
-1. **Preséntate en la comunidad:** comparte tu experiencia y en qué países operas. Esto ayuda a conectar con usuarios con necesidades similares.
-2. **Sigue los anuncios en X y Telegram:** allí se publican cambios de tarifas, nuevas funciones y mantenimientos programados.
-3. **Reporta incidencias por e-mail o soporte Telegram:** incluye capturas y el hash de la transacción para acelerar la respuesta.
-4. **Contribuye a la documentación:** si detectas mejoras para estas guías, comparte tus sugerencias en los canales oficiales.
+1. **Introduce yourself in the community:** share your experience and which countries you operate in. This helps connect with users who have similar needs.
+2. **Follow announcements on X and Telegram:** fee changes, new features, and scheduled maintenance are posted there.
+3. **Report incidents by email or Telegram support:** include screenshots and the transaction hash to speed up the response.
+4. **Contribute to the documentation:** if you notice improvements for these guides, share your suggestions in the official channels.
 
-### Normas básicas de convivencia
+### Basic Coexistence Rules
 
-- Respeta a otros miembros y evita compartir información personal o sensible en canales públicos.
-- Verifica siempre que los administradores tengan la insignia oficial antes de seguir instrucciones.
-- Nunca compartas claves privadas ni frases semilla; el equipo de Achylo jamás las solicitará.
-- Reporta inmediatamente cualquier actividad sospechosa en los canales de soporte.
+- Respect other members and avoid sharing personal or sensitive information in public channels.
+- Always verify that administrators have the official badge before following instructions.
+- Never share private keys or seed phrases; the Achylo team will never ask for them.
+- Report any suspicious activity immediately in the support channels.
 
-Mantenerse activo en estas vías garantiza que recibas las últimas novedades del protocolo y puedas resolver dudas con rapidez.
+Staying active in these channels ensures you receive the latest protocol news and can resolve questions quickly.

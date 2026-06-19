@@ -1,87 +1,87 @@
-#  Gestión de Órdenes Públicas
+#  Public Order Management
 
-##  Crear una orden pública 
-> **Nota:** Esta función es exclusiva para usuarios con rol de **Merchant**. Si no visualizas el botón "Create Public Order", asegúrate de haber completado tu registro en el menú *Become a Merchant*.
+##  Create a Public Order 
+> **Note:** This function is exclusive to users with the **Merchant** role. If you don't see the "Create Public Order" button, make sure you have completed your registration in the *Become a Merchant* menu.
 
-###  Capacidad de Orden y Colateral
-Al abrir el modal, verás un resumen de tu capacidad operativa basada en tu garantía:
-* **Your Merchant Collateral:** El saldo total que has depositado como garantía.
-* **Max order capacity (2x multiplier):** Achylo te permite publicar órdenes por un valor de hasta el **doble (2x)** de tu colateral.
-* **Available:** Indica cuánto cupo te queda disponible para nuevas órdenes tras descontar las órdenes activas.
+###  Order Capacity and Collateral
+When opening the modal, you will see a summary of your operational capacity based on your guarantee:
+* **Your Merchant Collateral:** The total balance you have deposited as collateral.
+* **Max order capacity (2x multiplier):** Achylo allows you to publish orders for up to **double (2x)** your collateral.
+* **Available:** Indicates how much capacity you have left for new orders after deducting active orders.
 
-### Pasos para configurar el modal:
+### Steps to configure the modal:
 
-1. **Order Type (Tipo de orden):**
-   * **Buy USDC:** Compras USDC y entregas fiat.
-   * **Sell USDC:** Vendes USDC y recibes fiat.
+1. **Order Type:**
+   * **Buy USDC:** You buy USDC and deliver fiat.
+   * **Sell USDC:** You sell USDC and receive fiat.
 
-2. **Fiat Currency (Moneda):** Selecciona la divisa de intercambio.
-   * *Opciones destacadas:* **CUP**, **CUBT** (aplica 50% de descuento), **MLC**, **USD Clásica**, **COP**, **USD**, **EUR**, **GBP**, **MXN**, **ARS**, entre otras.
+2. **Fiat Currency:** Select the exchange currency.
+   * *Highlighted options:* **CUP**, **CUBT** (50% discount applies), **MLC**, **USD Classic**, **COP**, **USD**, **EUR**, **GBP**, **MXN**, **ARS**, among others.
 
-3. **Exchange Rate (Tasa de cambio):** * Define cuánto fiat pagas/recibes por cada 1 USDC. 
-   * *Rango válido:* 0.01 - 1,000,000 por unidad.
+3. **Exchange Rate:** * Define how much fiat you pay/receive per 1 USDC. 
+   * *Valid range:* 0.01 - 1,000,000 per unit.
 
-4. **Límites por Transacción:**
-   * **Min Amount :** Lo mínimo que un usuario puede aceptarte.
-   * **Max Amount :** Lo máximo que un usuario puede aceptarte en una sola operación.
+4. **Transaction Limits:**
+   * **Min Amount:** The minimum a user can accept from you.
+   * **Max Amount:** The maximum a user can accept from you in a single operation.
 
-5. **Total Available Amount :** * Es el monto total de la orden. 
-   * **Importante:** Para órdenes de compra (*Buy*), no se bloquean tokens de tu wallet, se usa tu capacidad de colateral.
+5. **Total Available Amount:** * This is the total order amount. 
+   * **Important:** For buy orders, tokens from your wallet are not locked; your collateral capacity is used instead.
 
-6. **Payment Method (Métodos de Pago):**
-   * Selecciona hasta **5 métodos** distintos (ej. Zelle, Pix, Bandec, Transferencia).
+6. **Payment Method:**
+   * Select up to **5 different methods** (e.g. Zelle, Pix, Bandec, Transfer).
 
-7. **Reclaim Timeout :**
-   * Tiempo que tiene el comprador para completar el pago antes de que el vendedor pueda reclamar los fondos.
-   * *Rango:* Desde 15 minutos hasta 28 días. Si se deja vacío, aplica el valor por defecto.
+7. **Reclaim Timeout:**
+   * Time the buyer has to complete the payment before the seller can reclaim the funds.
+   * *Range:* From 15 minutes to 28 days. If left empty, the default value applies.
 
-8. **🏪 Merchant Only:** * Si activas esta casilla, **solo otros merchants registrados** podrán ver y aceptar tu orden, brindando una capa extra de seguridad.
-
----
-
-<p align="center">
-  <img src="/assets/images/order.png" alt="Vista del modal 'Create Public Order'" width="75%" />
-</p>
-
-<p align="center"><strong>📍 Img. No.1. Vista de Create Public Order.</strong></p>
-
----
-
-###  Órdenes “Merchant Only”
-Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios que ya tienen el estatus de **Merchant**. 
-* Si ves una **advertencia roja** en una orden, significa que es exclusiva para comerciantes. 
-* Si deseas acceder a ellas, debes registrarte previamente en el menú *Become a Merchant*.
-
----
-
-##  Aceptar una Orden Pública
-
-Si has encontrado una oferta que se ajusta a tus necesidades, sigue estos pasos para realizar el intercambio de forma segura:
-
-### Pasos para realizar la operación:
-
-1.  **Búsqueda:** Localiza la orden de tu interés en el marketplace. Puedes utilizar los **filtros** para segmentar por moneda fiat o tipo de operación.
-2.  **Selección:** Asegúrate de estar en la pestaña **“Marketplace”** y haz clic en el botón **“Accept Order”** de la publicación elegida.
-3.  **Configuración del monto:**
-    * Introduce la cantidad que deseas transaccionar. 
-    * El monto debe estar dentro del rango **mínimo y máximo** definido por el Merchant.
-    * Puedes usar el botón **MAX** para tomar todo el cupo disponible de la orden.
-4.  **Datos de cobro:** * Si estás aceptando una orden de tipo **Buy** (donde tú vendes USDC), deberás ingresar los datos de tu cuenta o tarjeta donde el Merchant debe enviarte el dinero fiat.
-5.  **Revisión y Tarifas:** * Verifica el resumen detallado de la transacción. 
-    * La aplicación te mostrará automáticamente los **descuentos en comisiones** si estás operando con **CUBT**.
-6.  **Confirmación:** Pulsa **“Accept Order”**. 
-    * Una vez procesado, la dApp te enviará una notificación confirmando que el **escrow** (contrato inteligente de garantía) se ha creado con éxito.
-
----
-
-###  Órdenes “Merchant Only”
-Algunas órdenes están restringidas y solo pueden ser aceptadas por usuarios que ya tienen el estatus de **Merchant**. 
-* Si ves una **advertencia roja** en una orden, significa que es exclusiva para comerciantes. 
-* Si deseas acceder a ellas, debes registrarte previamente en el menú *Become a Merchant*.
+8. **🏪 Merchant Only:** * If you check this box, **only registered merchants** will be able to see and accept your order, adding an extra layer of security.
 
 ---
 
 <p align="center">
-  <img src="/assets/images/card_accept.png" alt="Vista del card 'Accept Order'" width="50%" />
+  <img src="/assets/images/order.png" alt="View of the 'Create Public Order' modal" width="75%" />
 </p>
-<p align="center"><strong>📍 Img. No.2. Aceptar una orden pública</strong></p>
+
+<p align="center"><strong>📍 Img. No.1. View of Create Public Order.</strong></p>
+
+---
+
+###  “Merchant Only” Orders
+Some orders are restricted and can only be accepted by users who already have **Merchant** status. 
+* If you see a **red warning** on an order, it means it is exclusive to merchants. 
+* If you want to access them, you must register first in the *Become a Merchant* menu.
+
+---
+
+##  Accept a Public Order
+
+If you have found an offer that suits your needs, follow these steps to carry out the exchange safely:
+
+### Steps to perform the operation:
+
+1.  **Search:** Locate the order of interest in the marketplace. You can use **filters** to segment by fiat currency or operation type.
+2.  **Selection:** Make sure you are in the **“Marketplace”** tab and click the **“Accept Order”** button of the chosen listing.
+3.  **Amount configuration:**
+    * Enter the amount you want to transact. 
+    * The amount must be within the **minimum and maximum** range defined by the Merchant.
+    * You can use the **MAX** button to take all available capacity of the order.
+4.  **Payment details:** * If you are accepting a **Buy** order (where you sell USDC), you must enter the details of your account or card where the Merchant must send the fiat money.
+5.  **Review and Fees:** * Verify the detailed summary of the transaction. 
+    * The app will automatically show you **fee discounts** if you are operating with **CUBT**.
+6.  **Confirmation:** Press **“Accept Order”**. 
+    * Once processed, the dApp will send you a notification confirming that the **escrow** (smart guarantee contract) has been created successfully.
+
+---
+
+###  “Merchant Only” Orders
+Some orders are restricted and can only be accepted by users who already have **Merchant** status. 
+* If you see a **red warning** on an order, it means it is exclusive to merchants. 
+* If you want to access them, you must register first in the *Become a Merchant* menu.
+
+---
+
+<p align="center">
+  <img src="/assets/images/card_accept.png" alt="View of the 'Accept Order' card" width="50%" />
+</p>
+<p align="center"><strong>📍 Img. No.2. Accept a public order</strong></p>

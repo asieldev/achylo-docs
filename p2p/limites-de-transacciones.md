@@ -1,47 +1,47 @@
 
 
-#  Límites de Transacciones
+#  Transaction Limits
 
-Cada nivel de usuario tiene límites específicos por hora y por día para garantizar un uso justo del protocolo y proteger al sistema contra abusos o automatizaciones maliciosas.
-
----
-
-##  Capas de Protección Activas
-- **Anti-ráfaga:** más de **3 transacciones en 10 segundos** activan un enfriamiento automático de **30 segundos**.
-- **Detección de duplicados:** acciones idénticas repetidas en un lapso de **5 segundos** se bloquean de forma inmediata.
-- **Backoff progresivo:** después de **3 fallos consecutivos**, el tiempo de espera aumenta de manera exponencial hasta un máximo de **2 minutos**.
-- **Límites horarios y diarios:** dependen del nivel del usuario y se describen en la tabla siguiente.
+Each user level has specific hourly and daily limits to ensure fair use of the protocol and protect the system against abuse or malicious automation.
 
 ---
 
-##  Límites por Nivel
-| Nivel de Usuario | Requisitos | Límite por Hora | Límite por Día |
+##  Active Protection Layers
+- **Anti-burst:** more than **3 transactions in 10 seconds** triggers an automatic cooldown of **30 seconds**.
+- **Duplicate detection:** identical actions repeated within **5 seconds** are blocked immediately.
+- **Progressive backoff:** after **3 consecutive failures**, the wait time increases exponentially up to a maximum of **2 minutes**.
+- **Hourly and daily limits:** depend on the user level and are described in the following table.
+
+---
+
+##  Limits by Level
+| User Level | Requirements | Hourly Limit | Daily Limit |
 | :--- | :--- | :--- | :--- |
-| **Nuevo** | 0 escrows completados | 10 transacciones | 24 transacciones |
-| **Activo** | 1+ escrows completados | 20 transacciones | 48 transacciones |
-| **Merchant** | Registro y colateral vigente | 30 transacciones | 300 transacciones |
-| **Gold** | Cuenta verificada + beneficios Gold | Ilimitado | Ilimitado |
+| **New** | 0 completed escrows | 10 transactions | 24 transactions |
+| **Active** | 1+ completed escrows | 20 transactions | 48 transactions |
+| **Merchant** | Registration and active collateral | 30 transactions | 300 transactions |
+| **Gold** | Verified account + Gold benefits | Unlimited | Unlimited |
 
-> **Nota:** Los usuarios Gold no tienen límites, pero siguen sujetos a las protecciones anti-abuso instantáneas (anti-ráfaga, duplicados y backoff).
-
----
-
-##  Acciones Siempre Permitidas
-Las siguientes funciones **no consumen** cuota del limitador y están disponibles sin restricciones para todos los niveles:
-
-- Crear escrow privado.
-- Aceptar orden pública.
-- Liberar fondos.
-- Confirmar pago.
-- Reclamar fondos.
-- Iniciar disputa.
-- Votar en disputa.
+> **Note:** Gold users have no limits, but they are still subject to instant anti-abuse protections (anti-burst, duplicates, and backoff).
 
 ---
 
-##  Recomendaciones
-1. **Planifica tus operaciones:** agrupa acciones similares para evitar disparar el anti-ráfaga.
-2. **Evita automatizaciones agresivas:** los scripts que envían múltiples transacciones idénticas en segundos quedarán bloqueados.
-3. **Monitorea tus límites:** si alcanzas el límite horario, espera al siguiente intervalo o ajusta tu nivel (por ejemplo, completando escrows para subir a Usuario Activo).
+##  Always Allowed Actions
+The following functions **do not consume** limiter quota and are available without restrictions for all levels:
 
-Con estos límites el protocolo mantiene la estabilidad del gas patrocinado y protege tanto a usuarios como a merchants.
+- Create private escrow.
+- Accept public order.
+- Release funds.
+- Confirm payment.
+- Reclaim funds.
+- Start dispute.
+- Vote in dispute.
+
+---
+
+##  Recommendations
+1. **Plan your operations:** group similar actions to avoid triggering anti-burst.
+2. **Avoid aggressive automation:** scripts that send multiple identical transactions within seconds will be blocked.
+3. **Monitor your limits:** if you reach the hourly limit, wait for the next interval or adjust your level (for example, by completing escrows to upgrade to Active User).
+
+With these limits, the protocol maintains sponsored gas stability and protects both users and merchants.

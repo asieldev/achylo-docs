@@ -1,130 +1,130 @@
 ---
-"Términos de uso"
-Actualizado: "14 de noviembre de 2025"
+"Terms of Use"
+Updated: "November 14, 2025"
 ---
 
-# Términos de uso de Achylo Protocol
+# Achylo Protocol Terms of Use
 
-**Por favor lea este documento detenidamente.** El acceso o uso de Achylo Protocol implica la aceptación plena de los presentes términos, los cuales regulan la relación entre Achylo Labs ("Achylo", "nosotros") y cada usuario de la plataforma ("usted").
+**Please read this document carefully.** Accessing or using Achylo Protocol implies full acceptance of these terms, which govern the relationship between Achylo Labs ("Achylo", "we") and each user of the platform ("you").
 
-## 1. Elegibilidad
+## 1. Eligibility
 
-Al crear una cuenta o utilizar los servicios usted declara que:
+By creating an account or using the services you declare that:
 
-- Cuenta con la mayoría de edad legal conforme a las leyes de las Islas Marshall.
-- No ha sido suspendido ni eliminado previamente por incumplir políticas de Achylo.
-- Tiene autoridad suficiente para aceptar estos términos sin contravenir otros acuerdos.
-- Si actúa en nombre de una entidad, dicha entidad está válidamente constituida y usted posee facultades para representarla.
+- You are of legal age according to the laws of the Marshall Islands.
+- You have not been previously suspended or removed for failing to comply with Achylo policies.
+- You have sufficient authority to accept these terms without violating other agreements.
+- If you act on behalf of an entity, such entity is validly constituted and you have the authority to represent it.
 
-## 2. Registro de cuenta
+## 2. Account Registration
 
-Para acceder a la plataforma debe crear una cuenta. Al hacerlo se obliga a:
+To access the platform you must create an account. By doing so, you agree to:
 
-1. Proporcionar datos exactos y actualizados.
-2. Actualizar oportunamente la información relevante.
-3. Proteger sus credenciales y limitar el acceso a dispositivos asociados.
-4. Notificar de inmediato cualquier uso no autorizado o filtración.
-5. Asumir la responsabilidad por las acciones realizadas desde su cuenta.
+1. Provide accurate and up-to-date information.
+2. Update relevant information in a timely manner.
+3. Protect your credentials and limit access to associated devices.
+4. Notify immediately any unauthorized use or breach.
+5. Assume responsibility for actions performed from your account.
 
-## 3. Naturaleza de los servicios
+## 3. Nature of the Services
 
-Achylo provee infraestructura tecnológica descentralizada que permite transacciones P2P con criptoactivos soportadas por contratos inteligentes. Achylo no es intermediario financiero, custodio, corredor, asesor ni garante; todas las operaciones se celebran directamente entre usuarios bajo su exclusiva responsabilidad.
+Achylo provides decentralized technology infrastructure that enables P2P transactions with crypto assets supported by smart contracts. Achylo is not a financial intermediary, custodian, broker, advisor, or guarantor; all operations are entered into directly between users under their sole responsibility.
 
-## 4. Modificaciones e interrupciones
+## 4. Modifications and Interruptions
 
-Achylo puede actualizar, suspender o descontinuar funcionalidades para mejorar la plataforma. Cuando sea razonable se notificará con antelación, pero Achylo no es responsable por los efectos de dichas modificaciones. En caso de interrupción, los usuarios conservan acceso a sus activos interactuando directamente con los contratos inteligentes, dado que Achylo no custodia fondos ni claves privadas.
+Achylo may update, suspend, or discontinue functionalities to improve the platform. When reasonable, advance notice will be given, but Achylo is not responsible for the effects of such modifications. In case of interruption, users retain access to their assets by interacting directly with the smart contracts, since Achylo does not custody funds or private keys.
 
-> Achylo Labs utiliza contratos inteligentes autónomos desplegados en blockchain. Aun si la interfaz web fuese retirada o atacada, los usuarios mantienen control total sobre sus activos mediante herramientas compatibles, salvo que exista actividad sospechosa que ponga en riesgo a la contraparte.
+> Achylo Labs uses autonomous smart contracts deployed on blockchain. Even if the web interface were removed or attacked, users maintain full control over their assets through compatible tools, unless there is suspicious activity that puts the counterparty at risk.
 
-## 5. Asunción de riesgos
+## 5. Assumption of Risk
 
-El uso de servicios basados en internet y blockchain conlleva riesgos como fallas técnicas, ataques informáticos, pérdida de datos, errores de transacción, congestión de redes, fluctuaciones de precio y restricciones regulatorias. Usted acepta operar bajo su propio criterio y puede experimentar pérdidas totales o parciales de los activos involucrados.
+The use of internet and blockchain-based services entails risks such as technical failures, cyber attacks, data loss, transaction errors, network congestion, price fluctuations, and regulatory restrictions. You agree to operate at your own discretion and may experience total or partial losses of the assets involved.
 
-## 6. Exención y limitación de responsabilidad
+## 6. Disclaimer and Limitation of Liability
 
-- **Servicios “tal como están”**: Achylo opera con diligencia pero no garantiza disponibilidad continua, ausencia de errores, seguridad absoluta ni resultados concretos.
-- **No responsabilidad por pérdidas**: Achylo, sus directores y afiliados no serán responsables por daños indirectos, lucro cesante, pérdida de datos o cualquier consecuencia derivada del uso o imposibilidad de uso de los servicios.
-- **Factores externos**: Achylo no controla la volatilidad de los criptoactivos, el desempeño de redes blockchain o proveedores externos, por lo que no se hace responsable de eventos causados por dichos factores.
+- **Services "as is"**: Achylo operates with diligence but does not guarantee continuous availability, absence of errors, absolute security, or specific results.
+- **No liability for losses**: Achylo, its directors, and affiliates will not be liable for indirect damages, lost profits, data loss, or any consequence arising from the use or inability to use the services.
+- **External factors**: Achylo does not control the volatility of crypto assets, the performance of blockchain networks, or external providers, and therefore is not responsible for events caused by such factors.
 
-## 7. Uso aceptable
+## 7. Acceptable Use
 
-El usuario se compromete a no:
+The user undertakes not to:
 
-- Interferir con el funcionamiento de la plataforma o cuentas ajenas.
-- Desarrollar o ejecutar actividades ilícitas, lavado de activos o fraude.
-- Realizar scraping, ingeniería inversa o extracción automatizada sin autorización.
-- Utilizar credenciales, billeteras o claves que no le pertenezcan.
-- Introducir malware, bots o código destinado a comprometer los servicios.
-- Integrar aplicaciones con Achylo sin consentimiento escrito.
-- Proporcionar información falsa o engañosa.
+- Interfere with the operation of the platform or other accounts.
+- Develop or carry out illegal activities, money laundering, or fraud.
+- Perform scraping, reverse engineering, or automated extraction without authorization.
+- Use credentials, wallets, or keys that do not belong to you.
+- Introduce malware, bots, or code intended to compromise the services.
+- Integrate applications with Achylo without written consent.
+- Provide false or misleading information.
 
-## 8. Contenido generado por usuarios
+## 8. User-Generated Content
 
-- Usted es responsable del contenido que publica o transmite a través del protocolo.
-- Declara tener los derechos necesarios y que su contenido no infringe derechos de terceros.
-- Otorga a Achylo una licencia mundial, no exclusiva y gratuita para almacenar, procesar y mostrar dicho contenido con el fin de operar los servicios.
-- Conserve sus derechos morales, aunque renuncia a reclamarlos contra Achylo por usos legítimos asociados a la prestación de los servicios.
+- You are responsible for the content you publish or transmit through the protocol.
+- You declare that you have the necessary rights and that your content does not infringe third-party rights.
+- You grant Achylo a worldwide, non-exclusive, and free license to store, process, and display such content in order to operate the services.
+- You retain your moral rights, although you waive claiming them against Achylo for legitimate uses associated with the provision of the services.
 
-## 9. Servicios y contenido de terceros
+## 9. Third-Party Services and Content
 
-La plataforma puede enlazar o integrar servicios de terceros. Achylo no controla ni respalda dichos servicios y no es responsable por su veracidad, seguridad o disponibilidad. Cualquier relación con terceros corre por su cuenta y riesgo.
+The platform may link to or integrate third-party services. Achylo does not control or endorse such services and is not responsible for their accuracy, security, or availability. Any relationship with third parties is at your own risk.
 
-## 10. Propiedad intelectual
+## 10. Intellectual Property
 
-Todo el software, marcas, logotipos, bases de datos y contenido asociados a Achylo son propiedad de Achylo Labs o de sus licenciantes. Cualquier uso no autorizado queda prohibido y puede derivar en acciones legales.
+All software, trademarks, logos, databases, and content associated with Achylo are the property of Achylo Labs or its licensors. Any unauthorized use is prohibited and may result in legal action.
 
-## 11. Suspensión o terminación
+## 11. Suspension or Termination
 
-Achylo puede suspender o cancelar su cuenta si detecta incumplimientos, actividades ilícitas, riesgos operativos o motivos de seguridad, sin obligación de reembolso.
+Achylo may suspend or cancel your account if it detects breaches, illegal activities, operational risks, or security reasons, without obligation to refund.
 
-## 12. Cookies y tecnologías similares
+## 12. Cookies and Similar Technologies
 
-Achylo utiliza cookies, balizas web y tecnologías equivalentes para brindar funcionalidades esenciales, análisis de uso y optimización. El uso continuo implica su consentimiento conforme a la Política de Privacidad.
+Achylo uses cookies, web beacons, and equivalent technologies to provide essential functionalities, usage analysis, and optimization. Continued use implies your consent in accordance with the Privacy Policy.
 
-## 13. Política de privacidad
+## 13. Privacy Policy
 
-El tratamiento de datos personales se rige por la Política de Privacidad de Achylo Labs, la cual forma parte de estos términos y cumple con la legislación vigente en las Islas Marshall. Revise periódicamente dicha política para conocer actualizaciones.
+The processing of personal data is governed by the Achylo Labs Privacy Policy, which forms part of these terms and complies with the legislation in force in the Marshall Islands. Please review that policy periodically to learn about updates.
 
-## 14. Exención de garantías adicionales
+## 14. Additional Disclaimer of Warranties
 
-Achylo no garantiza compatibilidad con todos los dispositivos ni ausencia de vulnerabilidades. Es responsabilidad del usuario mantener copias de seguridad de su información.
+Achylo does not guarantee compatibility with all devices or the absence of vulnerabilities. It is the user's responsibility to keep backups of their information.
 
-## 15. Propiedad intelectual de terceros
+## 15. Third-Party Intellectual Property
 
-El contenido de terceros mostrado en la plataforma pertenece a sus titulares. Achylo no lo respalda ni garantiza, y cualquier interacción con ellos es responsabilidad del usuario.
+Third-party content displayed on the platform belongs to its owners. Achylo does not endorse or guarantee it, and any interaction with it is the user's responsibility.
 
-## 16. Limitación de responsabilidad
+## 16. Limitation of Liability
 
-Dentro del marco legal aplicable, Achylo no será responsable por daños indirectos, punitivos, incidentales o consecuenciales, aunque se hubiera advertido sobre la posibilidad de dichos daños.
+Within the applicable legal framework, Achylo will not be liable for indirect, punitive, incidental, or consequential damages, even if advised of the possibility of such damages.
 
-## 17. Indemnización
+## 17. Indemnification
 
-Usted se compromete a indemnizar y mantener indemne a Achylo y a su equipo frente a reclamaciones derivados de su uso de los servicios, su contenido, el incumplimiento de estos términos o la violación de derechos de terceros.
+You agree to indemnify and hold harmless Achylo and its team against claims arising from your use of the services, your content, breach of these terms, or violation of third-party rights.
 
-## 18. Disposiciones generales
+## 18. General Provisions
 
-- Estos términos reemplazan cualquier acuerdo previo relacionado con el uso de Achylo Protocol.
-- Achylo podrá modificarlos en cualquier momento. Las actualizaciones entrarán en vigor en la fecha indicada y el uso continuado implica su aceptación.
-- La falta de ejercicio de un derecho por parte de Achylo no constituye renuncia.
-- Si alguna cláusula se declara inválida, el resto permanecerá vigente.
-- Achylo no responde por eventos de fuerza mayor o fuera de su control razonable.
-- Usted no puede ceder sus derechos sin consentimiento escrito; Achylo puede hacerlo sin requerir su autorización.
+- These terms replace any previous agreement related to the use of Achylo Protocol.
+- Achylo may modify them at any time. Updates will take effect on the date indicated and continued use implies acceptance.
+- Achylo's failure to exercise a right does not constitute a waiver.
+- If any clause is declared invalid, the rest will remain in force.
+- Achylo is not responsible for force majeure events or matters beyond its reasonable control.
+- You may not assign your rights without written consent; Achylo may do so without requiring your authorization.
 
-## 19. Legislación aplicable y jurisdicción
+## 19. Applicable Law and Jurisdiction
 
-Los términos se rigen por las leyes de las Islas Marshall. Las controversias se resolverán ante los tribunales competentes del domicilio legal de Achylo Labs, salvo disposición imperativa en contrario.
+These terms are governed by the laws of the Marshall Islands. Disputes will be resolved before the competent courts of the legal domicile of Achylo Labs, unless mandatory law provides otherwise.
 
-## 20. Contacto
+## 20. Contact
 
-Para consultas contacte al equipo a través del canal de soporte publicado en la plataforma. El uso de los servicios implica también la aceptación de la Política de Privacidad oficial.
+For inquiries, contact the team through the support channel published on the platform. Use of the services also implies acceptance of the official Privacy Policy.
 
-## 21. Autocustodia y responsabilidad del usuario
+## 21. Self-Custody and User Responsibility
 
-Achylo facilita la interacción con billeteras inteligentes vinculadas a métodos de autenticación de terceros (por ejemplo, Google, correo electrónico o Apple ID). El usuario reconoce que:
+Achylo facilitates interaction with smart wallets linked to third-party authentication methods (for example, Google, email, or Apple ID). The user acknowledges that:
 
-1. El acceso a su billetera depende de la disponibilidad y control del método de autenticación elegido.
-2. Achylo no custodia credenciales ni claves criptográficas; no puede autorizar transacciones en su nombre.
-3. Como medida de seguridad, Achylo **no reconoce** mecanismos de recuperación on-chain independientes, pues podrían habilitar ataques o suplantaciones.
-4. Achylo no garantiza la recuperación de activos en casos de pérdida definitiva del método de autenticación. Se anunciarán alternativas de recuperación cuando estén disponibles.
-5. El protocolo opera bajo un modelo de autocustodia: usted es el único responsable de la seguridad y continuidad de su acceso.
-6. Al usar la dApp acepta que la pérdida de acceso al método de autenticación puede impedir temporal o permanentemente la administración de sus activos sin responsabilidad para Achylo.
+1. Access to their wallet depends on the availability and control of the chosen authentication method.
+2. Achylo does not custody credentials or cryptographic keys; it cannot authorize transactions on their behalf.
+3. As a security measure, Achylo **does not recognize** independent on-chain recovery mechanisms, as they could enable attacks or impersonations.
+4. Achylo does not guarantee the recovery of assets in cases of definitive loss of the authentication method. Recovery alternatives will be announced when available.
+5. The protocol operates under a self-custody model: you are solely responsible for the security and continuity of your access.
+6. By using the dApp, you accept that loss of access to the authentication method may temporarily or permanently prevent the management of your assets without liability for Achylo.

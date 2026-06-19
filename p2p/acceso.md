@@ -1,49 +1,49 @@
-# Acceso y Configuración Inicial
+# Access and Initial Setup
 
-### Red Disponible
-* **Base Sepolia** (Hasta nuevo comunicado).
-* **Aviso:** Antes de enviar USDC a tu cartera, verifica siempre la red disponible.
+### Available Network
+* **Base Sepolia** (Until further notice).
+* **Note:** Before sending USDC to your wallet, always verify the available network.
 
 ---
 
-## Cómo entrar a la aplicación Achylo
+## How to Access the Achylo App
 
-1.  **Accede al sitio oficial:** Abre [www.achylo.com](http://www.achylo.com) en tu navegador.
-2.  **Conecta tu Wallet:** * Haz clic en el botón **“Connect”**. 
-    * Si es tu primera vez, inicia sesión con tu **e-mail preferido**. Se creará automáticamente una Wallet personalizada.
-3.  **Recibir Fondos:** * Una vez creada la wallet, estás listo para recibir **USDC** desde otras fuentes (Exchanges u otras wallets).
-    * **IMPORTANTE:** Revisa que los fondos sean enviados exclusivamente por la **Red de Base**.
-4.  **Iniciar Negociaciones:** * Con la wallet conectada y con fondos, dirígete al menú: `Tools` -> `P2P`.
-    * La app mostrará tu dirección y desbloqueará los menús principales.
+1.  **Access the official site:** Open [www.achylo.com](http://www.achylo.com) in your browser.
+2.  **Connect your Wallet:** * Click the **“Connect”** button. 
+    * If it's your first time, log in with your **preferred email**. A personalized wallet will be created automatically.
+3.  **Receive Funds:** * Once the wallet is created, you're ready to receive **USDC** from other sources (exchanges or other wallets).
+    * **IMPORTANT:** Make sure funds are sent exclusively through the **Base Network**.
+4.  **Start Trading:** * With your wallet connected and funded, go to the menu: `Tools` -> `P2P`.
+    * The app will display your address and unlock the main menus.
 
 <p align="center">
-  <img src="/assets/images/p2p_menu.png" alt="Ruta hacia el módulo P2P en el menú principal" width="75%" />
+  <img src="/assets/images/p2p_menu.png" alt="Path to the P2P module in the main menu" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1. Ruta P2P.</strong></p>
+<p align="center"><strong>📍 Img. No.1. P2P Path.</strong></p>
 
 ---
 
-## Monedas Fiat Soportadas
-El Marketplace P2P acepta múltiples divisas para operar en distintos países:
+## Supported Fiat Currencies
+The P2P Marketplace accepts multiple currencies to operate in different countries:
 
-| Moneda | Descripción |
+| Currency | Description |
 | :--- | :--- |
-| **CUBT** | Peso Cubano Tokenizado (**50% de descuento en fees**) |
-| **CUP** | Peso Cubano |
-| **MLC** | Moneda Libremente Convertible |
-| **USD_CLASICA** | USD modalidad “clásica” (transferencias) |
-| **USD** | Dólar estadounidense (Efectivo) |
-| **COP** | Peso Colombiano (Efectivo) |
-| **EURO** | Euro (Efectivo) |
-| **GBP** | Libra esterlina (Efectivo) |
-| **CAD** | Dólar canadiense (Efectivo) |
-| **MXN** | Peso mexicano (Efectivo) |
-| **BRL** | Real brasileño (Efectivo) |
-| **PEN** | Sol peruano (Efectivo) |
-| **DOP** | Peso dominicano (Efectivo) |
-| **PYG** | Guaraní paraguayo (Efectivo) |
-| **ECS** | Sucre ecuatoriano |
-| **BOB** | Boliviano (Efectivo) |
-| **ARS** | Peso argentino (Efectivo) |
-| **VES** | Bolívar venezolano (Efectivo) |
+| **CUBT** | Tokenized Cuban Peso (**50% fee discount**) |
+| **CUP** | Cuban Peso |
+| **MLC** | Freely Convertible Currency |
+| **USD_CLASICA** | USD “classic” modality (transfers) |
+| **USD** | United States Dollar (Cash) |
+| **COP** | Colombian Peso (Cash) |
+| **EURO** | Euro (Cash) |
+| **GBP** | British Pound (Cash) |
+| **CAD** | Canadian Dollar (Cash) |
+| **MXN** | Mexican Peso (Cash) |
+| **BRL** | Brazilian Real (Cash) |
+| **PEN** | Peruvian Sol (Cash) |
+| **DOP** | Dominican Peso (Cash) |
+| **PYG** | Paraguayan Guaraní (Cash) |
+| **ECS** | Ecuadorian Sucre |
+| **BOB** | Bolivian Boliviano (Cash) |
+| **ARS** | Argentine Peso (Cash) |
+| **VES** | Venezuelan Bolívar (Cash) |

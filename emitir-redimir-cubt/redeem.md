@@ -1,27 +1,27 @@
 #  Redeem CUBT
 
-Guía para canjear **CUBT** y recibir **USDC** utilizando la pestaña **Redeem** del módulo “Mint & Redeem”.
+Guide to redeem **CUBT** and receive **USDC** using the **Redeem** tab of the “Mint & Redeem” module.
 
 ---
 
-##  Antes de comenzar
-- Wallet conectada en Base / Base Sepolia.
-- CUBT disponible en tu balance (y sin estar bloqueado en un escrow).
+##  Before You Begin
+- Wallet connected on Base / Base Sepolia.
+- CUBT available in your balance (and not locked in an escrow).
 
 ---
 
-##  Paso a paso
-1. **Selecciona Redeem**: cambia a la pestaña Redeem dentro del módulo.
-2. **Ingresa el monto**: escribe cuántos CUBT quieres canjear. Puedes usar el botón **MAX** si deseas liberar todo tu balance.
-3. **Revisa el simulador**:
-   - Verás los USDC estimados **antes y después** de la comisión.
-   - Se muestran descuentos activos o si eres **feeExempt**.
-4. **Confirma**: pulsa **Redeem** y aprueba la transacción en tu wallet. La interfaz mostrará toasts del progreso y el resultado final.
-5. **Actualización automática**: igual que en Mint, la dApp espera unos segundos tras la confirmación y refresca balances y estadísticas.
+##  Step by Step
+1. **Select Redeem**: switch to the Redeem tab within the module.
+2. **Enter the amount**: write how many CUBT you want to redeem. You can use the **MAX** button if you want to free up your entire balance.
+3. **Review the simulator**:
+   - You will see the estimated USDC **before and after** the fee.
+   - Active discounts are shown, or if you are **feeExempt**.
+4. **Confirm**: click **Redeem** and approve the transaction in your wallet. The interface will show progress toasts and the final result.
+5. **Automatic update**: just like in Mint, the dApp waits a few seconds after confirmation and refreshes balances and statistics.
 
 ---
 
 ##  Tips
-- Si acabas de recibir CUBT desde otra cuenta o contrato, usa **Refresh** para actualizar el balance antes de canjear.
-- Si el simulador muestra que la comisión es cero, significa que estás exento (feeExempt o estatus Gold/staking aplicable).
-- El flujo de Redeem no tiene sobrecolateralización: únicamente se descuenta la comisión configurada para ese momento.
+- If you just received CUBT from another account or contract, use **Refresh** to update the balance before redeeming.
+- If the simulator shows the fee is zero, it means you are exempt (feeExempt or applicable Gold/staking status).
+- The Redeem flow has no overcollateralization: only the fee configured at that time is deducted.

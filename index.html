@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
@@ -485,11 +485,41 @@
       position: relative;
       background: var(--achylo-code-bg);
       border: 1px solid var(--achylo-code-border);
+      border-top: 3px solid var(--achylo-accent);
       border-radius: var(--achylo-radius);
       padding: 20px 24px;
       overflow-x: auto;
       margin: 24px 0;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .markdown-section pre::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff5f56;
+      box-shadow: 16px 0 #ffbd2e, 32px 0 #27c93f;
+      opacity: 0.7;
+    }
+
+    .markdown-section pre[data-lang]::before {
+      content: attr(data-lang);
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--achylo-accent);
+      margin-bottom: 12px;
+      padding: 4px 10px;
+      padding-left: 56px;
+      border-radius: 6px;
+      background: rgba(255, 107, 53, 0.08);
+      width: fit-content;
     }
 
     .markdown-section pre code {
@@ -548,8 +578,8 @@
     }
 
     .markdown-section pre .copy-code-btn.copied {
-      background: #22c55e;
-      border-color: #22c55e;
+      background: var(--achylo-accent);
+      border-color: var(--achylo-accent);
       color: #fff;
     }
 
@@ -763,15 +793,15 @@
 </head>
 <body>
   <div class="language-switcher" id="languageSwitcher" aria-expanded="false">
-    <span id="languageLabel">Español</span>
+    <span id="languageLabel">English</span>
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
   </div>
   <div class="language-options" id="languageOptions" role="menu">
-    <button data-lang="es" role="menuitem">🇪🇸 Español</button>
-    <button data-lang="en" role="menuitem">🇺🇸 English</button>
-    <button data-lang="pt" role="menuitem">🇧🇷 Português</button>
+    <button data-lang="en" role="menuitem">English</button>
+    <button data-lang="es" role="menuitem">Espanol</button>
+    <button data-lang="pt" role="menuitem">Portugues</button>
   </div>
-  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro">
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle between light and dark mode">
     <span class="icon-sun" aria-hidden="true">
       <svg viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="5" />
@@ -843,7 +873,7 @@
       const languageSwitcher = document.getElementById('languageSwitcher');
       const languageOptions = document.getElementById('languageOptions');
       const languageLabel = document.getElementById('languageLabel');
-      const langMap = { es: 'Español', en: 'English', pt: 'Português' };
+      const langMap = { en: 'English', es: 'Español', pt: 'Português' };
 
       const applyLang = (lang) => {
         const combo = document.querySelector('#google_translate_container select.goog-te-combo');
@@ -851,7 +881,7 @@
           combo.value = lang;
           combo.dispatchEvent(new Event('change'));
         }
-        languageLabel.textContent = langMap[lang] || 'Español';
+        languageLabel.textContent = langMap[lang] || 'English';
         [...languageOptions.querySelectorAll('button')].forEach(btn => {
           btn.classList.toggle('active', btn.dataset.lang === lang);
         });
@@ -883,12 +913,12 @@
 
       window.googleTranslateElementInit = function () {
         new google.translate.TranslateElement({
-          pageLanguage: 'es',
+          pageLanguage: 'en',
           includedLanguages: 'es,en,pt',
           autoDisplay: false
         }, 'google_translate_container');
 
-        const storedLang = localStorage.getItem(LANG_KEY) || 'es';
+        const storedLang = localStorage.getItem(LANG_KEY) || 'en';
         setTimeout(() => applyLang(storedLang), 50);
       };
 

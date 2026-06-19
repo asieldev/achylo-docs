@@ -1,7 +1,7 @@
 ---
 "Achylo Protocol White Paper"
 version: "v1.0.0"
-Actualizado: "14 de noviembre de 2025"
+Updated: "November 14, 2025"
 ---
 ---
 

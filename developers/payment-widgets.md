@@ -1,132 +1,132 @@
 # Payment Widgets
 
-Adicione um botão **"Pagar com Crypto"** a qualquer website. Os seus clientes clicam, abre-se uma janela de pagamento e pagam. Simples assim.
+Add a **"Pay with Crypto"** button to any website. Your customers click, a payment window opens, and they pay. Simple as that.
 
 ---
 
-## ¿Para qué serve?
+## What is it for?
 
-| Ideal para | Ejemplo |
-|------------|---------|
-| **Lojas online** | Wix, Shopify, WooCommerce, PrestaShop |
-| **Landing pages** | Páginas de venda, funis de conversão |
-| **Botões de donativo** | ONGs, creadores de conteúdo |
-| **Serviços digitais** | SaaS, cursos, assinaturas |
+| Ideal for | Example |
+|-----------|---------|
+| **Online stores** | Wix, Shopify, WooCommerce, PrestaShop |
+| **Landing pages** | Sales pages, conversion funnels |
+| **Donation buttons** | NGOs, content creators |
+| **Digital services** | SaaS, courses, subscriptions |
 
 ---
 
-## Opção 1: No-Code (Copiar e Colar)
+## Option 1: No-Code (Copy and Paste)
 
-Para quem não sabe programar. Funciona em WordPress, Wix, Shopify, ou HTML puro.
+For non-developers. Works on WordPress, Wix, Shopify, or plain HTML.
 
-### Paso 1 – Copie o código
+### Step 1 — Copy the code
 
 ```html
 <!-- Achylo Payment Widget -->
 <script src="https://achylo.com/achylo.js?v=5"></script>
 
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pagar com Crypto"
-  description="Pagamento do pedido #1234">
+  label="💳 Pay with Crypto"
+  description="Payment for order #1234">
 </achylo-button>
 ```
 
-### Paso 2 – Obtenha seu Widget ID
+### Step 2 — Get your Widget ID
 
-1. Acesse [achylo.com](https://achylo.com) e faça login
-2. Abra seu **Perfil de Usuário** → seção **"Payment Widgets"**
-3. Clique em **"Criar novo widget"**
-4. Adicione os domínios onde usará o widget (ex: `https://sualoja.com`)
-5. Copie o **Widget ID** (começa com `achylo_`)
+1. Go to [achylo.com](https://achylo.com) and log in
+2. Open your **User Profile** → **"Payment Widgets"** section
+3. Click **"Create new widget"**
+4. Add the domains where you'll use the widget (e.g. `https://yourstore.com`)
+5. Copy the **Widget ID** (starts with `achylo_`)
 
-### Paso 3 – Personalize
+### Step 3 — Customize
 
-Substitua no código:
+Replace in the code:
 
 ```html
 <achylo-button
-  merchant-id="achylo_cv80520f"    <!-- Seu Widget ID -->
-  amount="50.00"                    <!-- Valor em USDC -->
-  currency="USDC"                     <!-- Sempre USDC -->
-  label="💳 Pagar agora"              <!-- Texto do botão -->
-  description="Assinatura mensal"    <!-- Descrição do pagamento -->
-  color="#6366f1">                  <!-- Cor do botão (opcional) -->
+  merchant-id="achylo_cv80520f"    <!-- Your Widget ID -->
+  amount="50.00"                    <!-- Value in USDC -->
+  currency="USDC"                     <!-- Always USDC -->
+  label="💳 Pay now"                  <!-- Button text -->
+  description="Monthly subscription"  <!-- Payment description -->
+  color="#6366f1">                  <!-- Button color (optional) -->
 </achylo-button>
 ```
 
-### Paso 4 – Cole no seu site
+### Step 4 — Paste on your site
 
-#### 🟣 Wix (Passo a passo detalhado)
+#### 🟣 Wix (Detailed step-by-step)
 
-1. **No Editor Wix**, clique no botão **"+ Adicionar"** (Add)
-2. Selecione **"Embed"** → **"Embed HTML"** ou **"Código HTML"**
-3. Clique em **"Inserir código"** ou **"Enter Code"**
-4. Cole o código do widget:
+1. **In the Wix Editor**, click the **"+ Add"** button
+2. Select **"Embed"** → **"Embed HTML"** or **"HTML Code"**
+3. Click **"Enter Code"**
+4. Paste the widget code:
 
 ```html
 <script src="https://achylo.com/achylo.js?v=5"></script>
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pagar com Crypto"
-  description="Pagamento do pedido #1234">
+  label="💳 Pay with Crypto"
+  description="Payment for order #1234">
 </achylo-button>
 ```
 
-5. Clique em **"Aplicar"** ou **"Update"**
-6. Posicione o botão onde deseja na página
-7. **Publicar** o site para ver funcionando
+5. Click **"Apply"** or **"Update"**
+6. Position the button where you want on the page
+7. **Publish** the site to see it working
 
-> 💡 **Dica**: Se o botão não aparecer, verifique se o domínio `seusite.wixsite.com` foi adicionado na whitelist do widget.
-
----
-
-| Plataforma | Como adicionar |
-|------------|----------------|
-| **WordPress** | Editor → "HTML personalizado" |
-| **Wix** | Ver guia detalhado acima ↑ |
-| **Shopify** | Tema → Editar código → Snippet novo |
-| **HTML puro** | Dentro do `<body>` |
-
-### Paso 5 – Teste
-
-1. Abra seu site no navegador
-2. Clique no botão
-3. Deve abrir um modal de pagamento
-4. ✅ Pronto!
+> 💡 **Tip**: If the button doesn't appear, check that the domain `yoursite.wixsite.com` was added to the widget whitelist.
 
 ---
 
-## Opção 2: JavaScript (Controle Programático)
+| Platform | How to add |
+|----------|------------|
+| **WordPress** | Editor → "Custom HTML" |
+| **Wix** | See detailed guide above ↑ |
+| **Shopify** | Theme → Edit code → New snippet |
+| **Plain HTML** | Inside the `<body>` |
 
-Para desenvolvedores que precisam escutar eventos ou controlar o fluxo.
+### Step 5 — Test
 
-### Atributos disponíveis
+1. Open your site in the browser
+2. Click the button
+3. A payment modal should open
+4. ✅ Ready!
 
-| Atributo | Obrigatório | Descrição |
-|----------|-------------|-----------|
-| `merchant-id` | ✅ | Seu Widget ID (`achylo_...`) |
-| `amount` | ✅* | Valor em USDC (ex: `"10.50"`). Ignorado se `amount-from` estiver definido. |
-| `currency` | ✅ | Sempre `"USDC"` |
-| `label` | — | Texto do botão (padrão: `"Pay with Crypto"`) |
-| `description` | — | Descrição personalizada do pagamento (opcional) |
-| `color` | — | Cor hexadecimal (padrão: `#ff7f41`) |
-| `amount-from` | — | Seletor CSS do elemento que contém o total do carrinho. O valor é lido no momento do clique. Símbolos `$`, `€`, `£`, `,` são removidos automaticamente. |
+---
 
-### Eventos DOM
+## Option 2: JavaScript (Programmatic Control)
 
-O botão emite eventos DOM personalizados que pode escutar. Todos os dados do evento estão disponíveis em `e.detail`.
+For developers who need to listen to events or control the flow.
 
-| Evento | `e.detail` | Quando |
-|--------|-----------|--------|
-| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Pagamento confirmado na blockchain |
-| `achylo:payment-error` | `error, paymentId` | Pagamento falhou ou foi rejeitado |
-| `achylo:payment-cancelled` | `paymentId` | Usuário fechou o modal sem pagar |
-| `achylo:opened` | `paymentId, mode, url` | Modal ou aba aberta |
+### Available attributes
+
+| Attribute | Required | Description |
+|-----------|----------|-------------|
+| `merchant-id` | ✅ | Your Widget ID (`achylo_...`) |
+| `amount` | ✅* | Value in USDC (e.g. `"10.50"`). Ignored if `amount-from` is set. |
+| `currency` | ✅ | Always `"USDC"` |
+| `label` | — | Button text (default: `"Pay with Crypto"`) |
+| `description` | — | Custom payment description (optional) |
+| `color` | — | Hex color (default: `#ff7f41`) |
+| `amount-from` | — | CSS selector of the element that contains the cart total. The value is read at click time. `$`, `€`, `£`, `,` symbols are removed automatically. |
+
+### DOM events
+
+The button emits custom DOM events you can listen to. All event data is available in `e.detail`.
+
+| Event | `e.detail` | When |
+|-------|-----------|------|
+| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Payment confirmed on-chain |
+| `achylo:payment-error` | `error, paymentId` | Payment failed or was rejected |
+| `achylo:payment-cancelled` | `paymentId` | User closed the modal without paying |
+| `achylo:opened` | `paymentId, mode, url` | Modal or tab opened |
 
 ```html
 <achylo-button
@@ -139,120 +139,120 @@ O botão emite eventos DOM personalizados que pode escutar. Todos os dados do ev
 <script>
   const btn = document.getElementById('pay-btn');
 
-  // Pagamento confirmado on-chain
+  // Payment confirmed on-chain
   btn.addEventListener('achylo:payment-success', (e) => {
     console.log('TX hash:', e.detail.txHash);
     console.log('Amount:', e.detail.amount, e.detail.token);
     console.log('Chain ID:', e.detail.chainId);
-    window.location.href = '/obrigado?tx=' + e.detail.txHash;
+    window.location.href = '/thank-you?tx=' + e.detail.txHash;
   });
 
-  // Erro no pagamento
+  // Payment error
   btn.addEventListener('achylo:payment-error', (e) => {
-    console.error('❌ Erro:', e.detail.error);
-    alert('Pagamento falhou. Tente novamente.');
+    console.error('❌ Error:', e.detail.error);
+    alert('Payment failed. Try again.');
   });
 
-  // Usuário fechou o modal
+  // User closed the modal
   btn.addEventListener('achylo:payment-cancelled', () => {
-    console.log('Usuário cancelou');
+    console.log('User cancelled');
   });
 </script>
 ```
 
 ---
 
-## Carrinho Dinâmico
+## Dynamic Cart
 
-Use `amount-from` para ler automaticamente o total do carrinho da página. O valor é capturado no momento do clique — sem JavaScript adicional.
+Use `amount-from` to automatically read the cart total from the page. The value is captured at click time — no additional JavaScript.
 
 ```html
 <script async src="https://achylo.com/achylo.js?v=5"></script>
 
-<!-- Substitua #cartTotal pelo ID/seletor do seu elemento de total -->
+<!-- Replace #cartTotal with your total element's ID/selector -->
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount-from="#cartTotal"
   currency="USDC">
 </achylo-button>
 ```
 
-> 💡 **Não captura o total?** Clique com o botão direito no total do carrinho → Inspecionar. O código destacado mostrará `id="alguma-coisa"`. Use `#alguma-coisa` em `amount-from`.
+> 💡 **Not capturing the total?** Right-click the cart total → Inspect. The highlighted code will show `id="something"`. Use `#something` in `amount-from`.
 
-### Controlo manual via JavaScript
+### Manual control via JavaScript
 
-Se precisar de controlo programático total (ex.: o total não está visível na página):
+If you need full programmatic control (e.g. the total is not visible on the page):
 
 ```html
 <achylo-button
   id="checkout-btn"
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   currency="USDC">
 </achylo-button>
 
 <script>
-  // Atualiza o amount quando o carrinho muda
-  function atualizarCheckout(total) {
+  // Updates the amount when the cart changes
+  function updateCheckout(total) {
     document.getElementById('checkout-btn')
       .setAttribute('amount', total.toFixed(2));
   }
 
-  // Redirecionar após pagamento
+  // Redirect after payment
   document.getElementById('checkout-btn')
     .addEventListener('achylo:payment-success', (e) => {
-      window.location.href = '/obrigado?tx=' + e.detail.txHash;
+      window.location.href = '/thank-you?tx=' + e.detail.txHash;
     });
 </script>
 ```
 
 ---
 
-## Múltiplos Produtos
+## Multiple Products
 
-Carregue o script uma vez e adicione quantos botões precisar. Cada um funciona independentemente.
+Load the script once and add as many buttons as you need. Each works independently.
 
 ```html
 <script async src="https://achylo.com/achylo.js?v=5"></script>
 
-<!-- Produto A -->
+<!-- Product A -->
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount="19.99"
   currency="USDC"
-  label="Comprar Produto A"
-  description="Produto A - Plano Básico">
+  label="Buy Product A"
+  description="Product A - Basic Plan">
 </achylo-button>
 
-<!-- Produto B -->
+<!-- Product B -->
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount="49.99"
   currency="USDC"
-  label="Comprar Produto B"
-  description="Produto B - Plano Pro">
+  label="Buy Product B"
+  description="Product B - Pro Plan">
 </achylo-button>
 
-<!-- Donativo (valor variável via amount-from) -->
+<!-- Donation (variable amount via amount-from) -->
 <achylo-button
-  merchant-id="achylo_SEU_WIDGET_ID"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount-from="#donationInput"
   currency="USDC"
-  label="Fazer Donativo">
+  label="Make Donation">
 </achylo-button>
 ```
 
 ---
 
-### Criar botão dinamicamente
+### Create button dynamically
 
 ```javascript
-// Criar elemento programmaticamente
+// Create element programmatically
 const btn = document.createElement('achylo-button');
 btn.setAttribute('merchant-id', 'achylo_cv80520f');
 btn.setAttribute('amount', '100.00');
 btn.setAttribute('currency', 'USDC');
-btn.setAttribute('label', 'Pagar R$ 100,00');
-btn.setAttribute('description', 'Assinatura anual');
+btn.setAttribute('label', 'Pay $100.00');
+btn.setAttribute('description', 'Annual subscription');
 btn.setAttribute('color', '#10b981');
 
 document.getElementById('container').appendChild(btn);
@@ -260,40 +260,40 @@ document.getElementById('container').appendChild(btn);
 
 ---
 
-## Segurança: Domínios Permitidos
+## Security: Allowed Domains
 
-Por segurança, o widget só funciona nos domínios autorizados:
+For security, the widget only works on authorized domains:
 
-1. Vá em **Perfil → Payment Widgets**
-2. Edite seu widget
-3. Em **"Allowed Origins"**, adicione:
-   - `https://sualoja.com`
-   - `https://www.sualoja.com`
-   - `https://checkout.sualoja.com`
+1. Go to **Profile → Payment Widgets**
+2. Edit your widget
+3. In **"Allowed Origins"**, add:
+   - `https://yourstore.com`
+   - `https://www.yourstore.com`
+   - `https://checkout.yourstore.com`
 
-> ⚠️ **Importante**: Sem o domínio na lista, o widget mostrará erro. Use `*` apenas em desenvolvimento (nunca em produção).
-
----
-
-## Limites de Valor
-
-| Limite | Valor |
-|--------|-------|
-| Mínimo | 1 USDC |
-| Máximo | 100.000 USDC |
-| Decimais | Até 6 casas |
+> ⚠️ **Important**: Without the domain in the list, the widget will show an error. Use `*` only in development (never in production).
 
 ---
 
-## Webhooks (Confirmação no Servidor)
+## Value Limits
 
-Receba notificações quando o pagamento for confirmado on-chain.
+| Limit | Value |
+|-------|-------|
+| Minimum | 1 USDC |
+| Maximum | 100,000 USDC |
+| Decimals | Up to 6 decimal places |
 
-### 1. Configure o webhook no backend
+---
 
-Quando criar o widget, inclua `webhookUrl` e `webhookSecret`.
+## Webhooks (Server Confirmation)
 
-### 2. Verifique a assinatura
+Receive notifications when the payment is confirmed on-chain.
+
+### 1. Configure the webhook on the backend
+
+When creating the widget, include `webhookUrl` and `webhookSecret`.
+
+### 2. Verify the signature
 
 ```javascript
 // Node.js / Express
@@ -314,25 +314,25 @@ app.post('/webhooks/achylo', (req, res) => {
   
   const { paymentId, amount, txHash, payerAddress } = req.body.data;
   
-  // Atualize seu banco de dados
-  await marcarPedidoComoPago(paymentId, txHash);
+  // Update your database
+  await markOrderAsPaid(paymentId, txHash);
   
   res.status(200).send('OK');
 });
 ```
 
-Veja documentação completa em [Webhooks →](webhooks.md)
+See full documentation at [Webhooks →](webhooks.md)
 
 ---
 
-## Exemplos por Framework
+## Examples by Framework
 
 ### React
 
 ```jsx
 import { useEffect, useRef } from 'react';
 
-export function BotaoPagamento({ amount, orderId, description }) {
+export function PaymentButton({ amount, orderId, description }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -340,11 +340,11 @@ export function BotaoPagamento({ amount, orderId, description }) {
     btn.setAttribute('merchant-id', process.env.REACT_APP_ACHYLO_WIDGET_ID);
     btn.setAttribute('amount', amount);
     btn.setAttribute('currency', 'USDC');
-    btn.setAttribute('label', '💳 Pagar com Crypto');
-    btn.setAttribute('description', description || `Pagamento do pedido ${orderId}`);
+    btn.setAttribute('label', '💳 Pay with Crypto');
+    btn.setAttribute('description', description || `Payment for order ${orderId}`);
 
     btn.addEventListener('achylo:success', () => {
-      marcarPedidoComoPago(orderId);
+      markOrderAsPaid(orderId);
     });
 
     containerRef.current.appendChild(btn);
@@ -374,10 +374,10 @@ onMounted(() => {
   btn.setAttribute('merchant-id', import.meta.env.VITE_ACHYLO_WIDGET_ID);
   btn.setAttribute('amount', props.amount);
   btn.setAttribute('currency', 'USDC');
-  btn.setAttribute('description', props.description || 'Pagamento');
+  btn.setAttribute('description', props.description || 'Payment');
 
   btn.addEventListener('achylo:success', (e) => {
-    console.log('Pago:', e.detail);
+    console.log('Paid:', e.detail);
   });
 
   widgetContainer.value.appendChild(btn);
@@ -402,7 +402,7 @@ export function AchyloButton({ amount, description }: { amount: string; descript
     btn.setAttribute('merchant-id', process.env.NEXT_PUBLIC_ACHYLO_WIDGET_ID!);
     btn.setAttribute('amount', amount);
     btn.setAttribute('currency', 'USDC');
-    btn.setAttribute('description', description || 'Pagamento');
+    btn.setAttribute('description', description || 'Payment');
 
     ref.current.appendChild(btn);
     return () => btn.remove();
@@ -416,50 +416,50 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 
 ## Troubleshooting
 
-### O botão não aparece
-- ✅ Verifique se o script `achylo.js` carregou (console F12)
-- ✅ Confirme que o `merchant-id` está correto
+### The button doesn't appear
+- ✅ Check if the `achylo.js` script loaded (console F12)
+- ✅ Confirm the `merchant-id` is correct
 
-### "Domínio não autorizado"
-- ✅ Adicione seu domínio na whitelist do widget
-- ✅ Inclua `https://` (ex: `https://sualoja.com`)
+### "Domain not authorized"
+- ✅ Add your domain to the widget whitelist
+- ✅ Include `https://` (e.g. `https://yourstore.com`)
 
-### O modal não abre
-- ✅ Verifique bloqueadores de popup
-- ✅ O clique deve ser direto do usuário (não via script)
+### The modal doesn't open
+- ✅ Check popup blockers
+- ✅ The click must be a direct user action (not via script)
 
 ---
 
-## Referência Rápida
+## Quick Reference
 
 ```html
 <achylo-button
-  merchant-id="achylo_SEU_ID"      <!-- ✅ Obrigatório -->
-  amount="10.00"                    <!-- ✅ Obrigatório (ou use amount-from) -->
-  currency="USDC"                  <!-- ✅ Obrigatório -->
-  amount-from="#cartTotal"         <!-- Opcional: lê total do DOM -->
-  label="💳 Pagar"                 <!-- Opcional -->
-  description="Descrição"          <!-- Opcional -->
-  color="#ff7f41">                 <!-- Opcional -->
+  merchant-id="achylo_YOUR_ID"     <!-- ✅ Required -->
+  amount="10.00"                    <!-- ✅ Required (or use amount-from) -->
+  currency="USDC"                  <!-- ✅ Required -->
+  amount-from="#cartTotal"         <!-- Optional: reads total from DOM -->
+  label="💳 Pay"                   <!-- Optional -->
+  description="Description"        <!-- Optional -->
+  color="#ff7f41">                 <!-- Optional -->
 </achylo-button>
 ```
 
-### Eventos
+### Events
 
-| Evento | `e.detail` | Quando dispara |
-|--------|-----------|----------------|
-| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Pagamento confirmado on-chain |
-| `achylo:payment-error` | `error, paymentId` | Erro no processamento |
-| `achylo:payment-cancelled` | `paymentId` | Usuário fechou o modal |
-| `achylo:opened` | `paymentId, mode, url` | Modal ou aba aberta |
-| `achylo:ready` | — | Script carregado e pronto |
+| Event | `e.detail` | When it fires |
+|-------|-----------|---------------|
+| `achylo:payment-success` | `txHash, amount, token, chainId, paymentId` | Payment confirmed on-chain |
+| `achylo:payment-error` | `error, paymentId` | Processing error |
+| `achylo:payment-cancelled` | `paymentId` | User closed the modal |
+| `achylo:opened` | `paymentId, mode, url` | Modal or tab opened |
+| `achylo:ready` | — | Script loaded and ready |
 
-> ℹ️ Os eventos `achylo:success`, `achylo:error` e `achylo:cancel` ainda são emitidos para compatibilidade com versões anteriores.
+> ℹ️ The events `achylo:success`, `achylo:error`, and `achylo:cancel` are still emitted for backward compatibility.
 
 ---
 
-## Recursos Relacionados
+## Related Resources
 
-- [Payment Links API →](payment-links.md) – Links de pagamento programáticos
-- [Webhooks →](webhooks.md) – Notificações em tempo real
-- [API Keys →](api-keys.md) – Gerenciar chaves de API
+- [Payment Links API →](payment-links.md) – Programmatic payment links
+- [Webhooks →](webhooks.md) – Real-time notifications
+- [API Keys →](api-keys.md) – Manage API keys

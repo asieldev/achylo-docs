@@ -1,42 +1,42 @@
-#  Fees y Sobrecolateralización (Mint & Redeem)
+#  Fees and Overcollateralization (Mint & Redeem)
 
-Achylo usa una **tarifa plana en porcentaje** para cada flujo y, en el caso del Mint, agrega un componente de **sobrecolateralización** para reforzar el Treasury.
+Achylo uses a **flat percentage fee** for each flow and, in the case of Mint, adds an **overcollateralization** component to strengthen the Treasury.
 
 ---
 
-##  Cómo se calculan
+##  How They Are Calculated
 1. **Mint**
-   - Se descuenta primero la comisión (`mintFee`).
-   - Luego se resta el 1% destinado a sobrecolateralización (si no estás exento).
-   - El monto neto restante se convierte en CUBT.
+   - The fee (`mintFee`) is deducted first.
+   - Then 1% destined for overcollateralization is subtracted (if you are not exempt).
+   - The remaining net amount is converted into CUBT.
 2. **Redeem**
-   - Solo se descuenta la comisión (`redeemFee`).
-   - Recibes en USDC el neto calculado por el simulador.
+   - Only the fee (`redeemFee`) is deducted.
+   - You receive the net calculated by the simulator in USDC.
 
-La tarjeta de simulación indica claramente ambos conceptos (`Protocol Fee` y `Overcollateralization`).
-
----
-
-##  Descuentos y Exenciones
-- **Usuarios Gold:** los usuarios con estatus Gold activo en el P2P son exentos automáticamente de todas las comisiones (0% fee). Esta verificación se realiza en tiempo real mediante la consulta al contrato P2PEscrow.
-- **Cuentas feeExempt:** exención manual de comisiones (0% fee) configurada por la Gobernanza (compuesta por usuarios Gold, usuarios con stake y holders), independiente del estatus Gold.
-- **Staking Activo:** Los usuarios que tienen un stake activo en el contrato reciben automáticamente un 50% de descuento en las comisiones de Mint y Redeem.
-- **Holder CUBT:** Los usuarios que poseen al menos 1 CUBT en su wallet reciben un descuento en las comisiones de Mint y Redeem (la configuración actual del contrato otorga un 25% de descuento).
-
-El backend verifica estas condiciones en cada llamada y la dApp refleja el resultado en tiempo real indicándolo en el simulador.
+The simulation card clearly indicates both concepts (`Protocol Fee` and `Overcollateralization`).
 
 ---
 
-##  Sobrecolateralización
-- Si no estás exento, el 1% del USDC depositado en Mint se envía al Treasury.
-- Esta fracción aparece en el simulador como **Overcollateralization** y no se convierte a CUBT.
-- Usuarios feeExempt o con permisos especiales pueden quedar liberados de este componente.
+##  Discounts and Exemptions
+- **Gold Users:** users with active Gold status in P2P are automatically exempt from all fees (0% fee). This verification is performed in real time by querying the P2PEscrow contract.
+- **feeExempt Accounts:** manual fee exemption (0% fee) configured by Governance (composed of Gold users, stakers, and holders), independent of Gold status.
+- **Active Staking:** Users who have active stake in the contract automatically receive a 50% discount on Mint and Redeem fees.
+- **CUBT Holders:** Users who hold at least 1 CUBT in their wallet receive a discount on Mint and Redeem fees (the current contract configuration grants a 25% discount).
+
+The backend verifies these conditions on every call and the dApp reflects the result in real time, indicating it in the simulator.
 
 ---
 
-##  Actualizaciones dinámicas
-Si ves que la comisión efectiva o la sobrecolateralización cambian, es porque:
-- El protocolo ajustó las tasas dentro de los límites permitidos.
-- Se actualizó tu estado (por ejemplo, obtuviste o perdiste la etiqueta feeExempt / staking / holder).
+##  Overcollateralization
+- If you are not exempt, 1% of the USDC deposited in Mint is sent to the Treasury.
+- This fraction appears in the simulator as **Overcollateralization** and is not converted to CUBT.
+- feeExempt users or those with special permissions may be exempt from this component.
 
-Siempre revisa el simulador antes de confirmar; ahí tendrás el desglose final aplicado a tu cuenta.
+---
+
+##  Dynamic Updates
+If you see the effective fee or overcollateralization change, it is because:
+- The protocol adjusted the rates within the allowed limits.
+- Your status was updated (for example, you obtained or lost the feeExempt / staking / holder label).
+
+Always review the simulator before confirming; there you will have the final breakdown applied to your account.

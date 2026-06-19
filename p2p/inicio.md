@@ -1,33 +1,33 @@
-#  Inicio
+#  Getting Started
 
-###  Antes de empezar
-Asegúrate de tener **USDC** (token estable) disponible en la red **Base**. Dependiendo de la versión que utilices, puedes obtenerlos de la siguiente manera:
+###  Before You Start
+Make sure you have **USDC** (stablecoin) available on the **Base** network. Depending on the version you use, you can obtain it as follows:
 
-* **Testnet (Base Sepolia):** Puedes usar el contrato de prueba *USDC Achylo* o solicitar tokens de prueba directamente al servicio de soporte.
-* **Mainnet (Base):** Compra USDC en un exchange de tu preferencia y envíalo a tu Wallet de Achylo.
+* **Testnet (Base Sepolia):** You can use the *Achylo USDC* test contract or request test tokens directly from the support service.
+* **Mainnet (Base):** Buy USDC on an exchange of your choice and send it to your Achylo Wallet.
 
 ---
 
-##  Gestión de Fondos
-Puedes adicionar fondos a tu Wallet desde cualquier fuente externa (Exchange u otra wallet).
+##  Fund Management
+You can add funds to your Wallet from any external source (exchange or other wallet).
 
-###  Depósitos Multi-Chain
+###  Multi-Chain Deposits
 
-Achylo soporta **depósitos multi-cadena**, permitiéndote depositar fondos desde múltiples blockchains y recibirlos automáticamente como **USDC en la red Base**.
+Achylo supports **multi-chain deposits**, allowing you to deposit funds from multiple blockchains and receive them automatically as **USDC on the Base network**.
 
-####  ¿Cómo funciona?
+####  How It Works
 
-1. **Selecciona tu cadena de origen:** Elige entre las cadenas soportadas (Arbitrum, Optimism, Polygon, BSC, y más).
+1. **Select your source chain:** Choose from supported chains (Arbitrum, Optimism, Polygon, BSC, and more).
 
-2. **Envía tus tokens:** Puedes depositar tokens nativos de cualquier cadena soportada (ETH, POL, BNB, etc.) o stablecoins (USDT, USDC, DAI).
+2. **Send your tokens:** You can deposit native tokens from any supported chain (ETH, POL, BNB, etc.) or stablecoins (USDT, USDC, DAI).
 
-3. **Conversión automática:** Es realizado el bridging y swap automáticamente. Tus fondos se convierten a USDC y llegan directamente a tu wallet en la red **Base**.
+3. **Automatic conversion:** Bridging and swapping are performed automatically. Your funds are converted to USDC and arrive directly in your wallet on the **Base** network.
 
-4. **Un solo balance:** Todo tu capital se unifica en USDC en Base, listo para usar en el protocolo.
+4. **Single balance:** All your capital is unified in USDC on Base, ready to use in the protocol.
 
-####  Cadenas Soportadas para Depósito
+####  Supported Chains for Deposit
 
-| Cadena | Tokens Comunes |
+| Chain | Common Tokens |
 |--------|----------------|
 | **Ethereum** | ETH, USDC, USDT, DAI |
 | **Arbitrum** | ETH, USDC, USDT |
@@ -36,45 +36,45 @@ Achylo soporta **depósitos multi-cadena**, permitiéndote depositar fondos desd
 | **BSC** | BNB, USDT, BUSD |
 | **Avalanche** | AVAX, USDC |
 
-> **Nota:** La lista completa de cadenas y tokens soportados se actualiza dinámicamente según la disponibilidad.
+> **Note:** The full list of supported chains and tokens is updated dynamically based on availability.
 
-####  Beneficios del Depósito Multi-Chain
+####  Benefits of Multi-Chain Deposits
 
-* **Sin necesidad de bridges manuales:** Olvídate de usar múltiples plataformas para mover fondos entre cadenas.
-* **Sin preocuparte por gas en otras redes:** El proceso optimiza automáticamente las rutas de menor costo.
-* **Capital unificado:** Todo tu saldo está en USDC en Base, simplificando la gestión.
-* **Acceso global:** Usuarios de cualquier ecosistema pueden participar sin fronteras.
+* **No manual bridges:** Forget about using multiple platforms to move funds between chains.
+* **No worries about gas on other networks:** The process automatically optimizes the lowest-cost routes.
+* **Unified capital:** Your entire balance is in USDC on Base, simplifying management.
+* **Global access:** Users from any ecosystem can participate without borders.
 
-### Características de tu Wallet:
-* **Sin costos extra:** Desde la Wallet puedes recibir y retirar fondos sin comisiones adicionales por parte de la plataforma.
-* **Autocustodia total:** Achylo Protocol **no es el dueño** de tu Wallet ni tiene control sobre ella. 
-* **Propiedad exclusiva:** Como usuario, eres el único que puede manipular los activos, ya que posees el control total de la misma.
+### Wallet Features:
+* **No extra costs:** From the Wallet you can receive and withdraw funds without additional platform fees.
+* **Full self-custody:** Achylo Protocol **is not the owner** of your Wallet and has no control over it. 
+* **Exclusive ownership:** As a user, you are the only one who can manipulate the assets, as you have total control over it.
 
 ---
 
-##  Interfaz de "My Wallet" (Mi Billetera)
+##  "My Wallet" Interface
 
-Al abrir tu perfil, verás las siguientes opciones para gestionar tus activos:
+When you open your profile, you will see the following options to manage your assets:
 
-### Información de la Cuenta
-* **Wallet Address (Dirección):** Tu identificador único en la red. Incluye un botón para copiar la dirección completa.
-* **USDC Balance:** Muestra la cantidad total de dólares digitales (USDC) que posees actualmente.
+### Account Information
+* **Wallet Address:** Your unique identifier on the network. Includes a button to copy the full address.
+* **USDC Balance:** Shows the total amount of digital dollars (USDC) you currently own.
 
-### Funciones Principales
-* **Send (Enviar):** Utilízalo para transferir tus USDC a otras billeteras o exchanges.
-* **Receive (Recibir):** Muestra los datos necesarios para que otros te envíen fondos.
-* **Buy/Sell (Comprar/Vender):** Acceso directo para adquirir más tokens o liquidar tus activos.
+### Main Functions
+* **Send:** Use it to transfer your USDC to other wallets or exchanges.
+* **Receive:** Shows the necessary details for others to send you funds.
+* **Buy/Sell:** Direct access to acquire more tokens or liquidate your assets.
 
-### Seguridad y Configuración
-* **Export Private Key (Exportar Llave Privada):** Permite obtener la clave secreta de tu billetera. 
-    *  **Atención:** Nunca compartas esta llave; quien la tenga posee el control total de tu dinero.
-* **Disconnect (Desconectar):** Finaliza la sesión de tu billetera en la dApp para mayor seguridad.
+### Security and Settings
+* **Export Private Key:** Allows you to obtain the secret key of your wallet. 
+    *  **Attention:** Never share this key; whoever has it has total control over your money.
+* **Disconnect:** Ends your wallet session in the dApp for greater security.
 
-> **Nota:** La seguridad de tus activos depende de tu gestión responsable como propietario único.
+> **Note:** The security of your assets depends on your responsible management as the sole owner.
 
 
 <p align="center">
-  <img src="/assets/images/wallet.png" alt="Vista de la sección 'My Wallet' con el saldo principal" width="75%" />
+  <img src="/assets/images/wallet.png" alt="View of the 'My Wallet' section with the main balance" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1 Saldo en Wallet.</strong></p>
+<p align="center"><strong>📍 Img. No.1 Wallet Balance.</strong></p>

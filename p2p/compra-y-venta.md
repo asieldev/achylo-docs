@@ -1,28 +1,28 @@
-#  Flujo de Compra y Venta (P2P)
+#  Buy and Sell Flow (P2P)
 
-Una vez que el escrow está activo, el proceso se divide según tu rol en la transacción:
-
----
-
-##  Flujo para el Comprador (Quien paga en Fiat)
-*Este es el usuario que acepta una oferta de venta y debe enviar el dinero fuera de la aplicación.*
-
-1.  **Seguimiento:** En la sección **“Active Orders”**, localiza el estado de tu escrow actual.
-2.  **Coordinación:** Contacta al vendedor usando los datos proporcionados para confirmar los detalles del pago.
-3.  **Pago Off-chain:** Realiza la transferencia de dinero (fiat) fuera de la app según el método acordado.
-4.  **Comprobante:** Obtén siempre un recibo o captura de pantalla (screenshot) de la operación.
-5.  **Notificación:** Pulsa el botón **“Confirm Payment Sent”** para avisar formalmente que el pago ha sido realizado.
-6.  **Evidencia:** Adjunta la prueba de pago en el **Chat** de la orden. Esto queda registrado y es vital en caso de disputas.
-7.  **Finalización:** Espera a que el vendedor verifique el ingreso y libere los fondos del escrow hacia tu wallet.
-
-> **⚠️ NOTA:** Guarda toda la evidencia del pago (recibos, capturas, correos). Será tu único respaldo si surge un inconveniente.
+Once the escrow is active, the process is divided according to your role in the transaction:
 
 ---
 
-##  Flujo para el Vendedor (Quien libera USDC)
-*Este es el usuario que tiene los activos bloqueados en el contrato y espera el pago fiat.*
+##  Buyer Flow (Who Pays in Fiat)
+*This is the user who accepts a sell offer and must send the money outside the application.*
 
-1.  **Monitoreo:** Revisa el estado del escrow en la pestaña **“Active Orders”**.
-2.  **Verificación:** Espera a que el comprador te notifique y suba el recibo de pago al chat.
-3.  **Confirmación Bancaria:** Verifica directamente en tu cuenta bancaria o monedero fiat que el dinero ha ingresado efectivamente.
-4.  **Liberación:** Una vez confirmado el dinero, pulsa **“Release Funds”** en la app y confirma la transacción
+1.  **Tracking:** In the **“Active Orders”** section, locate the status of your current escrow.
+2.  **Coordination:** Contact the seller using the provided details to confirm the payment details.
+3.  **Off-chain Payment:** Make the fiat money transfer outside the app according to the agreed method.
+4.  **Proof:** Always get a receipt or screenshot of the operation.
+5.  **Notification:** Click the **“Confirm Payment Sent”** button to formally notify that the payment has been made.
+6.  **Evidence:** Attach the proof of payment in the order **Chat**. This is recorded and is vital in case of disputes.
+7.  **Completion:** Wait for the seller to verify the receipt and release the escrow funds to your wallet.
+
+> **⚠️ NOTE:** Save all evidence of the payment (receipts, screenshots, emails). It will be your only backup if an issue arises.
+
+---
+
+##  Seller Flow (Who Releases USDC)
+*This is the user who has the assets locked in the contract and waits for the fiat payment.*
+
+1.  **Monitoring:** Check the escrow status in the **“Active Orders”** tab.
+2.  **Verification:** Wait for the buyer to notify you and upload the payment receipt to the chat.
+3.  **Bank Confirmation:** Verify directly in your bank account or fiat wallet that the money has actually been received.
+4.  **Release:** Once the money is confirmed, click **“Release Funds”** in the app and confirm the transaction.

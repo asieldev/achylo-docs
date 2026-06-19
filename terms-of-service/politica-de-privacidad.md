@@ -1,114 +1,114 @@
 ---
-"Política de Privacidad"
-Actualizado: "14 de noviembre de 2025"
+"Privacy Policy"
+Updated: "November 14, 2025"
 ---
 
-# Política de Privacidad — Achylo Protocol
+# Privacy Policy — Achylo Protocol
 
-Esta política describe cómo Achylo Labs ("Achylo", "nosotros") recopila, utiliza, conserva y protege la información obtenida cuando los usuarios interactúan con la dApp, los contratos inteligentes y los servicios complementarios del protocolo. Al utilizar la plataforma usted acepta estas prácticas.
+This policy describes how Achylo Labs ("Achylo", "we") collects, uses, retains, and protects information obtained when users interact with the dApp, smart contracts, and complementary protocol services. By using the platform you accept these practices.
 
-## 1. Alcance
+## 1. Scope
 
-Aplica a todas las funcionalidades de Achylo Protocol: escrow P2P, mint/redeem de CUBT, autenticación mediante smart accounts, integraciones de on-ramp/off-ramp y herramientas administrativas. Las redes blockchain utilizadas (por ejemplo Base L2) también forman parte del ecosistema cubierto.
+It applies to all functionalities of Achylo Protocol: P2P escrow, CUBT mint/redeem, smart account authentication, on-ramp/off-ramp integrations, and administrative tools. The blockchain networks used (for example Base L2) are also part of the covered ecosystem.
 
-## 2. Información que recopilamos
+## 2. Information We Collect
 
-### 2.1 Datos on-chain
+### 2.1 On-chain data
 
-- Direcciones de wallet y eventos asociados a contratos inteligentes.
-- Historial público de transacciones ejecutadas en nuestras direcciones.
-- Referencias a órdenes, escrows o disputas registrados on-chain.
+- Wallet addresses and events associated with smart contracts.
+- Public history of transactions executed on our addresses.
+- References to orders, escrows, or disputes registered on-chain.
 
-### 2.2 Datos técnicos y de uso
+### 2.2 Technical and usage data
 
-- Dirección IP, tipo de navegador y sistema operativo.
-- Logs de servidor, métricas de rendimiento y fallos.
-- Eventos de interacción con la interfaz (por ejemplo, creación de orden, subida de recibos, autenticación).
+- IP address, browser type, and operating system.
+- Server logs, performance metrics, and failures.
+- Interaction events with the interface (for example, order creation, receipt upload, authentication).
 
-### 2.3 Datos de escrow y operaciones
+### 2.3 Escrow and operation data
 
-- Identificadores internos de operación y estados del flujo (creado, financiado, liberado, disputado, etc.).
-- Montos, monedas y métodos de pago seleccionados por las partes.
-- Metadatos mínimos para ejecutar resoluciones de disputa o notificaciones.
+- Internal operation identifiers and flow states (created, funded, released, disputed, etc.).
+- Amounts, currencies, and payment methods selected by the parties.
+- Minimum metadata to execute dispute resolutions or notifications.
 
-### 2.4 Integraciones de terceros
+### 2.4 Third-party integrations
 
-Cuando el usuario emplea servicios externos (on-ramp Coinbase, proveedores de RPC, hosting, herramientas analíticas o notificaciones push) dichos terceros pueden recopilar información bajo sus propias políticas. Achylo solo comparte los datos estrictamente necesarios para operar la integración.
+When the user uses external services (Coinbase on-ramp, RPC providers, hosting, analytics tools, or push notifications) such third parties may collect information under their own policies. Achylo only shares the data strictly necessary to operate the integration.
 
-## 3. Finalidades del tratamiento
+## 3. Purposes of Processing
 
-Utilizamos la información para:
+We use the information to:
 
-1. Operar, mantener y mejorar la dApp y los contratos inteligentes.
-2. Facilitar transacciones de escrow y registrar estados de cumplimiento.
-3. Habilitar autenticación y recuperación a través de smart accounts.
-4. Ejecutar procesos de on-ramp/off-ramp y notificaciones.
-5. Prevenir fraude, abuso del sistema o ataques automatizados.
-6. Cumplir obligaciones legales, regulatorias o solicitudes de autoridades.
-7. Analizar métricas de uso para optimizar rendimiento y experiencia.
+1. Operate, maintain, and improve the dApp and smart contracts.
+2. Facilitate escrow transactions and record compliance states.
+3. Enable authentication and recovery through smart accounts.
+4. Execute on-ramp/off-ramp and notification processes.
+5. Prevent fraud, system abuse, or automated attacks.
+6. Comply with legal, regulatory, or authority requests.
+7. Analyze usage metrics to optimize performance and experience.
 
-## 4. Autenticación mediante smart accounts
+## 4. Authentication via Smart Accounts
 
-- Podemos almacenar identificadores de sesión, tokens temporales o hashes relacionados con el flujo de autenticación.
-- Registramos intentos fallidos para detectar abuso o automatizaciones maliciosas.
-- Nunca almacenamos ni solicitamos claves privadas; la custodia permanece bajo el control del usuario o del proveedor de wallet (p. ej., Coinbase Smart Wallet).
+- We may store session identifiers, temporary tokens, or hashes related to the authentication flow.
+- We record failed attempts to detect abuse or malicious automation.
+- We never store or request private keys; custody remains under the control of the user or the wallet provider (e.g., Coinbase Smart Wallet).
 
-## 5. Cookies y tecnologías similares
+## 5. Cookies and Similar Technologies
 
-Achylo utiliza cookies de sesión, almacenamiento local (localStorage/sessionStorage) y herramientas de analítica para:
+Achylo uses session cookies, local storage (localStorage/sessionStorage), and analytics tools to:
 
-- Mantener sesiones activas y recordar preferencias básicas.
-- Medir rendimiento, uso de características y detectar errores.
-- Optimizar tiempos de carga mediante caching local de configuraciones.
+- Keep sessions active and remember basic preferences.
+- Measure performance, feature usage, and detect errors.
+- Optimize load times through local caching of configurations.
 
-Puede deshabilitar o eliminar cookies desde su navegador, aunque ello puede afectar funcionalidades críticas como la autenticación continua o el acceso a notificaciones.
+You can disable or delete cookies from your browser, although this may affect critical functionalities such as continuous authentication or access to notifications.
 
-## 6. Compartición de información
+## 6. Information Sharing
 
-No vendemos información personal. Podremos compartir datos únicamente con:
+We do not sell personal information. We may share data only with:
 
-- Proveedores de infraestructura (servicios cloud, redes de distribución de contenido, proveedores RPC, almacenamiento IPFS).
-- Socios de on-ramp/off-ramp y entidades financieras que procesen solicitudes iniciadas por el usuario.
-- Autoridades regulatorias o fuerzas de seguridad cuando lo exija la ley o existan órdenes judiciales válidas.
+- Infrastructure providers (cloud services, content delivery networks, RPC providers, IPFS storage).
+- On-ramp/off-ramp partners and financial entities that process user-initiated requests.
+- Regulatory authorities or security forces when required by law or valid court orders.
 
-En cada caso aplicamos controles contractuales y técnicos para limitar el uso de la información al propósito acordado.
+In each case we apply contractual and technical controls to limit the use of information to the agreed purpose.
 
-## 7. Seguridad
+## 7. Security
 
-Implementamos medidas razonables como cifrado en tránsito (HTTPS), control de acceso basado en roles, monitoreo continuo, registros de auditoría y revisiones periódicas de seguridad. Aun así, ningún sistema es completamente invulnerable; el usuario acepta los riesgos inherentes a la transmisión de datos en Internet y redes blockchain públicas.
+We implement reasonable measures such as encryption in transit (HTTPS), role-based access control, continuous monitoring, audit logs, and periodic security reviews. Even so, no system is completely invulnerable; the user accepts the inherent risks of transmitting data over the Internet and public blockchain networks.
 
-## 8. Retención de datos
+## 8. Data Retention
 
-Conservamos la información únicamente durante el tiempo necesario para:
+We retain information only for the time necessary to:
 
-- Proporcionar los servicios solicitados.
-- Cumplir obligaciones legales y regulatorias.
-- Resolver disputas o reclamos.
-- Detectar y mitigar fraude o abuso recurrente.
+- Provide the requested services.
+- Comply with legal and regulatory obligations.
+- Resolve disputes or claims.
+- Detect and mitigate recurring fraud or abuse.
 
-Una vez cumplidas estas finalidades, eliminamos o anonimizamos los registros conforme a las mejores prácticas posibles dentro del contexto descentralizado.
+Once these purposes are fulfilled, we delete or anonymize records according to the best possible practices within the decentralized context.
 
-## 9. Derechos del usuario
+## 9. User Rights
 
-Dependiendo de su jurisdicción (por ejemplo, LGPD en Brasil, GDPR en la Unión Europea u otras leyes locales) usted podría ejercer derechos de:
+Depending on your jurisdiction (for example, LGPD in Brazil, GDPR in the European Union, or other local laws) you may exercise rights of:
 
-- Acceso y portabilidad de sus datos.
-- Rectificación o actualización.
-- Eliminación cuando resulte aplicable.
-- Oposición o limitación del tratamiento.
+- Access and portability of your data.
+- Rectification or updating.
+- Deletion when applicable.
+- Opposition or limitation of processing.
 
-Para ejercer estos derechos escriba a **contact@achylo.com** detallando la solicitud y la información necesaria para verificar su identidad. Responderemos dentro de los plazos exigidos por la regulación pertinente.
+To exercise these rights, write to **contact@achylo.com** detailing the request and the necessary information to verify your identity. We will respond within the deadlines required by the relevant regulation.
 
-## 10. Enlaces y servicios externos
+## 10. External Links and Services
 
-La dApp puede contener enlaces a sitios o aplicaciones de terceros. Achylo no controla sus políticas de privacidad ni prácticas de seguridad. Le recomendamos revisar los documentos aplicables antes de proporcionar información en esos servicios.
+The dApp may contain links to third-party sites or applications. Achylo does not control their privacy policies or security practices. We recommend reviewing the applicable documents before providing information on those services.
 
-## 11. Cambios a esta política
+## 11. Changes to This Policy
 
-Podemos actualizar esta política para reflejar cambios regulatorios, mejoras del protocolo o lanzamiento de nuevas funcionalidades. Publicaremos la fecha de la última actualización en la parte superior del documento. El uso continuado de la plataforma después de la publicación implica la aceptación de las modificaciones.
+We may update this policy to reflect regulatory changes, protocol improvements, or the launch of new functionalities. We will publish the date of the last update at the top of the document. Continued use of the platform after publication implies acceptance of the modifications.
 
-## 12. Contacto
+## 12. Contact
 
-Para consultas sobre esta política o el tratamiento de datos escriba a **contact@achylo.com** o utilice los canales oficiales listados en el portal de soporte. También puede solicitar información adicional mediante los formularios disponibles en la dApp.
+For inquiries about this policy or data processing, write to **contact@achylo.com** or use the official channels listed in the support portal. You may also request additional information through the forms available in the dApp.
 
 ---

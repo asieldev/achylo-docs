@@ -1,39 +1,39 @@
-#  Orden Privada
+#  Private Order
 
-## Crear una orden privada (Dirigida a una contraparte de confianza)
+## Create a Private Order (Directed to a Trusted Counterparty)
 
-Las órdenes privadas son la herramienta ideal cuando ya tienes un comprador o vendedor de confianza y deseas utilizar el **escrow inteligente** de Achylo para proteger la transacción de extremo a extremo.
+Private orders are the ideal tool when you already have a trusted buyer or seller and want to use Achylo's **smart escrow** to protect the transaction end-to-end.
 
-### Pasos para crear el Escrow:
+### Steps to Create the Escrow:
 
-1.  **Acceso:** En el panel principal, dirígete a la pestaña **“Active Orders”**.
-2.  **Iniciar proceso:** Pulsa el botón **“Private Order”** ubicado en la parte superior derecha.
-3.  **Configurar el modal “Create New Escrow”:** Completa los campos requeridos:
-    * **Cantidad USDC:** Indica el monto que vas a vender (estos fondos se bloquearán en el contrato hasta que decidas liberarlos).
-    * **Counterparty Address:** Pega la dirección de la wallet de tu contraparte (quien recibirá los USDC al finalizar).
-    * **Exchange Rate (per 1 USDC):** Define la tasa de cambio fiat acordada.
-    * **Fiat Currency:** Selecciona la moneda fiat correspondiente.
-    * **Fiat Card Details:** Ingresa tus datos bancarios o el método donde recibirás el pago.
-    * **Reclaim Timeout (Opcional):** Tiempo en minutos para recuperar tus fondos si la transacción se estanca (mínimo 30 minutos por defecto).
-4.  **Flujo de confirmación:** Sigue los pasos que indica el botón principal de forma secuencial:
+1.  **Access:** In the main panel, go to the **“Active Orders”** tab.
+2.  **Start process:** Click the **“Private Order”** button located in the upper right corner.
+3.  **Configure the “Create New Escrow” modal:** Fill in the required fields:
+    * **USDC Amount:** Enter the amount you are going to sell (these funds will be locked in the contract until you decide to release them).
+    * **Counterparty Address:** Paste your counterparty's wallet address (who will receive the USDC upon completion).
+    * **Exchange Rate (per 1 USDC):** Define the agreed fiat exchange rate.
+    * **Fiat Currency:** Select the corresponding fiat currency.
+    * **Fiat Card Details:** Enter your bank details or the method where you will receive the payment.
+    * **Reclaim Timeout (Optional):** Time in minutes to recover your funds if the transaction stalls (minimum 30 minutes by default).
+4.  **Confirmation flow:** Follow the steps indicated by the main button sequentially:
     * **Step 1:** Create Escrow.
     * **Step 2:** Fund Escrow.
-5.  **Finalización:** Confirma cada transacción en tu wallet. La app te mostrará notificaciones (*toasts*) indicando el progreso (ej. “Escrow created…”, “Escrow funded…”).
+5.  **Completion:** Confirm each transaction in your wallet. The app will show notifications (*toasts*) indicating progress (e.g. “Escrow created…”, “Escrow funded…”).
 
 ---
 
-###  Consideraciones Importantes
-* **Privacidad:** Las órdenes privadas **no aparecen en el marketplace público**. Solo la contraparte especificada podrá ver la orden en su tablero.
-* **Notificaciones:** Si la contraparte tiene las notificaciones activadas, recibirá un aviso automático al momento de la creación.
+###  Important Considerations
+* **Privacy:** Private orders **do not appear in the public marketplace**. Only the specified counterparty will be able to see the order on their dashboard.
+* **Notifications:** If the counterparty has notifications enabled, they will receive an automatic alert at the time of creation.
 
-###  Ventajas
-* **Control total:** Tú eliges exactamente con quién operas.
-* **Sin ruido:** Tu oferta se mantiene fuera del radar general del marketplace.
-* **Seguridad:** Disfrutas de la misma protección de un contrato inteligente que en las órdenes públicas.
+###  Advantages
+* **Total control:** You choose exactly who to trade with.
+* **No noise:** Your offer stays off the general marketplace radar.
+* **Security:** You enjoy the same smart contract protection as with public orders.
 
 ---
 
 <p align="center">
-  <img src="/assets/images/active-orders.png" alt="Vista del modal 'Create New Escrow'" width="75%" />
+  <img src="/assets/images/active-orders.png" alt="View of the 'Create New Escrow' modal" width="75%" />
 </p>
-<p align="center"><strong>📍 Img. No.1. Vista del modal 'Create New Escrow'.</strong></p>
+<p align="center"><strong>📍 Img. No.1. View of the 'Create New Escrow' modal.</strong></p>
