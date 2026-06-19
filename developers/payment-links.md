@@ -12,22 +12,31 @@ Achylo offers **3 ways** to generate payment links, depending on your technical 
 
 Ideal for merchants who don't want to integrate APIs. Embed a payment button on your website without backend code.
 
-- **Endpoint**: `POST /api/payment-links/widget`
 - **Authentication**: No API Key required (uses Merchant ID)
-- **Configuration**: Create a merchant widget from the Achylo dApp
-- **Usage**: Embed HTML on your site; the user clicks and pays without leaving
+- **How it works**: The widget calls `POST /api/payment-links/widget` automatically when the customer clicks the button
+- **Usage**: Create the widget from the dashboard, copy the embed code, paste it on your site
 
-**Usage example:**
+**Step-by-step setup from the Dashboard:**
+
+1. Go to [achylo.com](https://achylo.com) and connect your wallet
+2. Open your **User Profile** (click your avatar or address)
+3. Scroll to the **"Payment Widgets"** section
+4. Click **"Create new widget"**
+5. Add the domains where you'll use the widget (e.g. `https://yourstore.com`)
+6. Click **"Create"** — you'll get a unique Widget ID (`achylo_...`)
+7. Copy the embed code and paste it on your website
+
+**Embed code:**
 ```html
-<script async src="https://achylo.com/v1/achylo.js"></script>
+<script src="https://achylo.com/achylo.js?v=5"></script>
 <achylo-button
-  merchant-id="achylo_cv80520f"
+  merchant-id="achylo_YOUR_WIDGET_ID"
   amount="29.99"
   currency="USDC">
 </achylo-button>
 ```
 
-**Full documentation**: [Payment Widgets](./payment-widgets.md)
+**Full documentation**: [Payment Widgets →](/developers/payment-widgets)
 
 ---
 
