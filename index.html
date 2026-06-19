@@ -942,10 +942,18 @@
   <!-- Copy-to-Clipboard for Code Blocks -->
   <script>
     (function () {
-      const addCopyButtons = () => {
+      const addCodeBlockChrome = () => {
         const codeBlocks = document.querySelectorAll('.markdown-section pre');
         codeBlocks.forEach((pre) => {
           if (pre.querySelector('.copy-code-btn')) return; // already added
+
+          // Insert traffic-light dots (real DOM elements so they stay perfectly round)
+          if (!pre.querySelector('.code-dots')) {
+            const dots = document.createElement('div');
+            dots.className = 'code-dots';
+            dots.innerHTML = '<span></span><span></span><span></span>';
+            pre.appendChild(dots);
+          }
 
           const btn = document.createElement('button');
           btn.className = 'copy-code-btn';
@@ -983,16 +991,16 @@
 
       // Re-run after docsify renders new content
       const observer = new MutationObserver(() => {
-        addCopyButtons();
+        addCodeBlockChrome();
       });
 
       if (document.readyState !== 'loading') {
         observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
-        setTimeout(addCopyButtons, 500);
+        setTimeout(addCodeBlockChrome, 500);
       } else {
         document.addEventListener('DOMContentLoaded', () => {
           observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
-          setTimeout(addCopyButtons, 500);
+          setTimeout(addCodeBlockChrome, 500);
         });
       }
     })();
