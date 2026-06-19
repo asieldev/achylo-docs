@@ -457,37 +457,97 @@ For security, the widget only works on authorized domains:
 
 Receive notifications when the payment is confirmed on-chain.
 
-### 1. Configure the webhook on the backend
+### 1. Configure the webhook
 
-When creating the widget, include `webhookUrl` and `webhookSecret`.
+When creating a payment link via API, include `webhookUrl` and optionally `webhookSecret`:
+
+```javascript
+const link = await fetch('https://api.achylo.com/api/payment-links', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    amount: '10000000',
+    receiver: '0x...YOUR_SMART_ACCOUNT',
+    description: 'Order #1234',
+    webhookUrl: 'https://yourserver.com/webhooks/achylo',
+    webhookSecret: 'your_hex_secret_32_to_64_chars'  // Optional — auto-generated if omitted
+  })
+});
+```
 
 ### 2. Verify the signature
+
+Achylo uses a **Stripe-compatible** signing scheme with replay protection:
+
+- **Signing string**: `${timestamp}.${jsonBody}`
+- **Header**: `X-Achylo-Signature: sha256=<hex>`
+- **Header**: `X-Achylo-Timestamp: <unix_seconds>`
 
 ```javascript
 // Node.js / Express
 import crypto from 'crypto';
 
-app.post('/webhooks/achylo', (req, res) => {
+app.post('/webhooks/achylo', express.json(), (req, res) => {
   const signature = req.headers['x-achylo-signature'];
-  const payload = JSON.stringify(req.body);
-  
-  const expected = crypto
+  const timestamp = req.headers['x-achylo-timestamp'];
+  const rawBody = JSON.stringify(req.body);
+
+  // Replay protection: reject if older than 5 minutes
+  const now = Math.floor(Date.now() / 1000);
+  if (Math.abs(now - parseInt(timestamp)) > 300) {
+    return res.status(401).send('Timestamp expired');
+  }
+
+  // Verify HMAC-SHA256 signature
+  const signingString = `${timestamp}.${rawBody}`;
+  const expected = 'sha256=' + crypto
     .createHmac('sha256', process.env.ACHYLO_WEBHOOK_SECRET)
-    .update(payload)
+    .update(signingString, 'utf8')
     .digest('hex');
-  
-  if (signature !== expected) {
+
+  if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) {
     return res.status(401).send('Invalid signature');
   }
-  
-  const { paymentId, amount, txHash, payerAddress } = req.body.data;
-  
+
+  // Payment confirmed
+  const { payment_link_id, amount_usdc, tx_hash, payer_address } = req.body.data;
+
+  console.log(`Payment ${payment_link_id} confirmed: ${amount_usdc} USDC`);
+  console.log(`TX: ${tx_hash}, Payer: ${payer_address}`);
+
   // Update your database
-  await markOrderAsPaid(paymentId, txHash);
-  
+  await markOrderAsPaid(payment_link_id, tx_hash);
+
   res.status(200).send('OK');
 });
 ```
+
+### Webhook payload example
+
+```json
+{
+  "id": "delivery-uuid",
+  "event": "payment.completed",
+  "created_at": "2025-06-19T00:00:00.000Z",
+  "data": {
+    "payment_link_id": "be66da05-9590-437a-a557-f83c34de45d7",
+    "amount": "10000000",
+    "amount_usdc": "10.000000",
+    "receiver": "0x...",
+    "description": "Order #1234",
+    "chain_id": 8453,
+    "tx_hash": "0x1234...abcd",
+    "payer_address": "0xabc...",
+    "block_number": 12345678,
+    "paid_at": "2025-06-19T00:05:00.000Z"
+  }
+}
+```
+
+> ⚠️ **Webhooks require Redis** on the server. Delivery retries up to 5 times with exponential backoff.
 
 See full documentation at [Webhooks →](webhooks.md)
 

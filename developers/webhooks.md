@@ -102,10 +102,12 @@ Omit `webhookSecret` in the request. Achylo generates one and returns it once. Y
 
 The signature is computed as:
 ```
-HMAC-SHA256(key = webhookSecret, message = rawRequestBody)
+signingString = "${timestamp}.${rawRequestBody}"
+signature     = HMAC-SHA256(key = webhookSecret, message = signingString)
 ```
 
 The `x-achylo-signature` header contains `sha256=<hex_digest>`.
+The `x-achylo-timestamp` header contains the unix timestamp used in signing.
 
 ---
 
@@ -122,14 +124,14 @@ app.post('/webhooks/achylo', express.raw({ type: 'application/json' }), (req: Re
   const signature = req.headers['x-achylo-signature'] as string;
   const timestamp  = req.headers['x-achylo-timestamp'] as string;
 
-  if (!verifyAchyloSignature(req.body, process.env.ACHYLO_WEBHOOK_SECRET!, signature)) {
-    return res.status(401).json({ error: 'Invalid signature' });
-  }
-
-  // Optional: reject requests older than 5 minutes
+  // Reject requests older than 5 minutes (replay protection)
   const age = Math.abs(Date.now() / 1000 - parseInt(timestamp));
   if (age > 300) {
     return res.status(400).json({ error: 'Timestamp too old' });
+  }
+
+  if (!verifyAchyloSignature(req.body, timestamp, process.env.ACHYLO_WEBHOOK_SECRET!, signature)) {
+    return res.status(401).json({ error: 'Invalid signature' });
   }
 
   const event = JSON.parse(req.body.toString());
@@ -152,13 +154,15 @@ app.post('/webhooks/achylo', express.raw({ type: 'application/json' }), (req: Re
 
 function verifyAchyloSignature(
   rawBody: Buffer,
+  timestamp: string,
   secret: string,
   signature: string
 ): boolean {
   if (!signature || !signature.startsWith('sha256=')) return false;
+  const signingString = `${timestamp}.${rawBody.toString()}`;
   const expected = 'sha256=' + crypto
     .createHmac('sha256', secret)
-    .update(rawBody)
+    .update(signingString, 'utf8')
     .digest('hex');
   try {
     return crypto.timingSafeEqual(
@@ -191,12 +195,13 @@ app = Flask(__name__)
 ACHYLO_WEBHOOK_SECRET = os.environ['ACHYLO_WEBHOOK_SECRET']
 
 
-def verify_achylo_signature(raw_body: bytes, secret: str, signature: str) -> bool:
+def verify_achylo_signature(raw_body: bytes, timestamp: str, secret: str, signature: str) -> bool:
     if not signature or not signature.startswith('sha256='):
         return False
+    signing_string = f'{timestamp}.{raw_body.decode("utf-8")}'
     expected = 'sha256=' + hmac.new(
         secret.encode('utf-8'),
-        raw_body,
+        signing_string.encode('utf-8'),
         hashlib.sha256
     ).hexdigest()
     return hmac.compare_digest(expected, signature)
@@ -208,13 +213,13 @@ def achylo_webhook():
     signature = request.headers.get('X-Achylo-Signature', '')
     timestamp = request.headers.get('X-Achylo-Timestamp', '0')
 
-    if not verify_achylo_signature(raw_body, ACHYLO_WEBHOOK_SECRET, signature):
-        abort(401)
-
-    # Optional: reject stale events (>5 minutes)
+    # Reject stale events (>5 minutes)
     age = abs(time.time() - int(timestamp))
     if age > 300:
         abort(400)
+
+    if not verify_achylo_signature(raw_body, timestamp, ACHYLO_WEBHOOK_SECRET, signature):
+        abort(401)
 
     event = request.get_json()
 
@@ -250,11 +255,12 @@ app = FastAPI()
 ACHYLO_WEBHOOK_SECRET = os.environ['ACHYLO_WEBHOOK_SECRET']
 
 
-def verify_signature(raw_body: bytes, secret: str, signature: str) -> bool:
+def verify_signature(raw_body: bytes, timestamp: str, secret: str, signature: str) -> bool:
     if not signature.startswith('sha256='):
         return False
+    signing_string = f'{timestamp}.{raw_body.decode("utf-8")}'
     expected = 'sha256=' + hmac.new(
-        secret.encode(), raw_body, hashlib.sha256
+        secret.encode(), signing_string.encode('utf-8'), hashlib.sha256
     ).hexdigest()
     return hmac.compare_digest(expected, signature)
 
@@ -267,12 +273,12 @@ async def achylo_webhook(
 ):
     raw_body = await request.body()
 
-    if not verify_signature(raw_body, ACHYLO_WEBHOOK_SECRET, x_achylo_signature or ''):
-        raise HTTPException(status_code=401, detail='Invalid signature')
-
     age = abs(time.time() - int(x_achylo_timestamp or 0))
     if age > 300:
         raise HTTPException(status_code=400, detail='Timestamp too old')
+
+    if not verify_signature(raw_body, x_achylo_timestamp or '0', ACHYLO_WEBHOOK_SECRET, x_achylo_signature or ''):
+        raise HTTPException(status_code=401, detail='Invalid signature')
 
     event = await request.json()
 
@@ -293,12 +299,13 @@ async def achylo_webhook(
 
 define('ACHYLO_WEBHOOK_SECRET', getenv('ACHYLO_WEBHOOK_SECRET'));
 
-function verifyAchyloSignature(string $rawBody, string $secret, string $signature): bool
+function verifyAchyloSignature(string $rawBody, string $timestamp, string $secret, string $signature): bool
 {
     if (empty($signature) || strpos($signature, 'sha256=') !== 0) {
         return false;
     }
-    $expected = 'sha256=' . hash_hmac('sha256', $rawBody, $secret);
+    $signingString = $timestamp . '.' . $rawBody;
+    $expected = 'sha256=' . hash_hmac('sha256', $signingString, $secret);
     return hash_equals($expected, $signature);
 }
 
@@ -307,16 +314,16 @@ $rawBody  = file_get_contents('php://input');
 $signature = $_SERVER['HTTP_X_ACHYLO_SIGNATURE'] ?? '';
 $timestamp = (int) ($_SERVER['HTTP_X_ACHYLO_TIMESTAMP'] ?? 0);
 
-if (!verifyAchyloSignature($rawBody, ACHYLO_WEBHOOK_SECRET, $signature)) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Invalid signature']);
-    exit;
-}
-
 // Reject stale events (>5 minutes)
 if (abs(time() - $timestamp) > 300) {
     http_response_code(400);
     echo json_encode(['error' => 'Timestamp too old']);
+    exit;
+}
+
+if (!verifyAchyloSignature($rawBody, (string) $timestamp, ACHYLO_WEBHOOK_SECRET, $signature)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
     exit;
 }
 
@@ -366,12 +373,12 @@ class AchyloWebhookController extends Controller
         $timestamp = (int) $request->header('X-Achylo-Timestamp', 0);
         $secret   = config('services.achylo.webhook_secret');
 
-        if (!$this->verifySignature($rawBody, $secret, $signature)) {
-            return response()->json(['error' => 'Invalid signature'], 401);
-        }
-
         if (abs(now()->timestamp - $timestamp) > 300) {
             return response()->json(['error' => 'Timestamp too old'], 400);
+        }
+
+        if (!$this->verifySignature($rawBody, (string) $timestamp, $secret, $signature)) {
+            return response()->json(['error' => 'Invalid signature'], 401);
         }
 
         $event = json_decode($rawBody, true);
@@ -394,12 +401,13 @@ class AchyloWebhookController extends Controller
         // ]);
     }
 
-    private function verifySignature(string $rawBody, string $secret, string $signature): bool
+    private function verifySignature(string $rawBody, string $timestamp, string $secret, string $signature): bool
     {
         if (!str_starts_with($signature, 'sha256=')) {
             return false;
         }
-        $expected = 'sha256=' . hash_hmac('sha256', $rawBody, $secret);
+        $signingString = $timestamp . '.' . $rawBody;
+        $expected = 'sha256=' . hash_hmac('sha256', $signingString, $secret);
         return hash_equals($expected, $signature);
     }
 }
