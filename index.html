@@ -480,54 +480,56 @@
       background-color: var(--achylo-border-light);
     }
 
-    /* Code Blocks - Terminal Window Style */
+    /* Code Blocks */
     .markdown-section pre {
       position: relative;
-      background: #ffffff;
+      background: var(--achylo-code-bg);
       border: 1px solid var(--achylo-code-border);
       border-top: 3px solid var(--achylo-accent);
-      border-radius: 14px;
-      padding: 0;
-      overflow: hidden;
+      border-radius: var(--achylo-radius);
+      padding: 20px 24px;
+      overflow-x: auto;
       margin: 24px 0;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-
-    .markdown-section pre::before {
-      content: attr(data-lang);
-      display: block;
-      height: 44px;
-      line-height: 44px;
-      padding: 0 18px 0 70px;
-      text-align: right;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6b7280;
-      background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
-      border-bottom: 1px solid var(--achylo-code-border);
-      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 2px 4px rgba(0,0,0,0.03);
     }
 
     .markdown-section pre::after {
       content: '';
       position: absolute;
-      top: 16px;
-      left: 18px;
-      width: 11px;
-      height: 11px;
+      top: 12px;
+      left: 16px;
+      display: block;
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+      min-height: 10px;
       border-radius: 50%;
       background: #ff5f56;
-      box-shadow: 18px 0 #ffbd2e, 36px 0 #27c93f;
-      z-index: 2;
+      box-shadow: 16px 0 #ffbd2e, 32px 0 #27c93f;
+      opacity: 0.85;
+      box-sizing: border-box;
+      z-index: 1;
+    }
+
+    .markdown-section pre[data-lang]::before {
+      content: attr(data-lang);
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--achylo-accent);
+      margin-bottom: 12px;
+      padding: 4px 10px;
+      padding-left: 56px;
+      border-radius: 6px;
+      background: rgba(255, 107, 53, 0.08);
+      width: fit-content;
     }
 
     .markdown-section pre code {
-      display: block;
-      background: #ffffff;
-      padding: 18px 24px;
-      overflow-x: auto;
+      background: transparent;
+      padding: 0;
       font-size: 13.5px;
       line-height: 1.65;
       color: var(--achylo-text);
@@ -551,25 +553,23 @@
     /* Copy Button on Code Blocks */
     .markdown-section pre .copy-code-btn {
       position: absolute;
-      top: 8px;
+      top: 10px;
       right: 10px;
-      height: 28px;
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid var(--achylo-code-border);
-      border-radius: 7px;
-      padding: 0 10px;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 8px;
+      padding: 6px 12px;
       font-size: 11px;
       font-weight: 600;
       font-family: 'Inter', sans-serif;
-      color: #6b7280;
+      color: var(--achylo-accent);
       cursor: pointer;
       opacity: 0;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 5px;
-      z-index: 3;
-      backdrop-filter: blur(4px);
+      gap: 4px;
+      z-index: 2;
     }
 
     .markdown-section pre:hover .copy-code-btn {
@@ -583,9 +583,9 @@
     }
 
     .markdown-section pre .copy-code-btn.copied {
-      background: #27c93f;
+      background: var(--achylo-accent);
+      border-color: var(--achylo-accent);
       color: #fff;
-      border-color: #27c93f;
     }
 
     /* Override docsify default green syntax highlighting with orange */
