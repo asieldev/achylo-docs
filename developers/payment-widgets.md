@@ -166,7 +166,7 @@ The button emits custom DOM events you can listen to. All event data is availabl
 
 For developers who need to create and manage widgets programmatically from their backend.
 
-> **Authentication**: All endpoints accept `X-API-Key` header. See [API Keys →](api-keys.md)
+> **Authentication**: All endpoints accept `X-API-Key` header. See [API Keys →](developers/api-keys.md)
 
 ### Step 1 — Create a Widget
 
@@ -326,7 +326,7 @@ await fetch('https://api.achylo.com/api/payment-links/be66da05-...', {
 | `GET` | `/api/payment-links/history` | API Key | List payment history |
 | `DELETE` | `/api/payment-links/:id` | API Key | Cancel payment link |
 
-> See [Payment Links API →](payment-links.md) for full documentation and code examples in Python, PHP, and TypeScript.
+> See [Payment Links API →](developers/payment-links.md) for full documentation and code examples in Python, PHP, and TypeScript.
 
 ---
 
@@ -549,7 +549,7 @@ app.post('/webhooks/achylo', express.json(), (req, res) => {
 
 > ⚠️ **Webhooks require Redis** on the server. Delivery retries up to 5 times with exponential backoff.
 
-See full documentation at [Webhooks →](webhooks.md)
+See full documentation at [Webhooks →](developers/webhooks.md)
 
 ---
 
@@ -688,6 +688,6 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 
 ## Related Resources
 
-- [Payment Links API →](payment-links.md) – Programmatic payment links
-- [Webhooks →](webhooks.md) – Real-time notifications
-- [API Keys →](api-keys.md) – Manage API keys
+- [Payment Links API →](developers/payment-links.md) – Programmatic payment links
+- [Webhooks →](developers/webhooks.md) – Real-time notifications
+- [API Keys →](developers/api-keys.md) – Manage API keys
