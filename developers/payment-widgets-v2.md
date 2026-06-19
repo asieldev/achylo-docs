@@ -371,7 +371,7 @@ X-API-Key: YOUR_API_KEY
 | `merchant-id` + `amount` | `widget-id` |
 | Client-side config | Server-driven |
 | Fixed amounts only | Fixed + variable |
-| EOA receiver | Smart Account receiver |
+| Smart Account receiver | Smart Account receiver |
 
 **Migration benefits:**
 - ✅ More security (server-driven)
