@@ -1,1 +1,1 @@
-/* /index.html 200
+# No custom redirects needed, handled by wrangler.jsonc not_found_handling
