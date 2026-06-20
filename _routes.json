@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": ["/assets/*", "/images/*"],
+  "routes": [
+    {
+      "include": "/*",
+      "contentType": "text/html",
+      "serve": "/index.html"
+    }
+  ]
+}
