@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
   <title>Achylo Pay Docs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Achylo Pay developer documentation. Payment links, webhooks, and API reference for USDC payments on Base." />
+  <base href="/" />
 
   <!-- Open Graph / Social Media Preview -->
   <meta property="og:type"        content="website" />
@@ -826,8 +827,10 @@
       loadSidebar: true,
       subMaxLevel: 2,
       search: 'auto',
-      logo: 'assets/images/logo.svg',
-      routerMode: 'history'
+      logo: '/assets/images/logo.svg',
+      routerMode: 'history',
+      basePath: '/',
+      notFoundPage: true
     }
   </script>
 
