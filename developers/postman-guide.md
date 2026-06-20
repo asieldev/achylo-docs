@@ -529,7 +529,7 @@ POST {{base_url}}/api/public/widgets/wgt_i9j0k1l2/checkout
 
 ```json
 {
-  "checkoutUrl": "https://achylo.com/#/pay/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "checkoutUrl": "https://achylo.com/pay/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "paymentId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "productId": "prod_e5f6g7h8",
   "amount": "29.990000",

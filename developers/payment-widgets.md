@@ -261,7 +261,7 @@ const response = await fetch('https://api.achylo.com/api/payment-links', {
 
 const link = await response.json();
 console.log('Payment URL:', link.paymentUrl);
-// → https://achylo.com/#/pay/be66da05-...
+// → https://achylo.com/pay/be66da05-...
 ```
 
 **Response:**
@@ -269,7 +269,7 @@ console.log('Payment URL:', link.paymentUrl);
 ```json
 {
   "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
-  "paymentUrl": "https://achylo.com/#/pay/be66da05-...",
+  "paymentUrl": "https://achylo.com/pay/be66da05-...",
   "amount": "10000000",
   "receiver": "0x...",
   "description": "Order #1234",

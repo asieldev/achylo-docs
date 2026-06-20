@@ -59,7 +59,7 @@ EOF
 ```json
 {
   "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
-  "paymentUrl": "https://achylo.com/#/pay/be66da05-...",
+  "paymentUrl": "https://achylo.com/pay/be66da05-...",
   "amount": "10000000",
   "receiver": "0xyour_wallet",
   "description": "Order #1234",

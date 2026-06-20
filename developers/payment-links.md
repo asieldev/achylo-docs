@@ -51,7 +51,7 @@ Ideal for users who prefer to generate links manually from the Achylo interface 
 
 **Generated link example:**
 ```
-https://achylo.com/#/pay/f7c3a8e1-2b4d-4f9a-8c1e-9d7f2a5b3c6e
+https://achylo.com/pay/f7c3a8e1-2b4d-4f9a-8c1e-9d7f2a5b3c6e
 ```
 
 ---
@@ -93,7 +93,7 @@ Content-Type: application/json
 ```json
 {
   "paymentId": "be66da05-9590-437a-a557-f83c34de45d7",
-  "paymentUrl": "https://achylo.com/#/pay/be66da05-...",
+  "paymentUrl": "https://achylo.com/pay/be66da05-...",
   "amount": "10000000",
   "receiver": "0x992b874a816e6a6d4ebcb1eb6977962f061df51f",
   "description": "Order #1234",
@@ -195,7 +195,7 @@ X-API-Key: achylo_...
       "paidAt": "2026-05-06T12:30:00.000Z",
       "txHash": "0x1234...abcd",
       "payerAddress": "0xabc...",
-      "paymentUrl": "https://achylo.com/#/pay/be66da05-..."
+      "paymentUrl": "https://achylo.com/pay/be66da05-..."
     }
   ],
   "total": 1
@@ -265,7 +265,7 @@ const link = await createPaymentLink({
 });
 
 console.log('Payment URL:', link.paymentUrl);
-// → https://achylo.com/#/pay/be66da05-...
+// → https://achylo.com/pay/be66da05-...
 
 async function cancelPaymentLink(paymentId: string): Promise<void> {
   const response = await fetch(
