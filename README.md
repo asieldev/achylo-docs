@@ -37,7 +37,7 @@ Achylo is a Web3 platform with six core superpowers:
 
 ```bash
 # Quick example
-curl -X POST https://achylo-gunjs-relay.fly.dev/api/payment-links \
+curl -X POST https://api.achylo.com/api/payment-links \
   -H "X-API-Key: achylo_<your_key>" \
   -H "Content-Type: application/json" \
   -d '{
