@@ -96,15 +96,28 @@ const response = await fetch('https://api.achylo.com/api/v1/widgets', {
   },
   body: JSON.stringify({
     resourceType: 'product',
-    resourceId: 'prod_abc12345', // Product ID
+    resourceId: 'prod_abc12345',                              // Product ID
     originWhitelist: ['https://yourstore.com', 'https://www.yourstore.com'],
-    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS' // Optional - uses SA automatically
+    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS',              // Optional - uses SA automatically
+    webhookUrl: 'https://yourserver.com/webhooks/achylo',     // Optional
+    webhookSecret: 'whsec_your64hexcharsecret'                // Optional — required if webhookUrl is set
   })
 });
 
 const widget = await response.json();
 console.log('Widget ID:', widget.id); // wgt_def67890
 ```
+
+**Request body parameters:**
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `resourceType` | ✅ | `"product"` or `"payment_link"` |
+| `resourceId` | ✅ | Product ID (`prod_...`) or Payment Link ID |
+| `originWhitelist` | — | Array of allowed domains |
+| `payoutAddress` | — | Smart Account that receives payments (auto-detected if omitted) |
+| `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
+| `webhookSecret` | — | Secret to sign webhook payloads. If `webhookUrl` is set but this is omitted, a secret is auto-generated |
 
 ---
 
@@ -330,9 +343,13 @@ X-API-Key: YOUR_API_KEY
   "resourceType": "product",
   "resourceId": "prod_abc12345",
   "originWhitelist": ["https://yourstore.com"],
-  "payoutAddress": "0x...SMART_ACCOUNT"
+  "payoutAddress": "0x...SMART_ACCOUNT",
+  "webhookUrl": "https://yourserver.com/webhooks/achylo",
+  "webhookSecret": "whsec_your64hexcharsecret"
 }
 ```
+
+> `webhookUrl` and `webhookSecret` are **optional**. If `webhookUrl` is provided without a `webhookSecret`, one is auto-generated. See [Webhooks →](developers/webhooks.md).
 
 ### List Widgets
 

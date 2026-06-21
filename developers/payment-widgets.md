@@ -182,13 +182,24 @@ const response = await fetch('https://api.achylo.com/api/widget-merchants', {
       'https://yourstore.com',
       'https://www.yourstore.com'
     ],
-    payoutAddress: '0x...YOUR_SMART_ACCOUNT_ADDRESS'
+    payoutAddress: '0x...YOUR_SMART_ACCOUNT_ADDRESS',
+    webhookUrl: 'https://yourserver.com/webhooks/achylo',  // Optional
+    webhookSecret: 'whsec_your64hexcharsecret'             // Optional — required if webhookUrl is set
   })
 });
 
 const widget = await response.json();
 console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 ```
+
+**Request body parameters:**
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `origins` | ✅ | Array of allowed domains (e.g. `["https://yourstore.com"]`) |
+| `payoutAddress` | ✅ | Your Smart Account address that receives payments |
+| `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
+| `webhookSecret` | — | Secret to sign webhook payloads. Required if `webhookUrl` is set. Use `whsec_` + 64 hex chars or any string |
 
 **Response:**
 
@@ -203,6 +214,8 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
   "createdAt": "2025-06-19T00:00:00.000Z"
 }
 ```
+
+> 💡 **Webhook tip**: When a customer pays through your widget, Achylo sends a `POST` to your `webhookUrl` signed with `webhookSecret`. See [Webhooks →](developers/webhooks.md) for signature verification.
 
 ### Step 2 — List Your Widgets
 
