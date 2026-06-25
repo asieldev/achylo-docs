@@ -218,7 +218,16 @@ Paste this on your website:
 
 ## Flow B: Create a V2 Widget (Server-Driven)
 
-V2 widgets use a **server-driven architecture**: you create a Product first, then associate it with a Widget. The frontend only uses the `widget-id` — no amount or currency exposed.
+V2 widgets use a **server-driven architecture**: you create a Product first (or use the bundle endpoint), then associate it with a Widget. The frontend only uses the `widget-id` — no amount or currency exposed.
+
+**Dashboard:** manage products and widgets under **Stats → Payments → Widgets & Products** (not in the User Profile modal).
+
+**Two API paths:**
+
+| Path | Endpoints | Best for |
+|------|-----------|----------|
+| **Bundle (recommended)** | `POST /api/v1/widgets/bundle` | New product + widget in one step |
+| **Separate** | `POST /api/v1/products` → `POST /api/v1/widgets` | Reusing an existing product |
 
 ---
 
@@ -409,6 +418,89 @@ POST {{base_url}}/api/v1/widgets
 ```
 
 > 📌 Save the `id` (e.g. `wgt_i9j0k1l2`) and the `embedCode`.
+
+---
+
+### Step 5 (Alternative) — Create Widget + Product in One Request (Bundle)
+
+Skip Steps 1 and 5 when you do not need a standalone product first. This endpoint creates the product and widget together.
+
+```
+POST {{base_url}}/api/v1/widgets/bundle
+```
+
+**Headers:**
+
+| Key | Value |
+|-----|-------|
+| `X-API-Key` | `{{api_key}}` |
+| `Content-Type` | `application/json` |
+
+**Body (JSON) — Fixed Amount:**
+
+```json
+{
+  "resourceType": "product",
+  "productDetails": {
+    "name": "Monthly Subscription",
+    "description": "Full platform access for 30 days",
+    "amount": "29.99",
+    "allowCustomAmount": false
+  },
+  "payoutAddress": "{{smart_account}}",
+  "originWhitelist": [
+    "https://yourstore.com",
+    "https://www.yourstore.com",
+    "http://localhost:3000"
+  ],
+  "webhookUrl": "https://yourserver.com/webhooks/achylo"
+}
+```
+
+**Body (JSON) — Variable Amount (Donation):**
+
+```json
+{
+  "resourceType": "product",
+  "productDetails": {
+    "name": "Donation",
+    "description": "Support our project",
+    "allowCustomAmount": true
+  },
+  "payoutAddress": "{{smart_account}}",
+  "originWhitelist": ["https://yourstore.com"]
+}
+```
+
+> `payoutAddress` (Smart Account) is **required** on the bundle endpoint.
+
+**Expected Response (201):**
+
+```json
+{
+  "widget": {
+    "id": "wgt_i9j0k1l2",
+    "merchantId": "0x...",
+    "resourceType": "product",
+    "resourceId": "prod_e5f6g7h8",
+    "originWhitelist": ["https://yourstore.com"],
+    "webhookUrl": "https://yourserver.com/webhooks/achylo",
+    "active": true,
+    "createdAt": "2025-06-19T00:00:00.000Z",
+    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.4\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
+  },
+  "product": {
+    "id": "prod_e5f6g7h8",
+    "name": "Monthly Subscription",
+    "amount": "29.99",
+    "currency": "USDC",
+    "allowCustomAmount": false,
+    "active": true
+  }
+}
+```
+
+> 📌 Save `widget.id`, `widget.embedCode`, and `product.id` if you need to reference the product later.
 
 ---
 

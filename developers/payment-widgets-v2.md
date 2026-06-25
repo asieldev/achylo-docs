@@ -25,14 +25,29 @@ V2 uses a **server-driven** approach for maximum security:
 
 ---
 
+## Dashboard Location
+
+Product and Widget v2 management **is no longer available in the User Profile modal**. Use the dedicated panel instead:
+
+1. Go to [achylo.com](https://achylo.com) and log in
+2. Open **Stats** (navigation menu)
+3. Select the **Payments** tab
+4. Open **Widgets & Products**
+
+From there you can create and manage **Products**, **Widgets v1**, and **Widgets v2** (including embed codes and domain whitelists).
+
+> **Note:** The User Profile modal may still show API Keys and legacy Widget v1 shortcuts, but full product/widget management lives under **Stats → Payments → Widgets & Products**.
+
+---
+
 ## Step 1 – Create a Product
 
-Before creating the widget, you need to define a product.
+Before creating a widget with an existing product, you need to define the product (unless you use the [bundle endpoint](#create-widget--product-in-one-request-recommended) below).
 
 ### Via Dashboard
 
-1. Go to [achylo.com](https://achylo.com) and log in
-2. Open your **User Profile** → **"Products"** section
+1. Go to **Stats → Payments → Widgets & Products**
+2. Open the **Products** tab
 3. Click **"Create Product"**
 4. Fill in:
    - **Name**: Product name (e.g., "Monthly Subscription")
@@ -69,21 +84,22 @@ console.log('Product ID:', product.id); // prod_abc12345
 
 ## Step 2 – Create the Widget
 
-Now associate the product with a widget.
+Associate a product with a widget, or create both in a single API call (see [bundle](#create-widget--product-in-one-request-recommended)).
 
 ### Via Dashboard
 
-1. In the same **"Widgets v2"** section, click **"Create Widget"**
-2. Configure:
+1. In **Stats → Payments → Widgets & Products**, open the **Widgets v2** tab
+2. Click **"Create Widget"**
+3. Configure:
    - **Resource Type**: Select `Product`
    - **Product**: Choose the product created earlier
    - **Origin Whitelist**: Add domains where you'll use the widget
      - `https://yourstore.com`
      - `https://www.yourstore.com`
      - `https://checkout.yourstore.com`
-3. Click **"Create"**
-4. Copy the **Widget ID** (starts with `wgt_`)
-5. Copy the generated **Embed Code**
+4. Click **"Create"**
+5. Copy the **Widget ID** (starts with `wgt_`)
+6. Copy the generated **Embed Code**
 
 ### Via API
 
@@ -118,6 +134,91 @@ console.log('Widget ID:', widget.id); // wgt_def67890
 | `payoutAddress` | — | Smart Account that receives payments (auto-detected if omitted) |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. If `webhookUrl` is set but this is omitted, a secret is auto-generated |
+
+---
+
+## Create Widget + Product in One Request (Recommended)
+
+If you do not need a standalone product record first, use the **bundle** endpoint. It creates the product and the widget in a single request — the same flow used by the dashboard when you create a Widget v2 with a new product.
+
+### Via API
+
+```javascript
+const response = await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    resourceType: 'product',
+    productDetails: {
+      name: 'Monthly Subscription',
+      description: 'Full platform access',
+      amount: '29.99',
+      allowCustomAmount: false
+    },
+    originWhitelist: ['https://yourstore.com', 'https://www.yourstore.com'],
+    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS',              // Required — Smart Account that receives payments
+    webhookUrl: 'https://yourserver.com/webhooks/achylo',     // Optional
+    webhookSecret: 'whsec_your64hexcharsecret'                // Optional — required if webhookUrl is set
+  })
+});
+
+const { widget, product } = await response.json();
+console.log('Widget ID:', widget.id);   // wgt_def67890
+console.log('Product ID:', product.id); // prod_abc12345 (created automatically)
+console.log('Embed code:', widget.embedCode);
+```
+
+**When to use each endpoint:**
+
+| Endpoint | Use case |
+|----------|----------|
+| `POST /api/v1/widgets/bundle` | New product + widget in one step (simplest) |
+| `POST /api/v1/products` + `POST /api/v1/widgets` | Reuse an existing product across multiple widgets |
+
+**Bundle request body parameters:**
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `resourceType` | ✅ | `"product"` or `"payment_link"` |
+| `productDetails` | ✅* | Product fields when `resourceType` is `"product"` (*omit when linking an existing payment link) |
+| `productDetails.name` | ✅ | Product name |
+| `productDetails.description` | — | Optional description |
+| `productDetails.amount` | ✅* | Fixed amount in USDC (*required unless `allowCustomAmount` is `true`) |
+| `productDetails.allowCustomAmount` | — | Allow payer to enter amount (default `false`) |
+| `resourceId` | ✅* | Payment Link UUID when `resourceType` is `"payment_link"` |
+| `payoutAddress` | ✅ | Smart Account address that receives payments |
+| `originWhitelist` | — | Array of allowed domains |
+| `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
+| `webhookSecret` | — | Secret to sign webhook payloads (max 64 chars) |
+
+**Response (201):**
+
+```json
+{
+  "widget": {
+    "id": "wgt_def67890",
+    "merchantId": "0x...",
+    "resourceType": "product",
+    "resourceId": "prod_abc12345",
+    "originWhitelist": ["https://yourstore.com"],
+    "webhookUrl": null,
+    "active": true,
+    "createdAt": "2025-06-19T00:00:00.000Z",
+    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.4\"></script>\n<achylo-button widget-id=\"wgt_def67890\"></achylo-button>"
+  },
+  "product": {
+    "id": "prod_abc12345",
+    "name": "Monthly Subscription",
+    "amount": "29.99",
+    "currency": "USDC",
+    "allowCustomAmount": false,
+    "active": true
+  }
+}
+```
 
 ---
 
@@ -333,7 +434,7 @@ X-API-Key: YOUR_API_KEY
 }
 ```
 
-### Create Widget
+### Create Widget (link existing product)
 
 ```http
 POST /api/v1/widgets
@@ -349,7 +450,32 @@ X-API-Key: YOUR_API_KEY
 }
 ```
 
-> `webhookUrl` and `webhookSecret` are **optional**. If `webhookUrl` is provided without a `webhookSecret`, one is auto-generated. See [Webhooks →](developers/webhooks.md).
+### Create Widget + Product (bundle)
+
+Creates a new product and widget in a single request. No prior `POST /api/v1/products` call needed.
+
+```http
+POST /api/v1/widgets/bundle
+X-API-Key: YOUR_API_KEY
+
+{
+  "resourceType": "product",
+  "productDetails": {
+    "name": "Monthly Subscription",
+    "description": "Full access",
+    "amount": "29.99",
+    "allowCustomAmount": false
+  },
+  "originWhitelist": ["https://yourstore.com"],
+  "payoutAddress": "0x...SMART_ACCOUNT",
+  "webhookUrl": "https://yourserver.com/webhooks/achylo",
+  "webhookSecret": "whsec_your64hexcharsecret"
+}
+```
+
+**Response:** `{ "widget": { ... , "embedCode": "..." }, "product": { ... } }`
+
+> `payoutAddress` is **required** on the bundle endpoint. `webhookUrl` and `webhookSecret` are optional.
 
 ### List Widgets
 
