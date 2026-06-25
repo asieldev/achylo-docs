@@ -413,7 +413,7 @@ POST {{base_url}}/api/v1/widgets
   "webhookUrl": "https://yourserver.com/webhooks/achylo",
   "active": true,
   "createdAt": "2025-06-19T00:00:00.000Z",
-  "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.4\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
+  "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.5\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
 }
 ```
 
@@ -487,7 +487,7 @@ POST {{base_url}}/api/v1/widgets/bundle
     "webhookUrl": "https://yourserver.com/webhooks/achylo",
     "active": true,
     "createdAt": "2025-06-19T00:00:00.000Z",
-    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.4\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
+    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.5\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
   },
   "product": {
     "id": "prod_e5f6g7h8",
@@ -683,7 +683,7 @@ DELETE {{base_url}}/api/v1/products/prod_e5f6g7h8
 Paste this on your website:
 
 ```html
-<script async src="https://achylo.com/widget.js?v=1.4"></script>
+<script async src="https://achylo.com/widget.js?v=1.5"></script>
 
 <achylo-button widget-id="wgt_i9j0k1l2"></achylo-button>
 ```
