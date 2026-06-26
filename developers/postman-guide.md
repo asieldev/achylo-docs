@@ -55,6 +55,8 @@ POST {{base_url}}/api/widget-merchants
 
 **Body (JSON):**
 
+> `origins` is optional. Omit it or send `[]` to create a **public** V1 widget embeddable from any domain.
+
 ```json
 {
   "origins": [
@@ -129,6 +131,8 @@ PATCH {{base_url}}/api/widget-merchants/achylo_a1b2c3d4
 | `Content-Type` | `application/json` |
 
 **Body (JSON):**
+
+> Send `"origins": []` to make the V1 widget public. If origins are listed, only those domains can use the widget.
 
 ```json
 {
@@ -387,6 +391,8 @@ POST {{base_url}}/api/v1/widgets
 
 **Body (JSON):**
 
+> `originWhitelist` is optional. Omit it or send `[]` to create a **public** widget embeddable from any domain.
+
 ```json
 {
   "resourceType": "product",
@@ -413,7 +419,7 @@ POST {{base_url}}/api/v1/widgets
   "webhookUrl": "https://yourserver.com/webhooks/achylo",
   "active": true,
   "createdAt": "2025-06-19T00:00:00.000Z",
-  "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.5\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
+  "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.6\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
 }
 ```
 
@@ -487,7 +493,7 @@ POST {{base_url}}/api/v1/widgets/bundle
     "webhookUrl": "https://yourserver.com/webhooks/achylo",
     "active": true,
     "createdAt": "2025-06-19T00:00:00.000Z",
-    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.5\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
+    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.6\"></script>\n<achylo-button widget-id=\"wgt_i9j0k1l2\"></achylo-button>"
   },
   "product": {
     "id": "prod_e5f6g7h8",
@@ -564,7 +570,7 @@ PUT {{base_url}}/api/v1/widgets/wgt_i9j0k1l2
 This is what the SDK calls internally. No authentication needed.
 
 ```
-GET {{base_url}}/api/public/widgets/wgt_i9j0k1l2
+GET {{base_url}}/api/payment-links/widget-v2/wgt_i9j0k1l2
 ```
 
 **No headers required.**
@@ -594,7 +600,7 @@ GET {{base_url}}/api/public/widgets/wgt_i9j0k1l2
 This is what the SDK calls when the customer clicks the button. No authentication needed.
 
 ```
-POST {{base_url}}/api/public/widgets/wgt_i9j0k1l2/checkout
+POST {{base_url}}/api/payment-links/widget-v2/wgt_i9j0k1l2/checkout
 ```
 
 **Headers:**
@@ -619,6 +625,8 @@ POST {{base_url}}/api/public/widgets/wgt_i9j0k1l2/checkout
 
 **Expected Response (200):**
 
+> **Expiration**: Product and V1 widget checkouts generate a new payment link with a **15-minute** expiry (`expires_at = now + 15 min`). Payment Link widgets reuse an existing link and keep whatever `expiresInMinutes` was set at creation. After expiry, the checkout returns `410 Payment link has expired`.
+
 ```json
 {
   "checkoutUrl": "https://achylo.com/pay/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -630,7 +638,7 @@ POST {{base_url}}/api/public/widgets/wgt_i9j0k1l2/checkout
 }
 ```
 
-> Open the `checkoutUrl` in a browser to see the payment page.
+> Open the `checkoutUrl` in a browser to see the payment page. The underlying payment link expires **15 minutes** after this checkout call.
 
 ---
 
@@ -683,7 +691,7 @@ DELETE {{base_url}}/api/v1/products/prod_e5f6g7h8
 Paste this on your website:
 
 ```html
-<script async src="https://achylo.com/widget.js?v=1.5"></script>
+<script async src="https://achylo.com/widget.js?v=1.6"></script>
 
 <achylo-button widget-id="wgt_i9j0k1l2"></achylo-button>
 ```
@@ -721,8 +729,8 @@ Paste this on your website:
 | `GET` | `/api/v1/widgets/:id` | API Key or JWT | Get widget |
 | `PUT` | `/api/v1/widgets/:id` | API Key or JWT | Update widget |
 | `DELETE` | `/api/v1/widgets/:id` | API Key or JWT | Delete widget |
-| `GET` | `/api/public/widgets/:widgetId` | Public | Resolve widget config |
-| `POST` | `/api/public/widgets/:widgetId/checkout` | Public | Create checkout |
+| `GET` | `/api/payment-links/widget-v2/:widgetId` | Public | Resolve widget config |
+| `POST` | `/api/payment-links/widget-v2/:widgetId/checkout` | Public | Create checkout |
 
 ---
 
@@ -731,12 +739,13 @@ Paste this on your website:
 | Status | Error | Solution |
 |--------|-------|----------|
 | `401` | `API Key inválida o revocada` | Check your API Key is correct and not revoked |
-| `400` | `origins must be a non-empty array` | Include at least one origin in the body |
+| `400` | `origins must be an array when provided` | Send an array, omit the field, or use `[]` for a public widget |
 | `400` | `Valid payoutAddress (Smart Account) is required` | Add a valid Ethereum address |
 | `400` | `resourceType must be "payment_link" or "product"` | Use `"product"` or `"payment_link"` |
 | `404` | `Product not found or not active` | Check product ID and that it's active |
 | `404` | `Widget not found` | Check widget ID |
 | `403` | `Origin not allowed` | Add your domain to the widget's origin whitelist |
+| `410` | `Payment link has expired` | Link exceeded its `expiresAt` — create a new checkout (Product/V1) or a new payment link |
 | `429` | `Too many requests` | Wait and retry — rate limit exceeded |
 
 ---

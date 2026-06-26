@@ -12,8 +12,10 @@ Achylo offers **3 ways** to generate payment links, depending on your technical 
 
 Ideal for merchants who don't want to integrate APIs. Embed a payment button on your website without backend code.
 
-- **Authentication**: No API Key required (uses Merchant ID)
-- **How it works**: The widget calls `POST /api/payment-links/widget` automatically when the customer clicks the button
+- **Authentication**: No API Key required
+- **How it works**:
+  - **Widget V1** (`achylo.js`): `POST /api/payment-links/widget` on button click
+  - **Widget V2** (`widget.js`): `GET /api/payment-links/widget-v2/:widgetId` (resolve config) and `POST /api/payment-links/widget-v2/:widgetId/checkout` (checkout)
 - **Usage**: Create the widget from the dashboard, copy the embed code, paste it on your site
 
 **Step-by-step setup from the Dashboard:**
@@ -84,7 +86,7 @@ Content-Type: application/json
 | `amount` | string | ✅ | Amount in micro-USDC. `"1000000"` = 1 USDC |
 | `receiver` | string | ✅ | Ethereum address that receives the payment |
 | `description` | string | — | Order description (max 500 chars) |
-| `expiresInMinutes` | number | — | Expiry in minutes (5–43200). Defaults to no expiry |
+| `expiresInMinutes` | number | ✅ | Expiry in minutes. Allowed values: `15`, `60`, `360`, `720`, `1440` (15m, 1h, 6h, 12h, 24h). Defaults to `15` |
 | `webhookUrl` | string | — | HTTPS URL to receive payment events |
 | `webhookSecret` | string | — | Your hex secret for HMAC verification (32–64 chars). If omitted, one is auto-generated and returned once |
 
@@ -141,6 +143,45 @@ This endpoint is **public** — no authentication required. It is used by the ho
 | `paid` | Payment confirmed on-chain |
 | `expired` | Link expired before payment |
 | `cancelled` | Cancelled by the creator |
+
+---
+
+## Expiration
+
+Every payment link has an `expiresAt` timestamp. After that moment, pending links can no longer be paid.
+
+### Allowed values (`expiresInMinutes`)
+
+When you create a link via `POST /api/payment-links`, you must set `expiresInMinutes` to one of:
+
+| Value | Duration |
+|-------|----------|
+| `15` | 15 minutes *(default)* |
+| `60` | 1 hour |
+| `360` | 6 hours |
+| `720` | 12 hours |
+| `1440` | 24 hours |
+
+### Widget-generated links vs manual links
+
+Not all payment links expire the same way. It depends on **how** the link was created:
+
+| Source | When `expires_at` is set | Duration |
+|--------|--------------------------|----------|
+| **Widget V1 button click** | At checkout (auto-generated) | **15 minutes** (fixed) |
+| **Widget V2 Product checkout** | At checkout (auto-generated) | **15 minutes** (fixed) |
+| **Widget V2 Payment Link widget** | When you created the linked payment link | Your chosen `expiresInMinutes` |
+| **API / dashboard** (`POST /api/payment-links`) | At creation | Your chosen `expiresInMinutes` (default **15**) |
+
+The countdown starts at **link creation**, not when the customer opens the payment page. If a customer clicks a Product or V1 widget again, a **new** link with a fresh 15-minute window is generated.
+
+When a link expires:
+
+- Status changes from `pending` → `expired`
+- The hosted checkout page returns `410 Payment link has expired`
+- A background job runs every **15 minutes** to mark overdue pending links
+
+See also: [Payment Widgets V1 →](developers/payment-widgets.md#payment-link-expiration) · [Payment Widgets V2 →](developers/payment-widgets-v2.md#payment-link-expiration)
 
 ---
 

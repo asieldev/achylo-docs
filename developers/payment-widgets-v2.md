@@ -93,7 +93,7 @@ Associate a product with a widget, or create both in a single API call (see [bun
 3. Configure:
    - **Resource Type**: Select `Product`
    - **Product**: Choose the product created earlier
-   - **Origin Whitelist**: Add domains where you'll use the widget
+   - **Origin Whitelist** *(optional)*: Add domains where you'll use the widget. Leave empty to allow embedding from any domain (public widget).
      - `https://yourstore.com`
      - `https://www.yourstore.com`
      - `https://checkout.yourstore.com`
@@ -130,7 +130,7 @@ console.log('Widget ID:', widget.id); // wgt_def67890
 |-------|----------|-------------|
 | `resourceType` | ✅ | `"product"` or `"payment_link"` |
 | `resourceId` | ✅ | Product ID (`prod_...`) or Payment Link ID |
-| `originWhitelist` | — | Array of allowed domains |
+| `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `payoutAddress` | — | Smart Account that receives payments (auto-detected if omitted) |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. If `webhookUrl` is set but this is omitted, a secret is auto-generated |
@@ -191,7 +191,7 @@ console.log('Embed code:', widget.embedCode);
 | `productDetails.goalAmount` | — | Fundraising goal in USDC — enables donation progress bar |
 | `resourceId` | ✅* | Payment Link UUID when `resourceType` is `"payment_link"` |
 | `payoutAddress` | ✅ | Smart Account address that receives payments |
-| `originWhitelist` | — | Array of allowed domains |
+| `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads (max 64 chars) |
 
@@ -208,7 +208,7 @@ console.log('Embed code:', widget.embedCode);
     "webhookUrl": null,
     "active": true,
     "createdAt": "2025-06-19T00:00:00.000Z",
-    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.5\"></script>\n<achylo-button widget-id=\"wgt_def67890\"></achylo-button>"
+    "embedCode": "<script async src=\"https://achylo.com/widget.js?v=1.6\"></script>\n<achylo-button widget-id=\"wgt_def67890\"></achylo-button>"
   },
   "product": {
     "id": "prod_abc12345",
@@ -270,7 +270,7 @@ When `goalAmount` is set, the embed shows the donation progress bar automaticall
 
 ### Progress data (public resolve)
 
-When a product has a goal, `GET /api/public/widgets/:widgetId` returns extra fields inside `product`:
+When a product has a goal, `GET /api/payment-links/widget-v2/:widgetId` returns extra fields inside `product`:
 
 ```json
 {
@@ -298,7 +298,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 
 ```html
 <!-- Achylo Widget v2 -->
-<script async src="https://achylo.com/widget.js?v=1.5"></script>
+<script async src="https://achylo.com/widget.js?v=1.6"></script>
 
 <achylo-button widget-id="wgt_def67890"></achylo-button>
 ```
@@ -311,7 +311,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 4. Paste the code:
 
 ```html
-<script async src="https://achylo.com/widget.js?v=1.5"></script>
+<script async src="https://achylo.com/widget.js?v=1.6"></script>
 <achylo-button widget-id="wgt_def634956"></achylo-button>
 ```
 
@@ -371,9 +371,41 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 
 ### Origin Whitelist
 
-- **Only works on authorized domains**
-- **Protects against unauthorized use**
-- **Configure in dashboard or via API**
+The `originWhitelist` field is **optional**. When omitted, empty (`[]`), or stored as `null`, the widget is **public** and can be embedded from any domain.
+
+When one or more domains are configured, checkout requests are validated against that list. Unauthorized origins receive `403 Origin not allowed`.
+
+**Examples:**
+
+| `originWhitelist` | Behavior |
+|-------------------|----------|
+| *(omitted)* | Public — any domain |
+| `[]` | Public — any domain |
+| `["https://yourstore.com"]` | Restricted — only listed domains |
+
+Supported patterns: exact HTTPS URLs (e.g. `https://yourstore.com`), wildcards (e.g. `*.yourstore.com`), and `http://localhost:*` for local development.
+
+### Payment Link Expiration
+
+Widget V2 and Widget V1 share the same **15-minute checkout window** for auto-generated links. The countdown starts when the link is **created**, not when the customer opens the payment page.
+
+| Widget type | When the link is created | Duration |
+|-------------|--------------------------|----------|
+| **Product widget** | On customer click — checkout generates a new link | **15 minutes** (fixed) |
+| **Payment Link widget** | When you created the linked payment link (before embedding) | Whatever you set in `expiresInMinutes` (min **15m**, max **24h**) |
+| **Widget V1 embed button** | On customer click | **15 minutes** (fixed) |
+
+### How the countdown works
+
+1. **Product / V1 widgets**: the customer clicks the button → Achylo creates a new `payment_link` with `expires_at = now + 15 minutes`.
+2. **Payment Link widget**: the widget reuses an existing link — expiry is whatever was configured at creation time.
+3. The customer must pay before `expires_at`.
+4. After expiry, status becomes `expired` and `GET /pay/:id` returns `410 Payment link has expired`.
+5. A background job marks overdue pending links as `expired` every **15 minutes**.
+
+> 💡 **Tip**: For Product widgets, the customer can click again to get a fresh 15-minute link. For Payment Link widgets, create a new link (or choose a longer `expiresInMinutes`) if you need more time.
+
+When creating payment links via API or dashboard, `expiresInMinutes` must be one of: `15`, `60`, `360`, `720`, `1440` (default: **15**).
 
 ---
 
@@ -547,6 +579,25 @@ X-API-Key: YOUR_API_KEY
 
 > `payoutAddress` is **required** on the bundle endpoint. `webhookUrl` and `webhookSecret` are optional.
 
+### Public Widget SDK (no auth)
+
+Called automatically by `widget.js` — same URL pattern as Widget V1 (`/api/payment-links/widget`).
+
+```http
+GET /api/payment-links/widget-v2/:widgetId
+```
+
+Resolves widget configuration (product name, amount, donation progress, etc.).
+
+```http
+POST /api/payment-links/widget-v2/:widgetId/checkout
+Content-Type: application/json
+
+{ "amount": "15.00" }
+```
+
+Creates a checkout session and returns `{ "checkoutUrl": "https://achylo.com/pay/..." }`. For fixed-amount products, send an empty body `{}`.
+
 ### List Widgets
 
 ```http
@@ -559,7 +610,7 @@ X-API-Key: YOUR_API_KEY
 ## Troubleshooting V2
 
 ### Widget doesn't appear
-- ✅ Check `widget.js?v=1.5` loaded in console
+- ✅ Check `widget.js?v=1.6` loaded in console
 - ✅ Confirm correct `widget-id` (`wgt_...`)
 - ✅ Product exists and is active
 

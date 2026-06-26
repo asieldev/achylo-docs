@@ -196,7 +196,7 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `origins` | ✅ | Array of allowed domains (e.g. `["https://yourstore.com"]`) |
+| `origins` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `payoutAddress` | ✅ | Your Smart Account address that receives payments |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. Required if `webhookUrl` is set. Use `whsec_` + 64 hex chars or any string |
@@ -243,6 +243,8 @@ await fetch('https://api.achylo.com/api/widget-merchants/achylo_a1b2c3d4', {
 });
 ```
 
+Send `origins: []` to make the widget public. When one or more origins are configured, only those domains can create payments through the widget.
+
 ### Step 4 — Deactivate Widget
 
 ```javascript
@@ -267,7 +269,7 @@ const response = await fetch('https://api.achylo.com/api/payment-links', {
     amount: '10000000',            // 10 USDC (in micro-units: 1 USDC = 1000000)
     receiver: '0x...YOUR_SMART_ACCOUNT',
     description: 'Order #1234',
-    expiresInMinutes: 60,          // Optional: expires in 1 hour
+    expiresInMinutes: 15,          // Required: 15, 60, 360, 720, or 1440 (default: 15)
     webhookUrl: 'https://yourserver.com/webhooks/achylo'  // Optional
   })
 });
@@ -443,7 +445,9 @@ document.getElementById('container').appendChild(btn);
 
 ## Security: Allowed Domains
 
-For security, the widget only works on authorized domains:
+Allowed Origins are optional. If no origins are configured, the widget is public and can be embedded from any domain.
+
+When origins are configured, the widget only works on authorized domains:
 
 1. Go to **Profile → Payment Widgets**
 2. Edit your widget
@@ -452,7 +456,30 @@ For security, the widget only works on authorized domains:
    - `https://www.yourstore.com`
    - `https://checkout.yourstore.com`
 
-> ⚠️ **Important**: Without the domain in the list, the widget will show an error. Use `*` only in development (never in production).
+> ⚠️ **Important**: If the list contains domains, missing domains will be rejected. Use an empty list for a public widget, and use `*` only in development (never in production).
+
+---
+
+## Payment Link Expiration
+
+When a customer clicks a **Widget V1** button, the backend creates a new payment link on the fly. That link is valid for **15 minutes** from the moment it is generated.
+
+| Scenario | When the link is created | Duration |
+|----------|--------------------------|----------|
+| **Widget V1 embed button** | On customer click (checkout) | **15 minutes** (fixed) |
+| **Manual payment link via API** | When you call `POST /api/payment-links` | `expiresInMinutes` you choose (min **15m**, max **24h**) |
+
+### How the countdown works
+
+1. The customer clicks the widget button.
+2. Achylo creates a `payment_link` with `expires_at = now + 15 minutes`.
+3. The customer must complete payment before `expires_at`.
+4. If time runs out, the link status becomes `expired` and the checkout page returns `410 Payment link has expired`.
+5. A background job marks overdue pending links as `expired` every **15 minutes**.
+
+> 💡 **Tip**: If the customer needs more time, they can click the widget button again — a **new** 15-minute link is generated each time.
+
+When creating payment links manually (not via the widget button), `expiresInMinutes` must be one of: `15`, `60`, `360`, `720`, `1440`.
 
 ---
 
