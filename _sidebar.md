@@ -23,6 +23,8 @@
   * [Webhooks](developers/webhooks.md)
 * STAKING
   * [Staking](staking/staking.md)
+* SECURITY
+  * [2FA / Backup Codes](security/2fa.md)
 * CONTACT
   * [Community](contacto/comunidad.md)
 * WHITE PAPER
