@@ -398,15 +398,9 @@ Widget V2 and Widget V1 share the same **15-minute checkout window** for auto-ge
 | **Payment Link widget** | When you created the linked payment link (before embedding) | Whatever you set in `expiresInMinutes` (min **15m**, max **24h**) |
 | **Widget V1 embed button** | On customer click | **15 minutes** (fixed) |
 
-### How the countdown works
+### What happens if the link expires?
 
-1. **Product / V1 widgets**: the customer clicks the button → Achylo creates a new `payment_link` with `expires_at = now + 15 minutes`.
-2. **Payment Link widget**: the widget reuses an existing link — expiry is whatever was configured at creation time.
-3. The customer must pay before `expires_at`.
-4. After expiry, status becomes `expired` and `GET /pay/:id` returns `410 Payment link has expired`.
-5. A background job marks overdue pending links as `expired` every **15 minutes**.
-
-> 💡 **Tip**: For Product widgets, the customer can click again to get a fresh 15-minute link. For Payment Link widgets, create a new link (or choose a longer `expiresInMinutes`) if you need more time.
+If the customer does not pay before the link expires, they can click the button again to generate a fresh link. For Payment Link widgets, create a new link (or choose a longer `expiresInMinutes`) if you need more time.
 
 When creating payment links via API or dashboard, `expiresInMinutes` must be one of: `15`, `60`, `360`, `720`, `1440` (default: **15**).
 

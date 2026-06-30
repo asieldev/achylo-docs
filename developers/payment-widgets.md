@@ -469,15 +469,9 @@ When a customer clicks a **Widget V1** button, the backend creates a new payment
 | **Widget V1 embed button** | On customer click (checkout) | **15 minutes** (fixed) |
 | **Manual payment link via API** | When you call `POST /api/payment-links` | `expiresInMinutes` you choose (min **15m**, max **24h**) |
 
-### How the countdown works
+### What happens if the link expires?
 
-1. The customer clicks the widget button.
-2. Achylo creates a `payment_link` with `expires_at = now + 15 minutes`.
-3. The customer must complete payment before `expires_at`.
-4. If time runs out, the link status becomes `expired` and the checkout page returns `410 Payment link has expired`.
-5. A background job marks overdue pending links as `expired` every **15 minutes**.
-
-> 💡 **Tip**: If the customer needs more time, they can click the widget button again — a **new** 15-minute link is generated each time.
+If the customer does not pay within the 15-minute window, the link expires. They can click the widget button again to generate a new link.
 
 When creating payment links manually (not via the widget button), `expiresInMinutes` must be one of: `15`, `60`, `360`, `720`, `1440`.
 
@@ -587,7 +581,7 @@ app.post('/webhooks/achylo', express.json(), (req, res) => {
 }
 ```
 
-> ⚠️ **Webhooks require Redis** on the server. Delivery retries up to 5 times with exponential backoff.
+> ⚠️ Delivery retries up to 5 times with exponential backoff.
 
 See full documentation at [Webhooks →](developers/webhooks.md)
 
