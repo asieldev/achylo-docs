@@ -66,7 +66,8 @@ When you open your profile, you will see the following options to manage your as
 * **Buy/Sell:** Direct access to acquire more tokens or liquidate your assets.
 
 ### Security and Settings
-* **Export Private Key:** Allows you to obtain the secret key of your wallet. 
+* **Wallet Protection (MFA):** Enable multi-factor auth (Authenticator + optional SMS recovery) under Security Settings. Required to export your private key and withdraw funds. See [Wallet Protection / MFA](../security/2fa.md).
+* **Export Private Key:** Allows you to obtain the secret key of your wallet. Requires Wallet Protection.
     *  **Attention:** Never share this key; whoever has it has total control over your money.
 * **Disconnect:** Ends your wallet session in the dApp for greater security.
 
