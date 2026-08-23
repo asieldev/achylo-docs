@@ -26,15 +26,17 @@ You verify with:
 
 ### What you can change later
 
-| Action | Available today? | How |
-|--------|------------------|-----|
+| Action | Available? | How |
+|--------|------------|-----|
 | Enable Wallet Protection (Authenticator) | Yes | Security Settings → Enable |
-| Add SMS recovery | Yes | **Add SMS** |
-| Change SMS number | Yes | **Update SMS** (confirm with Authenticator first) |
-| Change / re-enroll Authenticator (TOTP) | **Not yet** | Planned: confirm with SMS, then scan a new QR |
+| Add SMS recovery | Yes | **Add SMS** (only if SMS is not enrolled yet) |
+| Change SMS number | Yes* | **Update SMS** (confirm with Authenticator first) |
+| Change / re-enroll Authenticator (TOTP) | **No** | Not supported by the wallet MFA provider once enrolled |
 | Disable Wallet Protection entirely | **No** | Irreversible by design |
 
-Until Authenticator rotation ships, protect your TOTP device carefully and always keep SMS recovery enrolled so you can still verify if the app is lost.
+\* If Update SMS fails because the method is already locked, keep using your enrolled recovery number for verification.
+
+**Important:** Authenticator can only be enrolled once. Keep the app and device safe. With SMS recovery enrolled, you can still verify protected actions via SMS if you lose the authenticator app — but you cannot install a replacement Authenticator secret.
 
 ---
 
@@ -105,6 +107,20 @@ Use this when you already have SMS enrolled and need a new number.
 
 ---
 
+## Authenticator cannot be replaced
+
+Once Authenticator is enrolled, Achylo **cannot** issue a new QR / secret for the same wallet. The MFA provider rejects re-enrollment (`already enrolled`).
+
+If you lose the authenticator app but still have **SMS recovery**:
+
+1. Start the protected action again.
+2. In the verify modal, choose **SMS** if offered.
+3. Enter the SMS code to complete the action.
+
+You will keep verifying with SMS (and any remaining Authenticator entry) — there is no path to install a brand-new Authenticator for that wallet.
+
+---
+
 ## How verification works day to day
 
 1. You start a protected action (export, withdraw, deposit escrow, etc.).
@@ -142,8 +158,9 @@ If you still have **SMS recovery** enrolled:
 
 1. Start the protected action again.
 2. In the verify modal, switch to **SMS** if available.
-3. Enter the SMS code.
-4. After you regain access, keep SMS up to date. Use **Update SMS** if your number changed, and set up Authenticator again if your app or device was replaced (when the UI allows re-enrollment after a successful verify).
+3. Enter the SMS code to complete the action.
+
+You cannot enroll a replacement Authenticator after the first one. Keep SMS recovery current.
 
 If you lose **both** Authenticator and SMS access:
 
@@ -183,7 +200,7 @@ International format with `+` and country code, digits only after the plus (E.16
 Your MFA session is still valid. When it expires, the verify modal appears again before the next protected action.
 
 ### Can I disable Wallet Protection or reset MFA if I lose access?
-No. Once enabled, Wallet Protection **cannot be reverted**. Achylo does **not** offer a support reset to remove or bypass it. You can only manage factors you still control from Security Settings (**Add SMS** / **Update SMS**). Changing the Authenticator secret is not available yet. If you lose every enrolled factor, protected actions stay blocked — there is no admin override. Keep Authenticator and SMS recovery current before you lose access to either.
+No. Once enabled, Wallet Protection **cannot be reverted**. Achylo does **not** offer a support reset to remove or bypass it. Authenticator cannot be re-enrolled once set. You may update SMS recovery while you still control Authenticator. If you lose every enrolled factor, protected actions stay blocked — there is no admin override.
 
 ---
 
