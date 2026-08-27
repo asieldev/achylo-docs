@@ -33,7 +33,7 @@ When opening the modal, you will see a summary of your operational capacity base
 
 7. **Reclaim Timeout:**
    * Time the buyer has to complete the payment before the seller can reclaim the funds.
-   * *Range:* From 15 minutes to 28 days. If left empty, the default value applies.
+   * *Range:* From 15 minutes to 360 days. If left empty, the default value applies.
 
 8. **🏪 Merchant Only:** * If you check this box, **only registered merchants** will be able to see and accept your order, adding an extra layer of security.
 
