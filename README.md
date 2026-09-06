@@ -97,3 +97,12 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 ### 6. CUBT Staking
 * **Yield:** Earn interest by holding your CUBT on the network.
 * **Status:** *(In development)*.
+
+---
+
+### 7. On-Chain Price Oracle (Chainlink Compatible)
+* **Real P2P pricing:** Decentralized exchange rates generated directly from real liquidated trades.
+* **Institutional safety:** VWAP volume weighting, median sorting, circuit breakers, anti-wash trading.
+* **Chainlink standard:** Compatible with `AggregatorV3Interface` for easy integration into lending markets, vaults, and DeFi contracts.
+
+📖 Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
