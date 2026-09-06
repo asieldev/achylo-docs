@@ -6,7 +6,7 @@ It natively implements both **custom institutional methods** (VWAP, Median, Ring
 
 ---
 
-## 📌 Contract Deployment Details
+## Contract Deployment Details
 
 | Parameter | Value |
 | :--- | :--- |
@@ -20,7 +20,7 @@ It natively implements both **custom institutional methods** (VWAP, Median, Ring
 
 ---
 
-## 🪙 Currency Identifiers (`currencyId`)
+## Currency Identifiers (`currencyId`)
 
 The oracle indexes each fiat currency by its dynamic `currencyId` (defined in the `PaymentMethodRegistry` contract):
 
@@ -31,11 +31,11 @@ The oracle indexes each fiat currency by its dynamic `currencyId` (defined in th
 | `2` | **MLC** | Moneda Libremente Convertible | *Configured on-demand* | *Dynamic* |
 | `3+` | *Dynamic* | Additional fiat currencies | *Configured on-demand* | *Dynamic* |
 
-> 💡 **Units & Precision:** Rates represent **units of fiat currency per 1 USDC**, scaled by `10^6`. For example, `930000000` corresponds to `930000000 / 1e6 = 930.00 CUP/USDC`.
+> **Units & Precision:** Rates represent **units of fiat currency per 1 USDC**, scaled by `10^6`. For example, `930000000` corresponds to `930000000 / 1e6 = 930.00 CUP/USDC`.
 
 ---
 
-## 🛡️ Institutional Security & Anti-Manipulation Engine
+## Institutional Security & Anti-Manipulation Engine
 
 Unlike naive DEX spot oracles that are vulnerable to flash loans, Achylo calculates prices exclusively from settled P2P transactions upon `releaseFunds`, protected by multiple algorithmic guardrails:
 
@@ -78,7 +78,7 @@ Unlike naive DEX spot oracles that are vulnerable to flash loans, Achylo calcula
 
 ---
 
-## 🔗 How to Query the Oracle
+## How to Query the Oracle
 
 You can integrate and consume oracle prices in three primary ways:
 1. **Chainlink `AggregatorV3Interface`** (Standard DeFi format)
@@ -317,49 +317,8 @@ main();
 
 ---
 
-## 📊 Subgraph & Indexing
-
-All oracle operations emit indexed EVM events for Subgraph integration:
-
-- **`TradeObserved(uint8 indexed currencyId, uint88 price, uint88 volume, address indexed buyer, address indexed seller, uint32 timestamp)`**
-- **`OutlierFiltered(uint8 indexed currencyId, uint88 rejectedPrice, uint88 currentReferencePrice, uint16 deviationBps)`**
-- **`FeedConfigUpdated(uint8 indexed currencyId, uint16 bufferSize, ...)`**
-- **`CurrencyPauseUpdated(uint8 indexed currencyId, bool isPaused, string reason)`**
-
-### Production Subgraph GraphQL Query:
-
-```graphql
-query GetCurrencyFeed {
-  currencyFeed(id: "0") {
-    id
-    currencyId
-    lastPrice
-    lastUpdated
-    bufferSize
-    observationsCount
-    isPaused
-  }
-  priceObservations(
-    first: 10
-    where: { currencyId: 0 }
-    orderBy: timestamp
-    orderDirection: desc
-  ) {
-    id
-    price
-    volume
-    buyer
-    seller
-    timestamp
-    blockNumber
-  }
-}
-```
-
----
-
-## 🖥️ Live Visual Explorer
+## Live Visual Explorer
 
 You can inspect all live oracle feeds, verify on-chain parameters, and monitor the ring buffer in real time directly from the Achylo App:
 
-👉 **[Achylo Price Oracle Dashboard](https://achylo.com/oracle)** (located in the top navigation under **Tools → Price Oracle**).
+**[Achylo Price Oracle Dashboard](https://achylo.com/oracle)** (located in the top navigation under **Tools → Price Oracle**).
