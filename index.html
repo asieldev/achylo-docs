@@ -28,8 +28,6 @@
   <meta name="twitter:image:alt"   content="Achylo Pay - USDC payments on Base" />
 
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
-  <!-- KaTeX CSS for beautiful math formulas -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
   <link rel="icon" type="image/svg+xml" href="assets/images/logo_app.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -511,28 +509,49 @@
       white-space: nowrap;
     }
 
-    /* Mathematical Formulas (KaTeX) */
-    .katex {
-      font-size: 1.08em;
-      text-rendering: auto;
-    }
-
-    .katex-display {
-      margin: 24px 0 !important;
-      padding: 20px 24px;
+    /* Mathematical Formulas & Specification Cards */
+    .formula-card {
+      margin: 22px 0;
+      padding: 18px 22px;
       background: var(--achylo-code-bg);
       border: 1px solid var(--achylo-code-border);
       border-left: 4px solid var(--achylo-accent);
       border-radius: var(--achylo-radius);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-      overflow-x: auto;
-      overflow-y: hidden;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .katex-display:hover {
+    .formula-card:hover {
       border-color: var(--achylo-accent-light);
-      box-shadow: 0 4px 16px rgba(255, 107, 53, 0.08);
+      box-shadow: 0 4px 14px rgba(255, 107, 53, 0.08);
+    }
+
+    .formula-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--achylo-accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .formula-math {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--achylo-text);
+      overflow-x: auto;
+      padding: 4px 0;
+    }
+
+    .formula-desc {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--achylo-text-secondary);
+      line-height: 1.5;
     }
 
     /* Code Blocks */
@@ -783,15 +802,19 @@
       color: #ff9d66;
     }
 
-    body[data-theme='dark'] .katex-display {
+    body[data-theme='dark'] .formula-card {
       background: var(--achylo-surface-elevated);
       border-color: var(--achylo-border);
       border-left-color: var(--achylo-accent);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
-    body[data-theme='dark'] .katex {
+    body[data-theme='dark'] .formula-math {
       color: #f8fafc;
+    }
+
+    body[data-theme='dark'] .formula-desc {
+      color: var(--achylo-text-secondary);
     }
 
     body[data-theme='dark'] .markdown-section blockquote {
@@ -933,10 +956,6 @@
 
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-
-  <!-- KaTeX for Beautiful Mathematical Equations -->
-  <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
 
   <!-- Prism.js Syntax Highlighting Language Packs -->
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-solidity.min.js"></script>

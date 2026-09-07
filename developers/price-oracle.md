@@ -94,28 +94,28 @@ The smart contract features full parametric configurability both globally and pe
 
 ### 1. Sliding Window N (Dynamic Ring Buffer)
 
-The oracle maintains an on-chain cyclic ring buffer of fixed capacity $N$ (`bufferSize`) per currency feed:
+The oracle maintains an on-chain cyclic ring buffer of fixed capacity `N` (`bufferSize`) per currency feed:
 
-$$
-\text{Observation}[N] = \left\{ (P_0, V_0, t_0, B_0), \dots, (P_{N-1}, V_{N-1}, t_{N-1}, B_{N-1}) \right\}
-$$
+<div class="formula-card">
+  <div class="formula-label">Ring Buffer State Structure</div>
+  <div class="formula-math">Observation[N] = { (Price<sub>0</sub>, Vol<sub>0</sub>, time<sub>0</sub>, block<sub>0</sub>), ..., (Price<sub>N-1</sub>, Vol<sub>N-1</sub>, time<sub>N-1</sub>, block<sub>N-1</sub>) }</div>
+  <div class="formula-desc">Fixed-capacity cyclic buffer storing the most recent <code>N</code> finalized escrow transactions.</div>
+</div>
 
-Each insertion executes in $O(1)$ storage complexity:
+Each insertion executes in `O(1)` storage complexity:
 
-$$
-\begin{aligned}
-\text{head}_{t+1} &= (\text{head}_t + 1) \bmod N \\
-\text{count}_{t+1} &= \min(\text{count}_t + 1, N)
-\end{aligned}
-$$
+```solidity
+head = (head + 1) % N;
+count = count < N ? count + 1 : N;
+```
 
 **Mathematical Rationale & Gas Guardrail:**
-* Bounding $N$ between 3 and 50 ($3 \le N \le 50$) ensures that calculation loops for both VWAP and in-memory Insertion Sort never exceed block gas limits, completely eliminating algorithmic gas denial-of-service vulnerabilities.
-* When governance or an administrator updates $N$ dynamically to a smaller capacity $N' < N$, the contract dynamically truncates excess array slots via `.pop()` and resets the cyclic pointer:
+* Bounding `N` between 3 and 50 (`3 <= N <= 50`) ensures that calculation loops for both VWAP and in-memory Insertion Sort never exceed block gas limits, completely eliminating algorithmic gas denial-of-service vulnerabilities.
+* When governance or an administrator updates `N` dynamically to a smaller capacity `N' < N`, the contract dynamically truncates excess array slots via `.pop()` and resets the cyclic pointer:
 
-$$
-\text{head} = \text{head} \bmod N'
-$$
+```solidity
+head = head % newCapacity;
+```
 
 This preserves historical continuity without requiring feed re-initialization.
 
@@ -123,17 +123,19 @@ This preserves historical continuity without requiring feed re-initialization.
 
 ### 2. Minimum Volume Filter
 
-Every finalized escrow delivers transaction volume $V$ denominated in USDC with 6 decimal places. The observation is evaluated against the minimum volume threshold:
+Every finalized escrow delivers transaction volume `tradeVolume` denominated in USDC with 6 decimal places. The observation is evaluated against the minimum volume threshold:
 
-$$
-V \ge V_{\min}
-$$
+<div class="formula-card">
+  <div class="formula-label">Volume Admission Rule</div>
+  <div class="formula-math">tradeVolume &gt;= minVolumeThreshold</div>
+  <div class="formula-desc">Global default: <code>5 USDC</code> (<code>5,000,000</code> units). Any transaction with volume below this threshold is dropped immediately.</div>
+</div>
 
-If $V < V_{\min}$, the transaction is immediately discarded before modifying any storage slot.
+If `tradeVolume < minVolume`, the transaction is immediately discarded before modifying any storage slot.
 
 **Mathematical Rationale:**
-* Protects against Sybil volume dilution. In an open P2P marketplace without a minimum volume threshold, a malicious actor could generate $N$ micro-escrows of $0.000001 \text{ USDC}$ with skewed prices to completely overwrite the ring buffer at negligible capital cost.
-* Setting $V_{\min} = 5 \text{ USDC}$ imposes a prohibitive economic cost and liquidity requirement on any attempt to influence the feed.
+* Protects against Sybil volume dilution. In an open P2P marketplace without a minimum volume threshold, a malicious actor could generate `N` micro-escrows of `0.000001 USDC` with skewed prices to completely overwrite the ring buffer at negligible capital cost.
+* Setting `minVolume = 5 USDC` imposes a prohibitive economic cost and liquidity requirement on any attempt to influence the feed.
 
 ---
 
@@ -141,30 +143,30 @@ If $V < V_{\min}$, the transaction is immediately discarded before modifying any
 
 To prevent high-net-worth participants (whales) from dominating the moving average, the volume injected into the weighting formula is capped:
 
-$$
-V_{\text{eff}} = \min(V, V_{\text{cap}})
-$$
-
-Where $V_{\text{cap}}$ defaults to $5,000 \times 10^6$ (5,000 USDC).
+<div class="formula-card">
+  <div class="formula-label">Effective Volume Formula</div>
+  <div class="formula-math">effectiveVolume = min(tradeVolume, maxVolumePerTradeCap)</div>
+  <div class="formula-desc">Default cap: <code>5,000 USDC</code> (<code>5,000,000,000</code> units). Trades larger than this cap are admitted with weight restricted to <code>5,000 USDC</code>.</div>
+</div>
 
 **Mathematical Rationale:**
-In standard Volume-Weighted Average Price, the relative weight $w_i$ of an observation $i$ is:
+In standard Volume-Weighted Average Price, the relative weight `w_i` of an observation `i` is:
 
-$$
-w_i = \frac{V_{\text{eff}, i}}{\sum_{j=0}^{k-1} V_{\text{eff}, j}}
-$$
+```text
+       effectiveVolume_i
+w_i = ───────────────────
+       ∑ effectiveVolume
+```
 
-If a counterparty executes a single $100,000 \text{ USDC}$ escrow alongside nine $100 \text{ USDC}$ escrows, without capping the single large transaction would control:
-
-$$
-w_{\text{whale}} = \frac{100\,000}{100\,000 + 9 \times 100} = \frac{100\,000}{100\,900} \approx 99.11\%
-$$
-
-With volume capping applied ($V_{\text{cap}} = 5,000 \text{ USDC}$):
-
-$$
-w_{\text{whale, capped}} = \frac{5\,000}{5\,000 + 900} = \frac{5\,000}{5\,900} \approx 84.75\%
-$$
+If a counterparty executes a single `100,000 USDC` escrow alongside nine `100 USDC` escrows:
+* **Without volume capping:** The single large transaction would control:
+  ```text
+  100,000 / (100,000 + 9 × 100) = 100,000 / 100,900 ≈ 99.11%
+  ```
+* **With volume capping applied (`cap = 5,000 USDC`):**
+  ```text
+  5,000 / (5,000 + 900) = 5,000 / 5,900 ≈ 84.75%
+  ```
 
 Combining volume capping with the median engine ensures that even extreme volume cannot arbitrarily distort the price.
 
@@ -172,17 +174,22 @@ Combining volume capping with the median engine ensures that even extreme volume
 
 ### 4. Circuit Breaker & Outlier Band
 
-Incoming trade prices are checked against the last calculated reference price $P_{\text{ref}} = \text{lastCalculatedPrice}$. The relative deviation in basis points ($\text{bps}$) is calculated on-chain using integer arithmetic:
+Incoming trade prices are checked against the last calculated reference price `refPrice = lastCalculatedPrice`. The relative deviation in basis points (`bps`) is calculated on-chain using integer arithmetic:
 
-$$
-\text{Deviation}_{\text{bps}} = \frac{|P - P_{\text{ref}}| \times 10\,000}{P_{\text{ref}}}
-$$
+<div class="formula-card">
+  <div class="formula-label">Deviation Calculation (Basis Points)</div>
+  <div class="formula-math">deviationBps = (|tradePrice - refPrice| × 10,000) / refPrice</div>
+  <div class="formula-desc">Where <code>100 bps = 1.00%</code>. Example: a price swing from 930 to 1,260 yields <code>(|1260 - 930| × 10,000) / 930 = 3,548 bps (35.48%)</code>.</div>
+</div>
 
 The trade is categorized as an anomalous outlier and rejected if:
 
-$$
-\text{Deviation}_{\text{bps}} > \text{maxDeviationBps} \quad \land \quad \text{count} \ge \text{minObservationsForOutlierCheck} \quad \land \quad (t_{\text{block}} - t_{\text{lastUpdated}}) < \text{staleThreshold}
-$$
+```solidity
+// Outlier rejection rule (trade is discarded):
+deviationBps > maxDeviationBps &&
+observationCount >= minObservationsForOutlierCheck &&
+(block.timestamp - lastUpdated) < staleThreshold
+```
 
 When triggered, the contract drops the trade, preserves the existing ring buffer state, and emits:
 
@@ -191,7 +198,7 @@ event OutlierFiltered(uint8 indexed currencyId, uint88 price, uint88 referencePr
 ```
 
 **Stale Price Recalibration Exemption:**
-If market conditions remain inactive such that $(t_{\text{block}} - t_{\text{lastUpdated}}) \ge \text{staleThreshold}$ (default 24 hours), the circuit breaker condition is bypassed. This permits legitimate macroeconomic shifts (e.g. sharp currency devaluations or central bank rate adjustments) to be assimilated into the oracle without deadlock.
+If market conditions remain inactive such that `(block.timestamp - lastUpdated) >= staleThreshold` (default 24 hours), the circuit breaker condition is bypassed. This permits legitimate macroeconomic shifts (e.g. sharp currency devaluations or central bank rate adjustments) to be assimilated into the oracle without deadlock.
 
 ---
 
@@ -207,13 +214,15 @@ bytes32 pairHash = keccak256(abi.encodePacked(
 ));
 ```
 
-A trade between counterparty $A$ and counterparty $B$ is dropped if:
+A trade between counterparty `A` and counterparty `B` is dropped if:
 
-$$
-(t_{\text{block}} - t_{\text{lastPairTrade}}[\text{pairHash}]) < \text{pairCooldown}
-$$
+<div class="formula-card">
+  <div class="formula-label">Anti-Wash Trade Cooldown Rule</div>
+  <div class="formula-math">(block.timestamp - lastPairTradeTimestamp[pairHash]) &lt; pairCooldown</div>
+  <div class="formula-desc">Default cooldown: <code>300 seconds (5 minutes)</code>. Drops rapid back-and-forth trades between the same participants within the window.</div>
+</div>
 
-Where $\text{pairCooldown}$ defaults to 300 seconds (5 minutes). This introduces temporal friction that makes rapid back-and-forth spoofing mathematically ineffective.
+This introduces temporal friction that makes rapid back-and-forth spoofing mathematically ineffective.
 
 ---
 
@@ -221,11 +230,13 @@ Where $\text{pairCooldown}$ defaults to 300 seconds (5 minutes). This introduces
 
 To guarantee immunity against atomic flash loans and single-block sandwich manipulation:
 
-$$
-\text{blockCooldownEnabled} = \text{true} \quad \land \quad \text{lastPairBlock}[\text{pairHash}] = B_{\text{current}}
-$$
+<div class="formula-card">
+  <div class="formula-label">Flash-Loan Block Isolation Rule</div>
+  <div class="formula-math">blockCooldownEnabled == true &amp;&amp; lastPairTradeBlockNumber[pairHash] == block.number</div>
+  <div class="formula-desc">Blocks any second trade between the same accounts within the exact same Ethereum / Base block number.</div>
+</div>
 
-If counterparty $A$ and $B$ execute an escrow within block $B_n$, any subsequent trade between the same accounts in block $B_n$ is rejected. Because flash loans must borrow, manipulate, and repay funds within a single block transaction sequence, this mechanism eliminates flash-loan attacks entirely.
+If counterparty `A` and `B` execute an escrow within block `B_n`, any subsequent trade between the same accounts in block `B_n` is rejected. Because flash loans must borrow, manipulate, and repay funds within a single block transaction sequence, this mechanism eliminates flash-loan attacks entirely.
 
 ---
 
@@ -235,36 +246,43 @@ The contract supports two independent mathematical aggregation algorithms:
 
 #### Engine A: Volume-Weighted Average Price (VWAP)
 
-For a sliding window of $k$ active observations ($k \le N$):
+For a sliding window of `k` active observations (`k <= N`):
 
-$$
-P_{\text{VWAP}} = \frac{\sum_{i=0}^{k-1} \left( P_i \cdot V_{\text{eff}, i} \right)}{\sum_{i=0}^{k-1} V_{\text{eff}, i}}
-$$
+<div class="formula-card">
+  <div class="formula-label">Volume-Weighted Average Price (VWAP) Formula</div>
+  <div class="formula-math">
+          ∑ [ Price<sub>i</sub> × effectiveVolume<sub>i</sub> ]  (for i = 0 .. k-1)<br>
+P<sub>VWAP</sub> = ────────────────────────────────────────────────────────────<br>
+                    ∑ [ effectiveVolume<sub>i</sub> ]  (for i = 0 .. k-1)
+  </div>
+  <div class="formula-desc">Every price point is weighted proportionally by its capped real volume settled in USDC.</div>
+</div>
 
 **Integer Precision & Overflow Safety:**
-* $P_i$ and $V_{\text{eff}, i}$ are stored as `uint88` (up to $\approx 3 \times 10^{26}$).
-* The product $P_i \cdot V_{\text{eff}, i}$ is accumulated into a 256-bit unsigned integer (`uint256`), supporting up to $50 \times (10^{14} \times 10^{14}) = 5 \times 10^{29} \ll 2^{256} - 1$, providing mathematical proof against arithmetic overflow.
+* `Price_i` and `effectiveVolume_i` are stored as `uint88` (up to ≈ 3 × 10^26).
+* The product `Price_i * effectiveVolume_i` is accumulated into a 256-bit unsigned integer (`uint256`), supporting up to `50 × (10^14 × 10^14) = 5 × 10^29 << 2^256 - 1`, providing mathematical proof against arithmetic overflow.
 
 #### Engine B: Statistical Median Price
 
-The observations array $\{ P_0, \dots, P_{k-1} \}$ is copied to memory and sorted in-place in ascending order:
+The observations array `{ Price_0, ..., Price_{k-1} }` is copied to memory and sorted in-place in ascending order:
 
-$$
-P_{(0)} \le P_{(1)} \le \dots \le P_{(k-1)}
-$$
+```text
+Price_(0) <= Price_(1) <= ... <= Price_(k-1)
+```
 
 The median price is extracted according to:
 
-$$
-P_{\text{Median}} = 
-\begin{cases}
-P_{\left(\frac{k - 1}{2}\right)}, & \text{if } k \text{ is odd} \\[12pt]
-\dfrac{P_{\left(\frac{k}{2} - 1\right)} + P_{\left(\frac{k}{2}\right)}}{2}, & \text{if } k \text{ is even}
-\end{cases}
-$$
+<div class="formula-card">
+  <div class="formula-label">Statistical Median Extraction</div>
+  <div class="formula-math">
+If k is odd:  P<sub>Median</sub> = Price<sub>(k - 1) / 2</sub><br><br>
+If k is even: P<sub>Median</sub> = ( Price<sub>(k / 2) - 1</sub> + Price<sub>k / 2</sub> ) / 2
+  </div>
+  <div class="formula-desc">Sorts observations in memory and selects the middle value. Provides 50% breakdown point immunity against outlier spikes.</div>
+</div>
 
 **Statistical Robustness:**
-The median offers a breakdown point of $\varepsilon^* = 50\%$. An attacker must control at least $\lfloor k / 2 \rfloor + 1$ observations in the active buffer to alter the output value. Outlier spikes and volume manipulations cannot influence the median price.
+The median offers a breakdown point of 50%. An attacker must control at least `floor(k / 2) + 1` observations in the active buffer to alter the output value. Outlier spikes and volume manipulations cannot influence the median price.
 
 ---
 
