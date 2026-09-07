@@ -8,6 +8,7 @@
   * [Buy and Sell](p2p/compra-y-venta.md)
   * [Transaction Limits](p2p/limites-de-transacciones.md)
   * [Fees](p2p/fees.md)
+  * [Referrals](p2p/referrals.md)
 * MINT AND REDEEM CUBT
   * [CUBT Token](emitir-redimir-cubt/token-cubt.md)
   * [Mint](emitir-redimir-cubt/mint.md)

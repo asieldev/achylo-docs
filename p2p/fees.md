@@ -23,7 +23,7 @@ The escrow contract charges the fee **only once** when the transaction is succes
 
 ## 👥 Who pays and who is exempt?
 - The **user who executes the action** pays the fee (for example, the seller when releasing funds to the buyer or when accepting an order).
-- **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly referral system. If you are Gold, the contract omits the fee for your operations.
+- **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly [Referral System](p2p/referrals.md). If you are Gold, the contract omits the fee for your operations.
 
 ---
 

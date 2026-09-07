@@ -16,7 +16,7 @@ When opening the modal, you will see a summary of your operational capacity base
    * **Sell USDC:** You sell USDC and receive fiat.
 
 2. **Fiat Currency:** Select the exchange currency.
-   * *Highlighted options:* **CUP**, **CUBT** (50% discount applies), **MLC**, **USD Classic**, **COP**, **USD**, **EUR**, **GBP**, **MXN**, **ARS**, among others.
+   * *Available options:* **CUP**, **BRL**, **MLC**, **USD Classic**, **COP**, **USD**, **EUR**, **GBP**, **MXN**, **ARS**, among others.
 
 3. **Exchange Rate:** * Define how much fiat you pay/receive per 1 USDC. 
    * *Valid range:* 0.01 - 1,000,000 per unit.

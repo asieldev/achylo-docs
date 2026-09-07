@@ -19,6 +19,7 @@ Achylo is a Web3 platform with six core superpowers:
 ### 1. P2P Marketplace (Decentralized and Anonymous)
 * **Buy/Sell:** Exchange USDC using local fiat currencies.
 * **No intermediaries:** The smart escrow keeps funds safe until both parties confirm.
+* **Referral program:** Invite active traders to unlock Gold status and 0% protocol fees ([Referrals Guide](p2p/referrals.md)).
 * **Order types:**
     * **Public:** Visible to all merchants.
     * **Private:** Only for your trusted counterparty.
