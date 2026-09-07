@@ -94,42 +94,46 @@ The smart contract features full parametric configurability both globally and pe
 
 ### 1. Sliding Window N (Dynamic Ring Buffer)
 
-The oracle maintains an on-chain cyclic ring buffer of fixed capacity `N` (`bufferSize`) per currency feed:
+The oracle maintains an on-chain cyclic ring buffer of fixed capacity $N$ (`bufferSize`) per currency feed:
 
-```text
-Observation[N] = { (P_0, V_0, t_0, B_0), ..., (P_{N-1}, V_{N-1}, t_{N-1}, B_{N-1}) }
-```
+$$
+\text{Observation}[N] = \left\{ (P_0, V_0, t_0, B_0), \dots, (P_{N-1}, V_{N-1}, t_{N-1}, B_{N-1}) \right\}
+$$
 
-Each insertion executes in `O(1)` storage complexity:
+Each insertion executes in $O(1)$ storage complexity:
 
-```text
-head[t+1]  = (head[t] + 1) % N
-count[t+1] = min(count[t] + 1, N)
-```
+$$
+\begin{aligned}
+\text{head}_{t+1} &= (\text{head}_t + 1) \bmod N \\
+\text{count}_{t+1} &= \min(\text{count}_t + 1, N)
+\end{aligned}
+$$
 
 **Mathematical Rationale & Gas Guardrail:**
-* Bounding `N` between 3 and 50 (`3 <= N <= 50`) ensures that calculation loops for both VWAP and in-memory Insertion Sort never exceed block gas limits, completely eliminating algorithmic gas denial-of-service vulnerabilities.
-* When governance or an administrator updates `N` dynamically to a smaller capacity `N' < N`, the contract dynamically truncates excess array slots via `.pop()` and resets the cyclic pointer:
-```text
-head = head % N'
-```
+* Bounding $N$ between 3 and 50 ($3 \le N \le 50$) ensures that calculation loops for both VWAP and in-memory Insertion Sort never exceed block gas limits, completely eliminating algorithmic gas denial-of-service vulnerabilities.
+* When governance or an administrator updates $N$ dynamically to a smaller capacity $N' < N$, the contract dynamically truncates excess array slots via `.pop()` and resets the cyclic pointer:
+
+$$
+\text{head} = \text{head} \bmod N'
+$$
+
 This preserves historical continuity without requiring feed re-initialization.
 
 ---
 
 ### 2. Minimum Volume Filter
 
-Every finalized escrow delivers transaction volume `V` denominated in USDC with 6 decimal places. The observation is evaluated against the minimum volume threshold:
+Every finalized escrow delivers transaction volume $V$ denominated in USDC with 6 decimal places. The observation is evaluated against the minimum volume threshold:
 
-```text
-V >= V_min
-```
+$$
+V \ge V_{\min}
+$$
 
-If `V < V_min`, the transaction is immediately discarded before modifying any storage slot.
+If $V < V_{\min}$, the transaction is immediately discarded before modifying any storage slot.
 
 **Mathematical Rationale:**
-* Protects against Sybil volume dilution. In an open P2P marketplace without a minimum volume threshold, a malicious actor could generate `N` micro-escrows of `0.000001 USDC` with skewed prices to completely overwrite the ring buffer at negligible capital cost.
-* Setting `V_min = 5 USDC` imposes a prohibitive economic cost and liquidity requirement on any attempt to influence the feed.
+* Protects against Sybil volume dilution. In an open P2P marketplace without a minimum volume threshold, a malicious actor could generate $N$ micro-escrows of $0.000001 \text{ USDC}$ with skewed prices to completely overwrite the ring buffer at negligible capital cost.
+* Setting $V_{\min} = 5 \text{ USDC}$ imposes a prohibitive economic cost and liquidity requirement on any attempt to influence the feed.
 
 ---
 
@@ -137,30 +141,30 @@ If `V < V_min`, the transaction is immediately discarded before modifying any st
 
 To prevent high-net-worth participants (whales) from dominating the moving average, the volume injected into the weighting formula is capped:
 
-```text
-V_eff = min(V, V_cap)
-```
+$$
+V_{\text{eff}} = \min(V, V_{\text{cap}})
+$$
 
-Where `V_cap` defaults to `5,000 * 10^6` (5,000 USDC).
+Where $V_{\text{cap}}$ defaults to $5,000 \times 10^6$ (5,000 USDC).
 
 **Mathematical Rationale:**
-In standard Volume-Weighted Average Price, the relative weight `w_i` of an observation `i` is:
+In standard Volume-Weighted Average Price, the relative weight $w_i$ of an observation $i$ is:
 
-```text
-w_i = V_i / Sum(V_j, j = 0..k-1)
-```
+$$
+w_i = \frac{V_{\text{eff}, i}}{\sum_{j=0}^{k-1} V_{\text{eff}, j}}
+$$
 
-If a counterparty executes a single `100,000 USDC` escrow alongside nine `100 USDC` escrows, without capping the single large transaction would control:
+If a counterparty executes a single $100,000 \text{ USDC}$ escrow alongside nine $100 \text{ USDC}$ escrows, without capping the single large transaction would control:
 
-```text
-w_whale = 100,000 / (100,000 + 9 * 100) = 100,000 / 100,900 ≈ 99.11%
-```
+$$
+w_{\text{whale}} = \frac{100\,000}{100\,000 + 9 \times 100} = \frac{100\,000}{100\,900} \approx 99.11\%
+$$
 
-With volume capping applied (`V_cap = 5,000 USDC`):
+With volume capping applied ($V_{\text{cap}} = 5,000 \text{ USDC}$):
 
-```text
-w_whale_capped = 5,000 / (5,000 + 900) = 5,000 / 5,900 ≈ 84.75%
-```
+$$
+w_{\text{whale, capped}} = \frac{5\,000}{5\,000 + 900} = \frac{5\,000}{5\,900} \approx 84.75\%
+$$
 
 Combining volume capping with the median engine ensures that even extreme volume cannot arbitrarily distort the price.
 
@@ -168,19 +172,17 @@ Combining volume capping with the median engine ensures that even extreme volume
 
 ### 4. Circuit Breaker & Outlier Band
 
-Incoming trade prices are checked against the last calculated reference price `P_ref = lastCalculatedPrice`. The relative deviation in basis points (`bps`) is calculated on-chain using integer arithmetic:
+Incoming trade prices are checked against the last calculated reference price $P_{\text{ref}} = \text{lastCalculatedPrice}$. The relative deviation in basis points ($\text{bps}$) is calculated on-chain using integer arithmetic:
 
-```text
-Deviation_bps = (|Price - P_ref| * 10,000) / P_ref
-```
+$$
+\text{Deviation}_{\text{bps}} = \frac{|P - P_{\text{ref}}| \times 10\,000}{P_{\text{ref}}}
+$$
 
 The trade is categorized as an anomalous outlier and rejected if:
 
-```text
-Deviation_bps > maxDeviationBps
-AND count >= minObservationsForOutlierCheck
-AND (block.timestamp - lastUpdated) < staleThreshold
-```
+$$
+\text{Deviation}_{\text{bps}} > \text{maxDeviationBps} \quad \land \quad \text{count} \ge \text{minObservationsForOutlierCheck} \quad \land \quad (t_{\text{block}} - t_{\text{lastUpdated}}) < \text{staleThreshold}
+$$
 
 When triggered, the contract drops the trade, preserves the existing ring buffer state, and emits:
 
@@ -189,7 +191,7 @@ event OutlierFiltered(uint8 indexed currencyId, uint88 price, uint88 referencePr
 ```
 
 **Stale Price Recalibration Exemption:**
-If market conditions remain inactive such that `(block.timestamp - lastUpdated) >= staleThreshold` (default 24 hours), the circuit breaker condition is bypassed. This permits legitimate macroeconomic shifts (e.g. sharp currency devaluations or central bank rate adjustments) to be assimilated into the oracle without deadlock.
+If market conditions remain inactive such that $(t_{\text{block}} - t_{\text{lastUpdated}}) \ge \text{staleThreshold}$ (default 24 hours), the circuit breaker condition is bypassed. This permits legitimate macroeconomic shifts (e.g. sharp currency devaluations or central bank rate adjustments) to be assimilated into the oracle without deadlock.
 
 ---
 
@@ -197,21 +199,21 @@ If market conditions remain inactive such that `(block.timestamp - lastUpdated) 
 
 To prevent circular trading between colluding accounts, the oracle tracks the timestamp of the last trade between any two addresses. The pair identity is computed canonically using lexicographical ordering:
 
-```text
-pairHash = keccak256(abi.encodePacked(
+```solidity
+bytes32 pairHash = keccak256(abi.encodePacked(
     buyer < seller ? buyer : seller,
     buyer < seller ? seller : buyer,
     currencyId
-))
+));
 ```
 
-A trade between counterparty `A` and counterparty `B` is dropped if:
+A trade between counterparty $A$ and counterparty $B$ is dropped if:
 
-```text
-(block.timestamp - lastPairTradeTimestamp[pairHash]) < pairCooldown
-```
+$$
+(t_{\text{block}} - t_{\text{lastPairTrade}}[\text{pairHash}]) < \text{pairCooldown}
+$$
 
-Where `pairCooldown` defaults to 300 seconds (5 minutes). This introduces temporal friction that makes rapid back-and-forth spoofing mathematically ineffective.
+Where $\text{pairCooldown}$ defaults to 300 seconds (5 minutes). This introduces temporal friction that makes rapid back-and-forth spoofing mathematically ineffective.
 
 ---
 
@@ -219,12 +221,11 @@ Where `pairCooldown` defaults to 300 seconds (5 minutes). This introduces tempor
 
 To guarantee immunity against atomic flash loans and single-block sandwich manipulation:
 
-```text
-blockCooldownEnabled == true
-AND lastPairTradeBlockNumber[pairHash] == block.number
-```
+$$
+\text{blockCooldownEnabled} = \text{true} \quad \land \quad \text{lastPairBlock}[\text{pairHash}] = B_{\text{current}}
+$$
 
-If counterparty `A` and `B` execute an escrow within block `B_n`, any subsequent trade between the same accounts in block `B_n` is rejected. Because flash loans must borrow, manipulate, and repay funds within a single block transaction sequence, this mechanism eliminates flash-loan attacks entirely.
+If counterparty $A$ and $B$ execute an escrow within block $B_n$, any subsequent trade between the same accounts in block $B_n$ is rejected. Because flash loans must borrow, manipulate, and repay funds within a single block transaction sequence, this mechanism eliminates flash-loan attacks entirely.
 
 ---
 
@@ -234,38 +235,36 @@ The contract supports two independent mathematical aggregation algorithms:
 
 #### Engine A: Volume-Weighted Average Price (VWAP)
 
-For a sliding window of `k` active observations (`k <= N`):
+For a sliding window of $k$ active observations ($k \le N$):
 
-```text
-           Sum_{i=0..k-1} ( Price_i * V_eff_i )
-P_VWAP = ----------------------------------------
-                 Sum_{i=0..k-1} ( V_eff_i )
-```
+$$
+P_{\text{VWAP}} = \frac{\sum_{i=0}^{k-1} \left( P_i \cdot V_{\text{eff}, i} \right)}{\sum_{i=0}^{k-1} V_{\text{eff}, i}}
+$$
 
 **Integer Precision & Overflow Safety:**
-* `Price_i` and `V_eff_i` are stored as `uint88` (up to ≈ 3 * 10^26).
-* The product `Price_i * V_eff_i` is accumulated into a 256-bit unsigned integer (`uint256`), supporting up to `50 * (10^14 * 10^14) = 5 * 10^29 << 2^256 - 1`, providing mathematical proof against arithmetic overflow.
+* $P_i$ and $V_{\text{eff}, i}$ are stored as `uint88` (up to $\approx 3 \times 10^{26}$).
+* The product $P_i \cdot V_{\text{eff}, i}$ is accumulated into a 256-bit unsigned integer (`uint256`), supporting up to $50 \times (10^{14} \times 10^{14}) = 5 \times 10^{29} \ll 2^{256} - 1$, providing mathematical proof against arithmetic overflow.
 
 #### Engine B: Statistical Median Price
 
-The observations array `{ P_0, ..., P_{k-1} }` is copied to memory and sorted in-place in ascending order:
+The observations array $\{ P_0, \dots, P_{k-1} \}$ is copied to memory and sorted in-place in ascending order:
 
-```text
-P_(0) <= P_(1) <= ... <= P_(k-1)
-```
+$$
+P_{(0)} \le P_{(1)} \le \dots \le P_{(k-1)}
+$$
 
 The median price is extracted according to:
 
-```text
-If k is odd:
-    P_Median = P_((k - 1) / 2)
-
-If k is even:
-    P_Median = (P_((k / 2) - 1) + P_(k / 2)) / 2
-```
+$$
+P_{\text{Median}} = 
+\begin{cases}
+P_{\left(\frac{k - 1}{2}\right)}, & \text{if } k \text{ is odd} \\[12pt]
+\dfrac{P_{\left(\frac{k}{2} - 1\right)} + P_{\left(\frac{k}{2}\right)}}{2}, & \text{if } k \text{ is even}
+\end{cases}
+$$
 
 **Statistical Robustness:**
-The median offers a breakdown point of `ε* = 50%`. An attacker must control at least `floor(k / 2) + 1` observations in the active buffer to alter the output value. Outlier spikes and volume manipulations cannot influence the median price.
+The median offers a breakdown point of $\varepsilon^* = 50\%$. An attacker must control at least $\lfloor k / 2 \rfloor + 1$ observations in the active buffer to alter the output value. Outlier spikes and volume manipulations cannot influence the median price.
 
 ---
 

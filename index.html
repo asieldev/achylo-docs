@@ -28,6 +28,8 @@
   <meta name="twitter:image:alt"   content="Achylo Pay - USDC payments on Base" />
 
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
+  <!-- KaTeX CSS for beautiful math formulas -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
   <link rel="icon" type="image/svg+xml" href="assets/images/logo_app.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -443,34 +445,50 @@
       text-decoration: underline;
     }
 
-    /* Tables */
-    .markdown-section table {
+    /* Tables & Responsive Table Wrapper */
+    .table-wrapper {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin: 24px 0;
       border-radius: var(--achylo-radius);
-      overflow: hidden;
-      box-shadow: var(--achylo-shadow-sm);
       border: 1px solid var(--achylo-border);
+      box-shadow: var(--achylo-shadow-sm);
+      background: var(--achylo-surface);
+    }
+
+    .markdown-section table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      border: none;
+      box-shadow: none;
     }
 
     .markdown-section th {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      font-weight: 600;
-      font-size: 13px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      font-weight: 700;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      padding: 14px 18px;
+      letter-spacing: 0.05em;
+      padding: 13px 18px;
       text-align: left;
-      border-bottom: 2px solid var(--achylo-border);
+      border-bottom: 2px solid var(--achylo-accent);
       color: var(--achylo-text-secondary);
+      white-space: nowrap;
     }
 
     .markdown-section td {
-      padding: 14px 18px;
+      padding: 13px 18px;
       border-bottom: 1px solid var(--achylo-border-light);
-      font-size: 14px;
+      font-size: 13.5px;
+      color: var(--achylo-text);
+      vertical-align: middle;
+      line-height: 1.5;
+    }
+
+    .markdown-section tr:nth-child(even) td {
+      background-color: rgba(248, 250, 252, 0.75);
     }
 
     .markdown-section tr:last-child td {
@@ -478,7 +496,43 @@
     }
 
     .markdown-section tr:hover td {
-      background-color: var(--achylo-border-light);
+      background-color: rgba(255, 107, 53, 0.06) !important;
+    }
+
+    /* Table Code Monospace Pills */
+    .markdown-section td code {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #c2410c;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* Mathematical Formulas (KaTeX) */
+    .katex {
+      font-size: 1.08em;
+      text-rendering: auto;
+    }
+
+    .katex-display {
+      margin: 24px 0 !important;
+      padding: 20px 24px;
+      background: var(--achylo-code-bg);
+      border: 1px solid var(--achylo-code-border);
+      border-left: 4px solid var(--achylo-accent);
+      border-radius: var(--achylo-radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      overflow-x: auto;
+      overflow-y: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .katex-display:hover {
+      border-color: var(--achylo-accent-light);
+      box-shadow: 0 4px 16px rgba(255, 107, 53, 0.08);
     }
 
     /* Code Blocks */
@@ -673,15 +727,22 @@
     /* Language Badge in Code */
     .markdown-section pre[data-lang]::before {
       content: attr(data-lang);
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
+      position: absolute;
+      top: 10px;
+      right: 90px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 10.5px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--achylo-muted);
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--achylo-border);
+      background: var(--achylo-border-light);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--achylo-border);
+      pointer-events: none;
+      line-height: 1.4;
     }
 
     /* Dark Mode Content */
@@ -692,12 +753,45 @@
       color: var(--achylo-text);
     }
 
+    body[data-theme='dark'] .table-wrapper {
+      background: var(--achylo-surface);
+      border-color: var(--achylo-border);
+    }
+
     body[data-theme='dark'] .markdown-section th {
-      background: linear-gradient(135deg, #18181b 0%, #1f1f24 100%);
+      background: linear-gradient(180deg, #18181b 0%, #121216 100%);
+      color: #94a3b8;
+      border-bottom: 2px solid var(--achylo-accent);
+    }
+
+    body[data-theme='dark'] .markdown-section td {
+      border-bottom-color: var(--achylo-border);
+      color: var(--achylo-text);
+    }
+
+    body[data-theme='dark'] .markdown-section tr:nth-child(even) td {
+      background-color: rgba(255, 255, 255, 0.02);
     }
 
     body[data-theme='dark'] .markdown-section tr:hover td {
-      background-color: rgba(255,255,255,0.03);
+      background-color: rgba(255, 140, 66, 0.08) !important;
+    }
+
+    body[data-theme='dark'] .markdown-section td code {
+      background: rgba(255, 127, 65, 0.12);
+      border-color: rgba(255, 127, 65, 0.25);
+      color: #ff9d66;
+    }
+
+    body[data-theme='dark'] .katex-display {
+      background: var(--achylo-surface-elevated);
+      border-color: var(--achylo-border);
+      border-left-color: var(--achylo-accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    body[data-theme='dark'] .katex {
+      color: #f8fafc;
     }
 
     body[data-theme='dark'] .markdown-section blockquote {
@@ -839,6 +933,17 @@
 
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+
+  <!-- KaTeX for Beautiful Mathematical Equations -->
+  <script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+
+  <!-- Prism.js Syntax Highlighting Language Packs -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-solidity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
   <script>
     (function () {
       const applyTheme = (theme) => {
@@ -980,18 +1085,35 @@
         });
       };
 
+      // Wrap tables for responsive horizontal scrolling
+      const enhanceTables = () => {
+        const tables = document.querySelectorAll('.markdown-section table');
+        tables.forEach((table) => {
+          if (table.parentElement && table.parentElement.classList.contains('table-wrapper')) return;
+          const wrapper = document.createElement('div');
+          wrapper.className = 'table-wrapper';
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+        });
+      };
+
+      const refreshDecorations = () => {
+        addCodeBlockChrome();
+        enhanceTables();
+      };
+
       // Re-run after docsify renders new content
       const observer = new MutationObserver(() => {
-        addCodeBlockChrome();
+        refreshDecorations();
       });
 
       if (document.readyState !== 'loading') {
         observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
-        setTimeout(addCodeBlockChrome, 500);
+        setTimeout(refreshDecorations, 500);
       } else {
         document.addEventListener('DOMContentLoaded', () => {
           observer.observe(document.querySelector('.content') || document.body, { childList: true, subtree: true });
-          setTimeout(addCodeBlockChrome, 500);
+          setTimeout(refreshDecorations, 500);
         });
       }
     })();
