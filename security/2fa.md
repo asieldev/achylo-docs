@@ -1,7 +1,7 @@
 # Wallet Protection (MFA)
 
 > **Warning — irreversible once enabled**  
-> After you enable Wallet Protection, **it cannot be turned off or removed**. For security, Achylo has no admin reset and no “disable MFA” path. Before you click Enable, make sure you can keep access to your Authenticator app and, ideally, enroll **SMS recovery** right away. Losing every enrolled factor permanently blocks export, withdrawals, and other protected actions.
+> After you enable Wallet Protection, **it cannot be turned off or removed**. For security, Achylo has no admin reset and no “disable MFA” path. Before you click Enable, make sure you can keep access to your Authenticator app and, ideally, enroll **SMS recovery** and/or a **Passkey** right away. Losing every enrolled factor permanently blocks export, withdrawals, and other protected actions.
 
 Achylo uses **Wallet Protection** as the multi-factor authentication (MFA) for your embedded wallet.
 
@@ -21,6 +21,7 @@ You verify with:
 
 1. **Authenticator app (TOTP)** — primary factor (Google Authenticator, Authy, 1Password, etc.)
 2. **SMS recovery** — optional but strongly recommended second factor for recovery
+3. **Passkey** — optional WebAuthn factor (Face ID, Touch ID, Windows Hello, or device lock) for faster verification
 
 > **Important:** Login to Achylo is done with Google, Apple, or Email. SMS is **not** used for login. SMS is reserved as an MFA recovery method so it stays independent from your login channel.
 
@@ -31,12 +32,13 @@ You verify with:
 | Enable Wallet Protection (Authenticator) | Yes | Security Settings → Enable |
 | Add SMS recovery | Yes | **Add SMS** (only if SMS is not enrolled yet) |
 | Change SMS number | Yes* | **Update SMS** (confirm with Authenticator first) |
+| Add Passkey | Yes | **Add Passkey** (device/browser must support WebAuthn) |
 | Change / re-enroll Authenticator (TOTP) | **No** | Not supported by the wallet MFA provider once enrolled |
 | Disable Wallet Protection entirely | **No** | Irreversible by design |
 
 \* If Update SMS fails because the method is already locked, keep using your enrolled recovery number for verification.
 
-**Important:** Authenticator can only be enrolled once. Keep the app and device safe. With SMS recovery enrolled, you can still verify protected actions via SMS if you lose the authenticator app — but you cannot install a replacement Authenticator secret.
+**Important:** Authenticator can only be enrolled once. Keep the app and device safe. With SMS recovery or a Passkey enrolled, you can still verify protected actions if you lose the authenticator app — but you cannot install a replacement Authenticator secret.
 
 ---
 
@@ -60,16 +62,35 @@ You verify with:
 7. Enter the **6-digit code** from the app into Achylo.
 8. Confirm enrollment.
 
-After TOTP succeeds, Achylo offers **SMS recovery**:
+After TOTP succeeds, Achylo offers **SMS recovery** and **Passkey**:
 
-9. Choose **Add SMS** (recommended) or skip for now.
+9. Choose **Add SMS recovery**, **Add Passkey**, or skip for now.
 10. If you add SMS:
     - Enter your phone number with **country code** (E.164), for example `+53 5XXX XXXX` or `+1 415 555 2671`.
     - Tap send / continue so Achylo sends an SMS code.
     - Enter the **6-digit SMS code**.
-11. When finished, Wallet Protection shows status **Enabled**, with methods:
+11. If you add a Passkey:
+    - Tap **Create passkey**.
+    - Confirm with Face ID, Touch ID, Windows Hello, or your device lock when the browser prompts you.
+12. When finished, Wallet Protection shows status **Enabled**, with methods:
     - **Authenticator**
     - **SMS recovery** (if you completed that step)
+    - **Passkey** (if you completed that step)
+
+---
+
+## Add a Passkey (later)
+
+Use this if Wallet Protection is already on and Passkey is not enrolled yet.
+
+1. Profile → **Security Settings** → **Wallet Protection**.
+2. Click **Add Passkey**.
+3. Tap **Create passkey** and complete the browser / OS prompt.
+4. Passkey appears as enabled under **Methods**.
+
+You can then verify protected actions with Passkey, Authenticator, or SMS (whichever is enrolled).
+
+> Passkeys are scoped to the site hostname (RP ID). Enroll and verify on the same Achylo domain you normally use (for example production vs staging).
 
 ---
 
@@ -126,7 +147,7 @@ You will keep verifying with SMS (and any remaining Authenticator entry) — the
 1. You start a protected action (export, withdraw, deposit escrow, etc.).
 2. If your MFA session is still valid, the action continues.
 3. If the session expired, Achylo shows the **Wallet Protection** verify modal.
-4. Enter your Authenticator code (or use SMS if offered).
+4. Choose **Passkey**, **Authenticator**, or **SMS** (whichever you enrolled).
 5. After success, the original action continues.
 
 Tips:
@@ -142,13 +163,15 @@ Tips:
 |--------|------|-----------|
 | Authenticator (TOTP) | Primary MFA | Yes — required to enable Wallet Protection |
 | SMS | Recovery / alternate verify | Strongly recommended |
+| Passkey | Fast alternate verify (WebAuthn) | Recommended when your device supports it |
 
 Best practice:
 
 1. Enable Authenticator first.
 2. Add SMS recovery immediately after.
-3. Keep Authenticator on a device you control.
-4. Use a phone number you can always access for recovery SMS.
+3. Add a Passkey on a trusted device for faster day-to-day verification.
+4. Keep Authenticator on a device you control.
+5. Use a phone number you can always access for recovery SMS.
 
 ---
 
@@ -181,7 +204,24 @@ The previous Achylo-native 2FA (QR + Achylo backup codes + `/api/v1/security/2fa
 | Achylo API 2FA endpoints | Wallet Protection enrollment / verify in Security Settings |
 | Only some Achylo endpoints | Wallet signing and protected operations gated by MFA |
 
-Do **not** look for “Enable 2FA”, “backup codes”, or “Regenerate backup codes” in Security Settings. Use **Wallet Protection**, **Enable**, **Add SMS**, and **Update SMS** instead.
+Do **not** look for “Enable 2FA”, “backup codes”, or “Regenerate backup codes” in Security Settings. Use **Wallet Protection**, **Enable**, **Add SMS**, **Update SMS**, and **Add Passkey** instead.
+
+---
+
+## Operator checklist: CDP Portal (Passkey)
+
+Before Passkey works in Achylo, the Coinbase Developer Platform project must allow it:
+
+1. Open [CDP Portal](https://portal.cdp.coinbase.com/) → your Achylo Embedded Wallet project.
+2. Enable **MFA → Passkey** (in addition to TOTP / SMS as needed).
+3. Under **CORS / allowed origins**, add every Achylo web origin that will enroll or verify passkeys (exact scheme + host + port), for example:
+   - `https://app.achylo.com`
+   - `https://staging.…`
+   - `http://localhost:5173` (local only)
+4. Confirm the live site hostname matches the origin users enroll on — WebAuthn **RP ID** is derived from the request origin host.
+5. Ship Achylo frontend with CDP SDK **≥ 0.0.126** (`@coinbase/cdp-core` / `cdp-hooks` / `cdp-react`) so `enrollPasskey` / `verifyPasskey` are available.
+
+If Passkey is disabled in Portal, Achylo hides **Add Passkey** and never offers it in the verify modal.
 
 ---
 
