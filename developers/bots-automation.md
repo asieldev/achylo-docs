@@ -92,6 +92,49 @@ GET /api/v1/automation/permissions
 X-API-Key: achylo_...
 ```
 
+### List your payment methods
+
+Use this to discover the IDs (and descriptions) you pass when creating or accepting orders.
+
+```http
+GET /api/v1/automation/payment-methods
+X-API-Key: achylo_...
+```
+
+Optional query:
+
+- `active=true` (default) — only methods you can use in orders  
+- `active=false` — include inactive methods too  
+- `user=0x…` — Smart Account to query (defaults to the one bound on the API Key)
+
+Example response:
+
+```json
+{
+  "user": "0xYOUR_SMART_ACCOUNT",
+  "activeOnly": true,
+  "count": 1,
+  "paymentMethods": [
+    {
+      "id": "0xYOUR_SAVED_PAYMENT_METHOD_ID",
+      "methodId": "0xGLOBAL_TYPE_ID",
+      "name": "bank_transfer",
+      "displayName": "Bank Transfer",
+      "description": "**** 1234",
+      "displayInfo": "**** 1234",
+      "accountInfo": "Account holder / number…",
+      "paymentDetails": "Extra notes…",
+      "isActive": true,
+      "isVerified": true,
+      "addedAt": 1710000000
+    }
+  ]
+}
+```
+
+Use each item’s `id` as `paymentMethodIds[]` / `takerPaymentMethodId`.  
+`description` is the short label (usually the same as `displayInfo`).
+
 ### Create a public order
 
 ```http
@@ -126,10 +169,9 @@ These are the IDs of **payment methods you already registered** in Achylo (Profi
 
 - They are **not** invented by your server.
 - The example value `0xaaa…` in older snippets was only a placeholder.
-- Today your integration must send those IDs (1 to 5).
-- Achylo’s backend validates them and runs the order; it does **not** invent methods for you at create time.
+- You must send those IDs (1 to 5). Achylo does **not** invent methods for you at create time.
 
-**How to get the IDs:** use the methods listed in your Achylo profile / the same IDs the web app uses when you create an order manually. If you need a friendlier API (e.g. “use my default Bank Transfer”), contact us — that convenience layer can be added on Achylo’s side later.
+**How to get the IDs:** call [`GET /api/v1/automation/payment-methods`](#list-your-payment-methods) and use each item’s `id` (and `description` / `displayName` to pick the right one). You can also copy them from your Achylo profile.
 
 ### Accept a public order
 
@@ -221,7 +263,7 @@ Start small. You can Activate again anytime to refresh permissions.
 | Error about missing account binding | Create a new API Key while logged into Achylo with your wallet |
 | Permission expired / no uses left | Open Bots / Automation and Activate again |
 | Amount too high | Accept amount is above the max you set |
-| Invalid payment method | Use a payment method ID from your Achylo profile (active method) |
+| Invalid payment method | Call `GET /api/v1/automation/payment-methods` and use an active `id` |
 | Operator not configured (UI) | Temporary config issue — try Reload later or contact support |
 
 ---
