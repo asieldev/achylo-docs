@@ -107,3 +107,12 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 * **Chainlink standard:** Compatible with `AggregatorV3Interface` for easy integration into lending markets, vaults, and DeFi contracts.
 
 📖 Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
+
+---
+
+### 8. Bots / Automation (Developers)
+* **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
+* **API Key + on-chain permissions:** You approve limited bot permissions in your profile; Achylo’s settlement bot executes on your behalf.
+* **No private key in your backend:** Permissions live on-chain and can be revoked anytime.
+
+📖 Full documentation: [Bots / Automation](developers/bots-automation.md)

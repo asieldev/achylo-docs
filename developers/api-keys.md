@@ -126,6 +126,14 @@ curl_close($ch);
 
 ---
 
+## Bots / Automation
+
+After you create at least one API Key, the same profile section shows **Bots / Automation**. Use it to grant Achylo’s settlement bot permission to run P2P public-order actions from your backend.
+
+📖 Full guide: [Bots / Automation](developers/bots-automation.md)
+
+---
+
 ## Security best practices
 
 - **Never** commit API keys to source code or version control
@@ -133,3 +141,4 @@ curl_close($ch);
 - Use separate keys per environment (`Development`, `Staging`, `Production`)
 - Rotate keys periodically and immediately if compromised
 - Revoke unused keys
+- If a key was used for automation, also **Revoke all** bot permissions in the dashboard

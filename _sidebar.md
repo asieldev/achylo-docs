@@ -17,6 +17,7 @@
 * DEVELOPERS
   * [Quickstart](developers/quickstart.md)
   * [API Keys](developers/api-keys.md)
+  * [Bots / Automation](developers/bots-automation.md)
   * [Payment Links](developers/payment-links.md)
   * [Payment Widgets](developers/payment-widgets.md)
   * [Payment Widgets V2](developers/payment-widgets-v2.md)
