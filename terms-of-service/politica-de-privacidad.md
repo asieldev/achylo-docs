@@ -9,7 +9,7 @@ This policy describes how Achylo Labs ("Achylo", "we") collects, uses, retains, 
 
 ## 1. Scope
 
-It applies to all functionalities of Achylo Protocol: P2P escrow, CUBT mint/redeem, smart account authentication, on-ramp/off-ramp integrations, and administrative tools. The blockchain networks used (for example Base L2) are also part of the covered ecosystem.
+It applies to all functionalities of Achylo Protocol: P2P escrow, CUBT mint/redeem, wallet authentication, on-ramp/off-ramp integrations, and administrative tools. The blockchain networks used (for example Base L2) are also part of the covered ecosystem.
 
 ## 2. Information We Collect
 
@@ -41,13 +41,13 @@ We use the information to:
 
 1. Operate, maintain, and improve the dApp and smart contracts.
 2. Facilitate escrow transactions and record compliance states.
-3. Enable authentication and recovery through smart accounts.
+3. Enable authentication and recovery through wallet addresses.
 4. Execute on-ramp/off-ramp and notification processes.
 5. Prevent fraud, system abuse, or automated attacks.
 6. Comply with legal, regulatory, or authority requests.
 7. Analyze usage metrics to optimize performance and experience.
 
-## 4. Authentication via Smart Accounts
+## 4. Authentication via wallet addresses
 
 - We may store session identifiers, temporary tokens, or hashes related to the authentication flow.
 - We record failed attempts to detect abuse or malicious automation.

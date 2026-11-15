@@ -24,7 +24,7 @@ Click **"Environments"** → **"+"** and add these variables:
 |----------|-------|
 | `base_url` | `https://api.achylo.com` (production Achylo API) |
 | `api_key` | `achylo_YOUR_API_KEY_HERE` |
-| `smart_account` | `0xYOUR_SMART_ACCOUNT_ADDRESS` |
+| `smart_account` | `0xYOUR_WALLET_ADDRESS` |
 
 Use `{{base_url}}` in every request. Production is always `https://api.achylo.com`.
 
@@ -480,7 +480,7 @@ POST {{base_url}}/api/v1/widgets/bundle
 }
 ```
 
-> `payoutAddress` (Smart Account) is **required** on the bundle endpoint.
+> `payoutAddress` (wallet address) is **required** on the bundle endpoint.
 
 **Expected Response (201):**
 
@@ -744,7 +744,7 @@ Base: `https://api.achylo.com` (use as Postman `{{base_url}}`)
 |--------|-------|----------|
 | `401` | `API Key inválida o revocada` | Check your API Key is correct and not revoked |
 | `400` | `origins must be an array when provided` | Send an array, omit the field, or use `[]` for a public widget |
-| `400` | `Valid payoutAddress (Smart Account) is required` | Add a valid Ethereum address |
+| `400` | `Valid payoutAddress (wallet address) is required` | Add a valid Ethereum address |
 | `400` | `resourceType must be "payment_link" or "product"` | Use `"product"` or `"payment_link"` |
 | `404` | `Product not found or not active` | Check product ID and that it's active |
 | `404` | `Widget not found` | Check widget ID |

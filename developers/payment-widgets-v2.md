@@ -29,7 +29,7 @@ V2 uses a **server-driven** approach for maximum security:
 
 - **SDK only accepts `widget-id`** — no payment configuration exposed in frontend
 - **Product and values loaded from backend** — impossible to manipulate on client
-- **Smart Account as receiver** — payments go to SA, not merchant's EOA
+- **Wallet address as receiver** — payments go to your Achylo wallet address
 
 ---
 
@@ -122,7 +122,7 @@ const response = await fetch('https://api.achylo.com/api/v1/widgets', {
     resourceType: 'product',
     resourceId: 'prod_abc12345',                              // Product ID
     originWhitelist: ['https://yourstore.com', 'https://www.yourstore.com'],
-    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS',              // Optional - uses SA automatically
+    payoutAddress: '0x...WALLET_ADDRESS',              // Optional - uses your wallet address automatically
     webhookUrl: 'https://yourserver.com/webhooks/achylo',     // Optional
     webhookSecret: 'whsec_your64hexcharsecret'                // Optional — required if webhookUrl is set
   })
@@ -139,7 +139,7 @@ console.log('Widget ID:', widget.id); // wgt_def67890
 | `resourceType` | ✅ | `"product"` or `"payment_link"` |
 | `resourceId` | ✅ | Product ID (`prod_...`) or Payment Link ID |
 | `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
-| `payoutAddress` | — | Smart Account that receives payments (auto-detected if omitted) |
+| `payoutAddress` | — | wallet address that receives payments (auto-detected if omitted) |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. If `webhookUrl` is set but this is omitted, a secret is auto-generated |
 
@@ -167,7 +167,7 @@ const response = await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
       allowCustomAmount: false
     },
     originWhitelist: ['https://yourstore.com', 'https://www.yourstore.com'],
-    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS',              // Required — Smart Account that receives payments
+    payoutAddress: '0x...WALLET_ADDRESS',              // Required — wallet address that receives payments
     webhookUrl: 'https://yourserver.com/webhooks/achylo',     // Optional
     webhookSecret: 'whsec_your64hexcharsecret'                // Optional — required if webhookUrl is set
   })
@@ -198,7 +198,7 @@ console.log('Embed code:', widget.embedCode);
 | `productDetails.allowCustomAmount` | — | Allow payer to enter amount (default `false`) |
 | `productDetails.goalAmount` | — | Fundraising goal in USDC — enables donation progress bar |
 | `resourceId` | ✅* | Payment Link UUID when `resourceType` is `"payment_link"` |
-| `payoutAddress` | ✅ | Smart Account address that receives payments |
+| `payoutAddress` | ✅ | wallet address that receives payments |
 | `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads (max 64 chars) |
@@ -263,7 +263,7 @@ await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
       goalAmount: '80000'        // 👈 fundraising goal in USDC → enables the progress bar
     },
     originWhitelist: ['https://yourcause.org'],
-    payoutAddress: '0x...SMART_ACCOUNT_ADDRESS'
+    payoutAddress: '0x...WALLET_ADDRESS'
   })
 });
 ```
@@ -361,7 +361,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 3. **If product with variable amount**: shows popup to enter amount
 4. **Backend creates Payment Link** associated with the product
 5. **Payment modal opens** with correct data
-6. **Payment goes to merchant's Smart Account**
+6. **Payment goes to merchant's wallet address**
 7. **Success event** is fired on frontend
 
 ---
@@ -374,10 +374,10 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 - **Impossible to manipulate values** via JavaScript
 - **Product validated on server** before creating payment link
 
-### Smart Account Receiver
+### Wallet address receiver
 
-- **Payments go to SA** — more secure than EOA
-- **SA configured automatically** during widget creation
+- **Payments go to your Achylo wallet address**
+- **Wallet address configured automatically** during widget creation
 - **Same flow as V1** for end customer
 
 ### Origin Whitelist
@@ -423,7 +423,7 @@ When creating payment links via API or dashboard, `expiresInMinutes` must be one
 | **Fixed amounts** | ✅ | ✅ |
 | **Variable amounts** | ✅ | ❌ |
 | **Recurring billing** | ✅ | ❌ |
-| **Smart Account receiver** | ✅ | ✅ |
+| **Wallet address receiver** | ✅ | ✅ |
 
 ---
 
@@ -553,7 +553,7 @@ X-API-Key: YOUR_API_KEY
   "resourceType": "product",
   "resourceId": "prod_abc12345",
   "originWhitelist": ["https://yourstore.com"],
-  "payoutAddress": "0x...SMART_ACCOUNT",
+  "payoutAddress": "0x...WALLET_ADDRESS",
   "webhookUrl": "https://yourserver.com/webhooks/achylo",
   "webhookSecret": "whsec_your64hexcharsecret"
 }
@@ -576,7 +576,7 @@ X-API-Key: YOUR_API_KEY
     "allowCustomAmount": false
   },
   "originWhitelist": ["https://yourstore.com"],
-  "payoutAddress": "0x...SMART_ACCOUNT",
+  "payoutAddress": "0x...WALLET_ADDRESS",
   "webhookUrl": "https://yourserver.com/webhooks/achylo",
   "webhookSecret": "whsec_your64hexcharsecret"
 }
@@ -642,13 +642,13 @@ X-API-Key: YOUR_API_KEY
 | `merchant-id` + `amount` | `widget-id` |
 | Client-side config | Server-driven |
 | Fixed amounts only | Fixed + variable |
-| Smart Account receiver | Smart Account receiver |
+| Wallet address receiver | Wallet address receiver |
 
 **Migration benefits:**
 - ✅ More security (server-driven)
 - ✅ Variable amount support
 - ✅ Reusable products
-- ✅ Native Smart Account
+- ✅ Native wallet address
 
 ---
 

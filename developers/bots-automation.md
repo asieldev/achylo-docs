@@ -110,13 +110,13 @@ Optional query:
 
 - `active=true` (default) — only methods you can use in orders  
 - `active=false` — include inactive methods too  
-- `user=0x…` — Smart Account to query (defaults to the one bound on the API Key)
+- `user=0x…` — wallet address to query (defaults to the one bound on the API Key)
 
 Example response:
 
 ```json
 {
-  "user": "0xYOUR_SMART_ACCOUNT",
+  "user": "0xYOUR_WALLET_ADDRESS",
   "activeOnly": true,
   "count": 1,
   "paymentMethods": [

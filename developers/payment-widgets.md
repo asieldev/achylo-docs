@@ -190,7 +190,7 @@ const response = await fetch('https://api.achylo.com/api/widget-merchants', {
       'https://yourstore.com',
       'https://www.yourstore.com'
     ],
-    payoutAddress: '0x...YOUR_SMART_ACCOUNT_ADDRESS',
+    payoutAddress: '0x...YOUR_WALLET_ADDRESS',
     webhookUrl: 'https://yourserver.com/webhooks/achylo',  // Optional
     webhookSecret: 'whsec_your64hexcharsecret'             // Optional — required if webhookUrl is set
   })
@@ -205,7 +205,7 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 | Field | Required | Description |
 |-------|----------|-------------|
 | `origins` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
-| `payoutAddress` | ✅ | Your Smart Account address that receives payments |
+| `payoutAddress` | ✅ | Your wallet address that receives payments |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. Required if `webhookUrl` is set. Use `whsec_` + 64 hex chars or any string |
 
@@ -275,7 +275,7 @@ const response = await fetch('https://api.achylo.com/api/payment-links', {
   },
   body: JSON.stringify({
     amount: '10000000',            // 10 USDC (in micro-units: 1 USDC = 1000000)
-    receiver: '0x...YOUR_SMART_ACCOUNT',
+    receiver: '0x...YOUR_WALLET_ADDRESS',
     description: 'Order #1234',
     expiresInMinutes: 15,          // Required: 15, 60, 360, 720, or 1440 (default: 15)
     webhookUrl: 'https://yourserver.com/webhooks/achylo'  // Optional
@@ -514,7 +514,7 @@ const link = await fetch('https://api.achylo.com/api/payment-links', {
   },
   body: JSON.stringify({
     amount: '10000000',
-    receiver: '0x...YOUR_SMART_ACCOUNT',
+    receiver: '0x...YOUR_WALLET_ADDRESS',
     description: 'Order #1234',
     webhookUrl: 'https://yourserver.com/webhooks/achylo',
     webhookSecret: 'your_hex_secret_32_to_64_chars'  // Optional — auto-generated if omitted
