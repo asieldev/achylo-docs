@@ -1,50 +1,37 @@
 # Bots / Automation
 
-Bots let your backend create, accept, confirm, cancel, and dispute **P2P public orders** through the Achylo API — without signing every action from your wallet in the UI.
+Bots let your **backend** create, accept, confirm, cancel, and dispute **P2P public orders** through the Achylo API — without opening the Achylo UI for every step.
 
-Under the hood, you grant limited on-chain permissions to Achylo’s settlement bot (`OperatorForwarder`). Your API Key then triggers those actions; Achylo submits a sponsored UserOperation on your behalf.
+You approve what the bot is allowed to do (and for how long) once in your profile. After that, your server calls Achylo with your API Key.
 
 ---
 
 ## Who this is for
 
 - Merchants and integrators who already use **API Keys**
-- Backends that need to automate P2P order lifecycle (not just payment links)
+- Backends that need to automate the P2P public-order lifecycle
 
 If you only need payment links or widgets, you do **not** need Bots — see [Payment Links](developers/payment-links.md).
 
 ---
 
-## How it works
+## How it works (simple)
 
-```
-Your app                         Achylo                         Base
-────────────────────────────────────────────────────────────────────
-1. Create API Key            →   Key bound to your Smart Account
-2. Profile → Bots / Automation → You Approve setPermissions (UserOp)
-3. POST /api/v1/automation/… →   Settlement SA → OperatorForwarder.execute
-4.                           →   P2PEscrow runs as YOU (ERC-2771)
-```
+1. You create an **API Key** in Achylo.
+2. In **Bots / Automation**, you turn on the actions you want and click **Activate** (your wallet confirms once).
+3. Your server calls `/api/v1/automation/...` with that API Key.
+4. Achylo runs the action on Base **as your account**, within the limits you approved.
 
-Important:
-
-| Piece | Role |
-|-------|------|
-| **API Key** | Authenticates your HTTP calls (`X-API-Key`) |
-| **Smart Account** | On-chain identity that owns the permissions |
-| **Bot permissions** | On-chain allowlist (actions, duration, max uses, max amount) |
-| **Settlement SA** | Achylo operator that calls `execute` (you never share its keys) |
-
-Permissions are **per Smart Account**, not per API Key. If several keys are bound to the same Smart Account, they share the same bot permissions.
+Permissions belong to **your Achylo wallet account**, not to each API Key separately. Several keys on the same account share the same bot permissions.
 
 ---
 
 ## Prerequisites
 
-1. An Achylo account with a **Coinbase Smart Wallet** (Smart Account).
+1. An Achylo account (logged in with your wallet).
 2. At least one **API Key** ([API Keys](developers/api-keys.md)).
-3. Enough **USDC allowance** on `P2PEscrow` for actions that move funds (approve the escrow contract — **never** the OperatorForwarder).
-4. For merchants creating public sell orders: merchant mode / collateral as required by the protocol.
+3. Payment methods already saved in your Achylo profile (needed to create or accept orders).
+4. For creating public sell orders: merchant status / collateral as required by Achylo.
 
 ---
 
@@ -54,65 +41,58 @@ Permissions are **per Smart Account**, not per API Key. If several keys are boun
 2. Create a key (label e.g. `"Production"`)
 3. Copy it once and store it as `ACHYLO_API_KEY`
 
-New keys are automatically bound to your current Smart Account when created from the dashboard. That binding is required for automation.
-
 ---
 
-## Step 2 — Enable Bots / Automation in the dashboard
+## Step 2 — Enable Bots / Automation
 
-After you have at least one API Key, the same accordion shows **Bots / Automation**.
-
-For each action you can:
+After you have at least one API Key, the same section shows **Bots / Automation**.
 
 | Action | What it allows |
 |--------|----------------|
 | **Create Public Order** | Create a public P2P order |
-| **Accept Public Order** | Take / accept a public order (supports **max amount**) |
-| **Confirm Payment** | Mark an escrow as paid (buyer) |
+| **Accept Public Order** | Accept a public order (you can set a **max amount**) |
+| **Confirm Payment** | Mark an order as paid (buyer side) |
 | **Cancel Public Order** | Cancel your own public order |
-| **Raise Dispute** | Open a dispute on an escrow |
+| **Raise Dispute** | Open a dispute |
 
-Per action:
+For each action you can set:
 
-- Toggle **on/off**
-- **Duration:** 7 or 30 days (hard max 30 days on-chain)
-- **Max uses**
-- **Max amount** (USDC) — required for Accept Public Order
+- On / off
+- Duration: **7 or 30 days**
+- Max number of uses
+- Max amount in USDC (for Accept Public Order)
 
-Then click **Activate**. Your wallet sends **one** UserOperation (`setPermissions`) via the Coinbase paymaster.
+Click **Activate** so Achylo saves those permissions.
 
 Also available:
 
-- **Reload** — refresh on-chain status
-- **Revoke** (per action) — clears that permission
-- **Revoke all** — invalidates every permission for the Achylo operator
+- **Reload** — refresh status
+- **Revoke** (one action) or **Revoke all**
 
-> Reload / Activate **overwrite** previous values for the selected actions; they do not stack uses.
+> Activate / Reload **replace** the previous settings for those actions; they do not add extra uses on top.
 
 ---
 
 ## Step 3 — Call the Automation API
 
 **Base path:** `/api/v1/automation`  
-**Auth:** `X-API-Key` (required for execute endpoints)  
-**Required header on every POST:** `Idempotency-Key: <unique-string>` (max 128 chars)
+**Auth:** `X-API-Key`  
+**Every POST must include:** `Idempotency-Key: <unique-string>` (max 128 characters)
 
-### Config (public)
+### Check configuration
 
 ```http
 GET /api/v1/automation/config
 ```
 
-Returns operator Smart Account, forwarder address, selectors, and feature flags.
-
-### Permissions (on-chain status)
+### Check your bot permissions
 
 ```http
 GET /api/v1/automation/permissions
 X-API-Key: achylo_...
 ```
 
-### Create public order
+### Create a public order
 
 ```http
 POST /api/v1/automation/orders
@@ -132,14 +112,26 @@ Content-Type: application/json
   "customReclaimTimeout": 0,
   "merchantOnly": false,
   "paymentMethodIds": [
-    "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "0xYOUR_SAVED_PAYMENT_METHOD_ID"
   ]
 }
 ```
 
-Amounts are in **micro-USDC** (1 USDC = `1000000`). `orderType` may be `"Buy"` / `"Sell"` or `0` / `1`.
+Amounts are in **micro-USDC** (1 USDC = `1000000`).  
+`orderType`: `"Buy"` / `"Sell"` (or `0` / `1`).
 
-### Accept public order
+#### About `paymentMethodIds`
+
+These are the IDs of **payment methods you already registered** in Achylo (Profile → payment methods) — the same ones you pick when creating an order in the app.
+
+- They are **not** invented by your server.
+- The example value `0xaaa…` in older snippets was only a placeholder.
+- Today your integration must send those IDs (1 to 5).
+- Achylo’s backend validates them and runs the order; it does **not** invent methods for you at create time.
+
+**How to get the IDs:** use the methods listed in your Achylo profile / the same IDs the web app uses when you create an order manually. If you need a friendlier API (e.g. “use my default Bank Transfer”), contact us — that convenience layer can be added on Achylo’s side later.
+
+### Accept a public order
 
 ```http
 POST /api/v1/automation/orders/:orderId/accept
@@ -151,9 +143,11 @@ Content-Type: application/json
 ```json
 {
   "amount": "10000000",
-  "takerPaymentMethodId": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  "takerPaymentMethodId": "0xYOUR_SAVED_PAYMENT_METHOD_ID"
 }
 ```
+
+`takerPaymentMethodId` is again one of **your** saved payment methods (the taker’s method that matches the order).
 
 ### Confirm payment / cancel / dispute
 
@@ -163,9 +157,9 @@ POST /api/v1/automation/orders/:orderId/cancel
 POST /api/v1/automation/orders/:orderId/dispute
 ```
 
-Same headers (`X-API-Key` + `Idempotency-Key`). Body can be empty `{}`.
+Same headers (`X-API-Key` + `Idempotency-Key`). Body may be `{}`.
 
-### Operation status
+### Check an operation
 
 ```http
 GET /api/v1/automation/operations/:id
@@ -197,7 +191,7 @@ async function acceptOrder(orderId: string, amount: string, takerPaymentMethodId
 
 ---
 
-## Defaults (recommended for new users)
+## Suggested defaults for new users
 
 | Action | Duration | Max uses | Max amount |
 |--------|----------|----------|------------|
@@ -206,18 +200,17 @@ async function acceptOrder(orderId: string, amount: string, takerPaymentMethodId
 | Raise Dispute | 7 days | 1–3 | — |
 | Create / Cancel | 30 days | as needed | — |
 
-Start with short expiries and low use counts. You can Activate again anytime to refresh permissions.
+Start small. You can Activate again anytime to refresh permissions.
 
 ---
 
 ## Security checklist
 
-- Store API keys in a secrets manager — never in git
-- Prefer **limited** USDC `approve` on **P2PEscrow**, not infinite allowance
-- Never approve USDC to the OperatorForwarder
-- Use a unique `Idempotency-Key` per logical operation
-- Revoke permissions when a bot is no longer needed
-- Compromised API key → revoke the key **and** Revoke all bot permissions
+- Keep API keys in environment variables / a secrets manager — never in git
+- Prefer a limited USDC spending approval for Achylo trading (avoid unlimited if you can)
+- Use a unique `Idempotency-Key` for every logical operation
+- Revoke bot permissions when you no longer need automation
+- If a key is leaked → revoke the key **and** use **Revoke all** on Bots / Automation
 
 ---
 
@@ -225,12 +218,11 @@ Start with short expiries and low use counts. You can Activate again anytime to 
 
 | Symptom | Likely cause |
 |---------|----------------|
-| `SMART_ACCOUNT_REQUIRED` | API key has no Smart Account binding — create a new key from the dashboard while logged in with your wallet |
-| `PERMISSION_EXPIRED` / `NO_USES_LEFT` | Re-open Bots / Automation and Activate again |
-| `AMOUNT_TOO_HIGH` | Accept amount exceeds the max you set on-chain |
-| `FORWARDER_MISMATCH` | Achylo config out of sync — contact support / wait for cutover |
-| Operator address not configured (UI) | Frontend missing operator config; wait for `/api/v1/automation/config` or ask support |
-| Tx succeeds in UI but API fails | Wrong API key (different account) or permission not enabled for that action |
+| Error about missing account binding | Create a new API Key while logged into Achylo with your wallet |
+| Permission expired / no uses left | Open Bots / Automation and Activate again |
+| Amount too high | Accept amount is above the max you set |
+| Invalid payment method | Use a payment method ID from your Achylo profile (active method) |
+| Operator not configured (UI) | Temporary config issue — try Reload later or contact support |
 
 ---
 

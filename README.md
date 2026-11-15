@@ -112,7 +112,7 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 
 ### 8. Bots / Automation (Developers)
 * **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
-* **API Key + on-chain permissions:** You approve limited bot permissions in your profile; Achylo’s settlement bot executes on your behalf.
-* **No private key in your backend:** Permissions live on-chain and can be revoked anytime.
+* **API Key + permissions:** You approve limited bot permissions in your profile; then your backend calls the Achylo API.
+* **Revocable anytime:** Turn actions off or Revoke all from the same screen.
 
 📖 Full documentation: [Bots / Automation](developers/bots-automation.md)
