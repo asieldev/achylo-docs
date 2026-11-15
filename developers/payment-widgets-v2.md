@@ -2,6 +2,14 @@
 
 Add a **"Pay with Crypto"** button to any website with the new server-driven architecture. More secure, flexible, and independent from V1 configuration.
 
+## Base URL (API)
+
+```
+https://api.achylo.com
+```
+
+All API paths in this guide (e.g. `/api/v1/widgets`) are relative to that host unless a full URL is shown.
+
 ---
 
 ## What is it for?
@@ -517,10 +525,12 @@ export function AchyloWidgetButton({
 
 ## API Reference
 
+Base: `https://api.achylo.com`
+
 ### Create Product
 
 ```http
-POST /api/v1/products
+POST https://api.achylo.com/api/v1/products
 X-API-Key: YOUR_API_KEY
 
 {
@@ -536,7 +546,7 @@ X-API-Key: YOUR_API_KEY
 ### Create Widget (link existing product)
 
 ```http
-POST /api/v1/widgets
+POST https://api.achylo.com/api/v1/widgets
 X-API-Key: YOUR_API_KEY
 
 {
@@ -554,7 +564,7 @@ X-API-Key: YOUR_API_KEY
 Creates a new product and widget in a single request. No prior `POST /api/v1/products` call needed.
 
 ```http
-POST /api/v1/widgets/bundle
+POST https://api.achylo.com/api/v1/widgets/bundle
 X-API-Key: YOUR_API_KEY
 
 {
@@ -581,13 +591,13 @@ X-API-Key: YOUR_API_KEY
 Called automatically by `widget.js` — same URL pattern as Widget V1 (`/api/payment-links/widget`).
 
 ```http
-GET /api/payment-links/widget-v2/:widgetId
+GET https://api.achylo.com/api/payment-links/widget-v2/:widgetId
 ```
 
 Resolves widget configuration (product name, amount, donation progress, etc.).
 
 ```http
-POST /api/payment-links/widget-v2/:widgetId/checkout
+POST https://api.achylo.com/api/payment-links/widget-v2/:widgetId/checkout
 Content-Type: application/json
 
 { "amount": "15.00" }
@@ -598,7 +608,7 @@ Creates a checkout session and returns `{ "checkoutUrl": "https://achylo.com/pay
 ### List Widgets
 
 ```http
-GET /api/v1/widgets
+GET https://api.achylo.com/api/v1/widgets
 X-API-Key: YOUR_API_KEY
 ```
 

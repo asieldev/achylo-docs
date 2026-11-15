@@ -30,6 +30,7 @@ Achylo is a Web3 platform with six core superpowers:
 * **Utility:** Ideal for users who want to move across the *on-chain* world in a yield-bearing stablecoin.
 
 ### 3. Payment Links (For Merchants and Developers)
+* **API Base URL (production):** `https://api.achylo.com`
 * **Programmatic collections:** Create USDC payment links on Base and share them with your customers.
 * **No customer wallet required:** The payer only needs a Base-compatible wallet.
 * **Flexible authentication:** Use your session JWT or an API Key to create links from your backend.
@@ -37,7 +38,7 @@ Achylo is a Web3 platform with six core superpowers:
 * **Custom reference:** Include your own order ID for reconciliation.
 
 ```bash
-# Quick example
+# Quick example (production API)
 curl -X POST https://api.achylo.com/api/payment-links \
   -H "X-API-Key: achylo_<your_key>" \
   -H "Content-Type: application/json" \
@@ -111,6 +112,7 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 ---
 
 ### 8. Bots / Automation (Developers)
+* **API Base URL (production):** `https://api.achylo.com` (e.g. `/api/v1/automation/...`)
 * **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
 * **API Key + permissions:** You approve limited bot permissions in your profile; then your backend calls the Achylo API.
 * **Revocable anytime:** Turn actions off or Revoke all from the same screen.

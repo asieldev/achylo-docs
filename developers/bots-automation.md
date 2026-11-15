@@ -19,7 +19,7 @@ If you only need payment links or widgets, you do **not** need Bots — see [Pay
 
 1. You create an **API Key** in Achylo.
 2. In **Bots / Automation**, you turn on the actions you want and click **Activate** (your wallet confirms once).
-3. Your server calls `/api/v1/automation/...` with that API Key.
+3. Your server calls `https://api.achylo.com/api/v1/automation/...` with that API Key.
 4. Achylo runs the action on Base **as your account**, within the limits you approved.
 
 Permissions belong to **your Achylo wallet account**, not to each API Key separately. Several keys on the same account share the same bot permissions.
@@ -75,20 +75,25 @@ Also available:
 
 ## Step 3 — Call the Automation API
 
-**Base path:** `/api/v1/automation`  
+**Base URL (production):** `https://api.achylo.com`  
+**Path prefix:** `/api/v1/automation`  
 **Auth:** `X-API-Key`  
 **Every POST must include:** `Idempotency-Key: <unique-string>` (max 128 characters)
+
+Paths below are relative to `https://api.achylo.com`. Example full URL:
+
+`https://api.achylo.com/api/v1/automation/payment-methods`
 
 ### Check configuration
 
 ```http
-GET /api/v1/automation/config
+GET https://api.achylo.com/api/v1/automation/config
 ```
 
 ### Check your bot permissions
 
 ```http
-GET /api/v1/automation/permissions
+GET https://api.achylo.com/api/v1/automation/permissions
 X-API-Key: achylo_...
 ```
 
@@ -97,7 +102,7 @@ X-API-Key: achylo_...
 Use this to discover the IDs (and descriptions) you pass when creating or accepting orders.
 
 ```http
-GET /api/v1/automation/payment-methods
+GET https://api.achylo.com/api/v1/automation/payment-methods
 X-API-Key: achylo_...
 ```
 
@@ -138,7 +143,7 @@ Use each item’s `id` as `paymentMethodIds[]` / `takerPaymentMethodId`.
 ### Create a public order
 
 ```http
-POST /api/v1/automation/orders
+POST https://api.achylo.com/api/v1/automation/orders
 X-API-Key: achylo_...
 Idempotency-Key: create-order-001
 Content-Type: application/json
@@ -176,7 +181,7 @@ These are the IDs of **payment methods you already registered** in Achylo (Profi
 ### Accept a public order
 
 ```http
-POST /api/v1/automation/orders/:orderId/accept
+POST https://api.achylo.com/api/v1/automation/orders/:orderId/accept
 X-API-Key: achylo_...
 Idempotency-Key: accept-001
 Content-Type: application/json
@@ -194,9 +199,9 @@ Content-Type: application/json
 ### Confirm payment / cancel / dispute
 
 ```http
-POST /api/v1/automation/orders/:orderId/confirm-payment
-POST /api/v1/automation/orders/:orderId/cancel
-POST /api/v1/automation/orders/:orderId/dispute
+POST https://api.achylo.com/api/v1/automation/orders/:orderId/confirm-payment
+POST https://api.achylo.com/api/v1/automation/orders/:orderId/cancel
+POST https://api.achylo.com/api/v1/automation/orders/:orderId/dispute
 ```
 
 Same headers (`X-API-Key` + `Idempotency-Key`). Body may be `{}`.
@@ -204,7 +209,7 @@ Same headers (`X-API-Key` + `Idempotency-Key`). Body may be `{}`.
 ### Check an operation
 
 ```http
-GET /api/v1/automation/operations/:id
+GET https://api.achylo.com/api/v1/automation/operations/:id
 X-API-Key: achylo_...
 ```
 

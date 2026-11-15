@@ -8,6 +8,8 @@ Achylo provides a REST API that lets you create USDC payment links, receive real
 https://api.achylo.com
 ```
 
+That is the **production** Achylo API host. All paths in the docs (e.g. `/api/payment-links`) are relative to it unless a full URL is shown.
+
 All responses are JSON. All amounts are in **micro-USDC** (1 USDC = `1000000`).
 
 ---

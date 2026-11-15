@@ -2,6 +2,14 @@
 
 API Keys allow your servers to interact with the Achylo API without requiring a wallet signature on every request. They are the recommended authentication method for all programmatic integrations.
 
+## Base URL
+
+```
+https://api.achylo.com
+```
+
+All API requests go to that host. Paths like `/api/payment-links` mean `https://api.achylo.com/api/payment-links`.
+
 ---
 
 ## Key format
@@ -47,7 +55,7 @@ achylo_a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2a3f2c8b9d4e1f6a7c2b8d9e3f1a4c7b2
 Pass the key in the `X-API-Key` header on every request:
 
 ```http
-POST /api/payment-links
+POST https://api.achylo.com/api/payment-links
 X-API-Key: achylo_a3f2c8b9...
 Content-Type: application/json
 ```

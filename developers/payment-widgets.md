@@ -2,6 +2,14 @@
 
 Add a **"Pay with Crypto"** button to any website. Your customers click, a payment window opens, and they pay. Simple as that.
 
+## Base URL (API)
+
+```
+https://api.achylo.com
+```
+
+Backend / API examples in this guide use that host (e.g. `https://api.achylo.com/api/widget-merchants`).
+
 ---
 
 ## What is it for?
@@ -329,8 +337,10 @@ await fetch('https://api.achylo.com/api/payment-links/be66da05-...', {
 
 ### API Endpoints Summary
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
+Base: `https://api.achylo.com`
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
 | `POST` | `/api/widget-merchants` | API Key | Create widget |
 | `GET` | `/api/widget-merchants` | API Key | List your widgets |
 | `GET` | `/api/widget-merchants/:id` | Public | Get widget info |

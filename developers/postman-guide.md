@@ -22,9 +22,11 @@ Click **"Environments"** → **"+"** and add these variables:
 
 | Variable | Value |
 |----------|-------|
-| `base_url` | `https://api.achylo.com` |
+| `base_url` | `https://api.achylo.com` (production Achylo API) |
 | `api_key` | `achylo_YOUR_API_KEY_HERE` |
 | `smart_account` | `0xYOUR_SMART_ACCOUNT_ADDRESS` |
+
+Use `{{base_url}}` in every request. Production is always `https://api.achylo.com`.
 
 ### 2. Set the environment as active
 
@@ -699,6 +701,8 @@ Paste this on your website:
 ---
 
 ## API Reference Summary
+
+Base: `https://api.achylo.com` (use as Postman `{{base_url}}`)
 
 ### V1 Widget Endpoints
 

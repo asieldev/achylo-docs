@@ -2,6 +2,14 @@
 
 Payment links let you generate a hosted USDC checkout page on Base. Share the URL with your customer — they connect their wallet and pay.
 
+## Base URL
+
+```
+https://api.achylo.com
+```
+
+All paths in this guide (e.g. `/api/payment-links`) are relative to that host unless a full URL is shown.
+
 ---
 
 ## Payment Link Creation Methods
@@ -62,7 +70,7 @@ https://achylo.com/pay/f7c3a8e1-2b4d-4f9a-8c1e-9d7f2a5b3c6e
 
 Ideal for backend integrations, payment automation, and custom systems.
 
-- **Endpoint**: `POST /api/payment-links`
+- **Endpoint**: `POST https://api.achylo.com/api/payment-links`
 - **Authentication**: Requires API Key
 - **Configuration**: Full control over parameters (webhooks, custom expiration, etc.)
 - **Usage**: Integrate with your backend, e-commerce, CRM, or billing system
@@ -74,7 +82,7 @@ Ideal for backend integrations, payment automation, and custom systems.
 ## Create a payment link
 
 ```http
-POST /api/payment-links
+POST https://api.achylo.com/api/payment-links
 X-API-Key: achylo_...
 Content-Type: application/json
 ```
@@ -115,7 +123,7 @@ Content-Type: application/json
 ## Get payment link details
 
 ```http
-GET /api/payment-links/:id
+GET https://api.achylo.com/api/payment-links/:id
 ```
 
 This endpoint is **public** — no authentication required. It is used by the hosted checkout page.
@@ -188,7 +196,7 @@ See also: [Payment Widgets V1 →](developers/payment-widgets.md#payment-link-ex
 ## Cancel a payment link
 
 ```http
-DELETE /api/payment-links/:id
+DELETE https://api.achylo.com/api/payment-links/:id
 X-API-Key: achylo_...
 ```
 
@@ -208,7 +216,7 @@ Cancels a `pending` payment link. Only the creator can cancel it. Links that are
 ## List your payment links
 
 ```http
-GET /api/payment-links/history?limit=50&offset=0
+GET https://api.achylo.com/api/payment-links/history?limit=50&offset=0
 X-API-Key: achylo_...
 ```
 
