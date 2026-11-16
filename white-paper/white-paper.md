@@ -1,4 +1,4 @@
----
+﻿---
 "Achylo Protocol White Paper"
 version: "v1.0.0"
 Updated: "November 14, 2025"
@@ -57,12 +57,12 @@ Manages the entire lifecycle of an escrow transaction:
 - Automatic timeouts to guarantee finality.
 - Collateral slashing for fraudulent behavior.
 
-#### 2.1.2 CUBT Token Contract
+#### 2.1.2 APAY Token Contract
 
 Acts as the utility and value token for the protocol:
 
-- **Minting:** Converts USDT into CUBT.
-- **Redemption:** Converts CUBT back into USDT.
+- **Minting:** Converts USDT into APAY.
+- **Redemption:** Converts APAY back into USDT.
 - **Dynamic fees:** Mint and redeem fees adjust to protocol economics.
 - **Overcollateralization:** Ensures price stability and security.
 - **Staking integration:** Rewards long-term holders.
@@ -164,8 +164,8 @@ Achylo generates revenue via transparent on-chain fees.
 
 **Token fees**
 
-- Mint fee: 0.1–1% (USDT → CUBT).
-- Redeem fee: 0.1–1% (CUBT → USDT).
+- Mint fee: 0.1–1% (USDT → APAY).
+- Redeem fee: 0.1–1% (APAY → USDT).
 
 **Fee reductions**
 
@@ -182,7 +182,7 @@ Achylo generates revenue via transparent on-chain fees.
 
 ### 5.3 Token Economics
 
-- CUBT mints on demand when users deposit USDT.
+- APAY mints on demand when users deposit USDT.
 - Redeems on demand when users withdraw USDT.
 - Backed by overcollateralized reserves.
 - Deflationary pressure achieved through fee burning.
@@ -206,7 +206,7 @@ Achylo generates revenue via transparent on-chain fees.
 
 ### 7.1 Protocol Governance
 
-- CUBT holders participate through token-weighted voting.
+- APAY holders participate through token-weighted voting.
 - Community can submit proposals to adjust protocol parameters.
 - Approved changes execute after timelock delays for security.
 
@@ -291,9 +291,9 @@ Governance controls:
 
 ### 10.4 Stablecoin Infrastructure
 
-- Token minting converts fiat-backed stablecoins into CUBT.
+- Token minting converts fiat-backed stablecoins into APAY.
 - Redemption routes back to fiat on demand.
-- Fee optimization for users holding CUBT or staking.
+- Fee optimization for users holding APAY or staking.
 - Staking yields for token holders.
 
 ## 12. Conclusion
@@ -302,7 +302,7 @@ Achylo unites secure escrow mechanics, transparent arbitration, and incentive-al
 
 ## Appendix A — Technical Specifications
 
-- **Smart contract addresses:** Parameterized via environment variables for P2P Escrow, CUBT Token, Referral System, and Recovery Module.
+- **Smart contract addresses:** Parameterized via environment variables for P2P Escrow, APAY Token, Referral System, and Recovery Module.
 - **Supported networks:** Base Sepolia (testnet) and Base Mainnet (production).
 - **Stablecoin support:** Primary—USDT; secondary—USDC.
 
@@ -311,9 +311,9 @@ Achylo unites secure escrow mechanics, transparent arbitration, and incentive-al
 - **Escrow:** Neutral holding of funds during a transaction.
 - **Collateral:** Security deposit required from merchants.
 - **Arbitration:** Community-based dispute resolution.
-- **CUBT:** Achylo’s native utility token.
-- **Mint:** Convert stablecoin to CUBT.
-- **Redeem:** Convert CUBT back to stablecoin.
+- **APAY:** Achylo’s native utility token.
+- **Mint:** Convert stablecoin to APAY.
+- **Redeem:** Convert APAY back to stablecoin.
 - **Referral:** Commission-based user acquisition program.
 - **Gold User:** Premium tier with enhanced benefits.
 - **Rate limiting:** Controls transaction frequency to prevent abuse.

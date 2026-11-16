@@ -21,7 +21,7 @@ It is important to understand how your guarantee funds are locked:
 * **Locked status:** While you hold the merchant role, the collateral will remain locked to secure your operations.
 * **Withdraw funds:** If you decide to stop being a merchant, you can use the **“Withdraw Fund”** option.
 * **Cooldown period:** There is a waiting time before you can withdraw the full collateral.
-    * ⚠️ **72-hour rule:** This preventive lock is only activated if you have performed any buy or sell operation in the last **72 hours**.
+    * ⚠️ **24-hour rule:** This preventive lock is only activated if you have performed any buy or sell operation in the last **24 hours**.
 
 > **Tip:** Make sure you have no pending operations before starting the withdrawal process to facilitate the release of your funds.
 

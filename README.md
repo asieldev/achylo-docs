@@ -24,9 +24,9 @@ Achylo is a Web3 platform with six core superpowers:
     * **Public:** Visible to all merchants.
     * **Private:** Only for your trusted counterparty.
 
-### 2. Mint/Redeem CUBT (Stablecoin backed by USDC)
-* **Conversion:** Swap `USDC ↔️ CUBT` at any time.
-* **Discounts:** Get lower P2P fees when operating with CUBT.
+### 2. Mint/Redeem APAY (Stablecoin backed by USDC)
+* **Conversion:** Swap `USDC ↔️ APAY` at any time.
+* **Discounts:** Get lower P2P fees when operating with APAY.
 * **Utility:** Ideal for users who want to move across the *on-chain* world in a yield-bearing stablecoin.
 
 ### 3. Payment Links (For Merchants and Developers)
@@ -96,8 +96,8 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 
 ---
 
-### 6. CUBT Staking
-* **Yield:** Earn interest by holding your CUBT on the network.
+### 6. APAY Staking
+* **Yield:** Earn interest by holding your APAY on the network.
 * **Status:** *(In development)*.
 
 ---

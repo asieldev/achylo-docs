@@ -29,12 +29,12 @@ Achylo supports **multi-chain deposits**, allowing you to deposit funds from mul
 
 | Chain | Common Tokens |
 |--------|----------------|
-| **Ethereum** | ETH, USDC, USDT, DAI |
-| **Arbitrum** | ETH, USDC, USDT |
-| **Optimism** | ETH, USDC |
-| **Polygon** | POL, USDC, USDT |
-| **BSC** | BNB, USDT, BUSD |
-| **Avalanche** | AVAX, USDC |
+| `Ethereum` | `ETH`, `USDC`, `USDT`, `DAI` |
+| `Arbitrum` | `ETH`, `USDC`, `USDT` |
+| `Optimism` | `ETH`, `USDC` |
+| `Polygon` | `POL`, `USDC`, `USDT` |
+| `BSC` | `BNB`, `USDT`, `BUSD` |
+| `Avalanche` | `AVAX`, `USDC` |
 
 > **Note:** The full list of supported chains and tokens is updated dynamically based on availability.
 

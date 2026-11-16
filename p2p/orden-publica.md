@@ -68,7 +68,7 @@ If you have found an offer that suits your needs, follow these steps to carry ou
     * You can use the **MAX** button to take all available capacity of the order.
 4.  **Payment details:** * If you are accepting a **Buy** order (where you sell USDC), you must enter the details of your account or card where the Merchant must send the fiat money.
 5.  **Review and Fees:** * Verify the detailed summary of the transaction. 
-    * The app will automatically show you **fee discounts** if you are operating with **CUBT**.
+    * The app will automatically show you **fee discounts** if you are operating with **APAY**.
 6.  **Confirmation:** Press **“Accept Order”**. 
     * Once processed, the dApp will send you a notification confirming that the **escrow** (smart guarantee contract) has been created successfully.
 

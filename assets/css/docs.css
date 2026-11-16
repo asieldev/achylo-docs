@@ -181,6 +181,74 @@ body.ready {
   color: var(--docs-text);
 }
 
+/* Minimal, nearly invisible scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+*:hover,
+*:focus,
+*:focus-within {
+  scrollbar-color: rgba(113, 113, 122, 0.35) transparent;
+}
+
+[data-theme='dark'] *:hover,
+[data-theme='dark'] *:focus,
+[data-theme='dark'] *:focus-within {
+  scrollbar-color: rgba(161, 161, 170, 0.28) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*:hover::-webkit-scrollbar-thumb,
+*:focus::-webkit-scrollbar-thumb,
+*:focus-within::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.35);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 113, 122, 0.55);
+  background-clip: padding-box;
+}
+
+[data-theme='dark'] *:hover::-webkit-scrollbar-thumb,
+[data-theme='dark'] *:focus::-webkit-scrollbar-thumb,
+[data-theme='dark'] *:focus-within::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.28);
+  background-clip: padding-box;
+}
+
+[data-theme='dark'] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(161, 161, 170, 0.45);
+  background-clip: padding-box;
+}
+
+.sidebar,
+.docs-toc,
+.docs-search-dialog .results-panel,
+.table-wrapper,
+.markdown-section pre,
+.docs-code-wrap pre {
+  scrollbar-gutter: stable;
+}
+
 code,
 pre,
 .token,
@@ -205,16 +273,53 @@ img {
   height: auto;
 }
 
-/* Hide Google Translate chrome */
+/* Hide Google Translate chrome / floating badge */
+.goog-te-banner-frame,
 .goog-te-banner-frame.skiptranslate,
+.goog-te-balloon-frame,
 .goog-logo-link,
+.goog-te-gadget,
 .goog-te-gadget-icon,
-.skiptranslate > iframe {
+.goog-te-spinner-pos,
+.goog-tooltip,
+.goog-text-highlight,
+#goog-gt-tt,
+#google_translate_element,
+#google_translate_container,
+.skiptranslate > iframe,
+iframe.skiptranslate,
+iframe[id*='google_translate'],
+iframe[src*='translate.googleapis.com'],
+iframe[src*='translate.google'],
+/* Newer Google Translate Element branding / floating widget */
+.VIpgJd-ZVi9od-ORHb,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+.VIpgJd-yAWNEb-L7Jrkb {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body > .skiptranslate,
+body > .VIpgJd-ZVi9od-ORHb-OEVmcd {
   display: none !important;
 }
 
-#google_translate_container {
-  display: none !important;
+body,
+body.translated-ltr,
+body.translated-rtl {
+  top: 0 !important;
+}
+
+/* Keep translated text readable; kill highlight boxes */
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* ------------------------------------------------------------
@@ -454,12 +559,15 @@ img {
 .sidebar {
   top: var(--docs-header-height) !important;
   height: calc(100vh - var(--docs-header-height)) !important;
+  max-height: calc(100vh - var(--docs-header-height)) !important;
   width: var(--docs-sidebar-width) !important;
   padding: 12px 0 32px !important;
   background: var(--docs-surface) !important;
   border-right: 1px solid var(--docs-border) !important;
   box-shadow: none !important;
-  overflow-y: auto;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   color: var(--docs-text);
 }
@@ -472,8 +580,11 @@ img {
   display: none !important;
 }
 
-body.close .sidebar {
-  transform: translateX(-100%);
+/* Docsify adds body.close on small screens — keep drawer closed unless we open it */
+@media (max-width: 768px) {
+  body.close .sidebar {
+    transform: translateX(-100%) !important;
+  }
 }
 
 .sidebar-nav {
@@ -1251,10 +1362,11 @@ body.close .content {
   border-collapse: collapse;
   margin: 0;
   border: none;
+  background: var(--docs-surface) !important;
 }
 
 .markdown-section th {
-  background: var(--docs-bg);
+  background: var(--docs-bg) !important;
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
@@ -1270,31 +1382,82 @@ body.close .content {
   padding: 10px 14px;
   border-bottom: 1px solid var(--docs-border-subtle);
   font-size: 13.5px;
-  color: var(--docs-text-secondary);
+  color: var(--docs-text-secondary) !important;
   vertical-align: top;
   line-height: 1.5;
+  background: transparent !important;
+}
+
+/* Override Docsify vue.css zebra (applies on <tr>, not only <td>) */
+.markdown-section tr,
+.markdown-section tr:nth-child(2n),
+.markdown-section tr:nth-child(even),
+.markdown-section tr:nth-of-type(2n) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.markdown-section tr:nth-child(even),
+.markdown-section tr:nth-child(2n),
+.markdown-section tr:nth-of-type(2n) {
+  background: var(--docs-bg) !important;
+  background-color: var(--docs-bg) !important;
+}
+
+.markdown-section tr:nth-child(even) td,
+.markdown-section tr:nth-child(2n) td,
+.markdown-section tr:nth-of-type(2n) td {
+  background: transparent !important;
 }
 
 .markdown-section tr:last-child td {
   border-bottom: none;
 }
 
-.markdown-section tr:nth-child(even) td,
-.markdown-section tr:nth-of-type(2n) td {
+.markdown-section tr:hover,
+.markdown-section tr:hover td {
+  background: var(--docs-border-subtle) !important;
+  background-color: var(--docs-border-subtle) !important;
+}
+
+[data-theme='dark'] .markdown-section table {
+  background: var(--docs-surface) !important;
+}
+
+[data-theme='dark'] .markdown-section th {
+  background: #141416 !important;
+  color: #a1a1aa !important;
+}
+
+[data-theme='dark'] .markdown-section td {
+  color: #d4d4d8 !important;
   background: transparent !important;
 }
 
-.markdown-section tr:hover td {
-  background: var(--docs-border-subtle) !important;
+[data-theme='dark'] .markdown-section tr,
+[data-theme='dark'] .markdown-section tr:nth-child(odd) {
+  background: #111113 !important;
+  background-color: #111113 !important;
+}
+
+[data-theme='dark'] .markdown-section tr:nth-child(even),
+[data-theme='dark'] .markdown-section tr:nth-child(2n),
+[data-theme='dark'] .markdown-section tr:nth-of-type(2n) {
+  background: #1a1a1e !important;
+  background-color: #1a1a1e !important;
 }
 
 [data-theme='dark'] .markdown-section tr:nth-child(even) td,
-[data-theme='dark'] .markdown-section tr:nth-of-type(2n) td {
+[data-theme='dark'] .markdown-section tr:nth-child(2n) td,
+[data-theme='dark'] .markdown-section tr:nth-of-type(2n) td,
+[data-theme='dark'] .markdown-section tr:nth-child(odd) td {
   background: transparent !important;
 }
 
+[data-theme='dark'] .markdown-section tr:hover,
 [data-theme='dark'] .markdown-section tr:hover td {
-  background: rgba(255, 255, 255, 0.04) !important;
+  background: #222228 !important;
+  background-color: #222228 !important;
 }
 
 .markdown-section td code {
@@ -1526,14 +1689,19 @@ body.close .content {
 .docs-sidebar-backdrop {
   display: none;
   position: fixed;
-  inset: 0;
   top: var(--docs-header-height);
+  right: 0;
+  bottom: 0;
+  /* Start AFTER the drawer so it never intercepts sidebar clicks/scroll */
+  left: min(var(--docs-sidebar-width), 86vw);
   background: rgba(0, 0, 0, 0.4);
-  z-index: 40;
+  z-index: 55;
+  pointer-events: none;
 }
 
 .docs-sidebar-backdrop.is-open {
   display: block;
+  pointer-events: auto;
 }
 
 /* ------------------------------------------------------------
@@ -1570,24 +1738,94 @@ body.close .content {
   }
 
   .docs-header__menu-toggle {
-    display: inline-flex;
+    display: inline-flex !important;
+    flex-shrink: 0;
   }
 
   .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.2s var(--docs-ease);
-    z-index: 50 !important;
-    box-shadow: var(--docs-shadow-md) !important;
-  }
-
-  body.docs-nav-open .sidebar {
-    transform: translateX(0);
-  }
-
-  .content {
+    position: fixed !important;
     left: 0 !important;
+    top: var(--docs-header-height) !important;
+    bottom: 0 !important;
+    width: min(var(--docs-sidebar-width), 86vw) !important;
+    height: calc(100dvh - var(--docs-header-height)) !important;
+    max-height: calc(100dvh - var(--docs-header-height)) !important;
+    transform: translateX(-105%) !important;
+    transition: transform 0.2s var(--docs-ease);
+    /* Keep above page content; backdrop is shifted so it never covers this panel */
+    z-index: 70 !important;
+    box-shadow: var(--docs-shadow-md) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+
+  .sidebar .sidebar-nav {
+    padding-bottom: 48px !important;
+  }
+
+  /* Keep a faint thumb on mobile so scroll is discoverable */
+  .sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(113, 113, 122, 0.45) transparent;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(113, 113, 122, 0.45);
+    border-radius: 999px;
+  }
+
+  [data-theme='dark'] .sidebar {
+    scrollbar-color: rgba(161, 161, 170, 0.4) transparent;
+  }
+
+  [data-theme='dark'] .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(161, 161, 170, 0.4);
+  }
+
+  body.docs-nav-open .sidebar,
+  body.docs-nav-open.close .sidebar {
+    transform: translateX(0) !important;
+  }
+
+  body.docs-nav-open {
+    overflow: hidden;
+  }
+
+  body.docs-nav-open .sidebar,
+  body.docs-nav-open .sidebar a,
+  body.docs-nav-open .sidebar button {
+    pointer-events: auto !important;
+  }
+
+  /*
+    Docsify vue.css mobile uses inverted semantics:
+    body.close .content { transform: translateX(300px) }
+    We keep `close` for drawer sync, but content must never shift.
+  */
+  .content,
+  body.close .content,
+  body.docs-nav-open .content {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
     padding-left: var(--docs-content-pad-x) !important;
     padding-right: var(--docs-content-pad-x) !important;
+  }
+
+  /* Native Docsify hamburger — replaced by header menu toggle */
+  .sidebar-toggle {
+    display: none !important;
   }
 
   .markdown-section h1 {

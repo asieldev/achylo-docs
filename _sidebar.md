@@ -11,8 +11,8 @@
   * [Fees](p2p/fees.md)
   * [Referrals](p2p/referrals.md)
 
-* Mint & Redeem CUBT
-  * [CUBT Token](emitir-redimir-cubt/token-cubt.md)
+* Mint & Redeem APAY
+  * [APAY Token](emitir-redimir-cubt/token-cubt.md)
   * [Mint](emitir-redimir-cubt/mint.md)
   * [Redeem](emitir-redimir-cubt/redeem.md)
   * [Fees](emitir-redimir-cubt/fees.md)

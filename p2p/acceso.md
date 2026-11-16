@@ -29,21 +29,21 @@ The P2P Marketplace accepts multiple currencies to operate in different countrie
 
 | Currency | Description |
 | :--- | :--- |
-| **CUBT** | Tokenized Cuban Peso (**50% fee discount**) |
+| **APAY** | Achylo Governance Token |
 | **CUP** | Cuban Peso |
 | **MLC** | Freely Convertible Currency |
 | **USD_CLASICA** | USD “classic” modality (transfers) |
-| **USD** | United States Dollar (Cash) |
-| **COP** | Colombian Peso (Cash) |
-| **EURO** | Euro (Cash) |
-| **GBP** | British Pound (Cash) |
-| **CAD** | Canadian Dollar (Cash) |
-| **MXN** | Mexican Peso (Cash) |
-| **BRL** | Brazilian Real (Cash) |
-| **PEN** | Peruvian Sol (Cash) |
-| **DOP** | Dominican Peso (Cash) |
-| **PYG** | Paraguayan Guaraní (Cash) |
+| **USD** | United States Dollar |
+| **COP** | Colombian Peso  |
+| **EURO** | Euro  |
+| **GBP** | British Pound |
+| **CAD** | Canadian Dollar |
+| **MXN** | Mexican Peso |
+| **BRL** | Brazilian Real |
+| **PEN** | Peruvian Sol |
+| **DOP** | Dominican Peso |
+| **PYG** | Paraguayan Guaraní  |
 | **ECS** | Ecuadorian Sucre |
-| **BOB** | Bolivian Boliviano (Cash) |
-| **ARS** | Argentine Peso (Cash) |
-| **VES** | Venezuelan Bolívar (Cash) |
+| **BOB** | Bolivian Boliviano |
+| **ARS** | Argentine Peso |
+| **VES** | Venezuelan Bolívar |

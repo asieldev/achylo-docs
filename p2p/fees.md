@@ -22,8 +22,8 @@ The escrow contract charges the fee **only once** when the transaction is succes
 ---
 
 ## 👥 Who pays and who is exempt?
-- The **user who executes the action** pays the fee (for example, the seller when releasing funds to the buyer or when accepting an order).
-- **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly [Referral System](p2p/referrals.md). If you are Gold, the contract omits the fee for your operations.
+- The fee is **always deducted from the seller**.
+- **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly [Referral System](p2p/referrals.md). If the seller is Gold, the contract omits the fee for that operation.
 
 ---
 
@@ -46,7 +46,7 @@ The escrow contract charges the fee **only once** when the transaction is succes
 | Question | Answer |
 | :--- | :--- |
 | Who defines the amount? | Governance (composed of Gold users, stakers, and holders); published on the Stats page. |
-| Who pays it? | The user who executes the sponsored action, unless they are Gold. |
+| Who pays it? | Always the seller, unless they are Gold. |
 | What is it for? | Cover on-chain gas and maintain the sponsorship service. |
 | When is it charged? | At the key moment of each flow (e.g. releasing funds). |
 | Can I avoid it? | Only if you have Gold status; otherwise it is deducted automatically. |

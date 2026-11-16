@@ -1,4 +1,4 @@
----
+﻿---
 "Privacy Policy"
 Updated: "November 14, 2025"
 ---
@@ -9,7 +9,7 @@ This policy describes how Achylo Labs ("Achylo", "we") collects, uses, retains, 
 
 ## 1. Scope
 
-It applies to all functionalities of Achylo Protocol: P2P escrow, CUBT mint/redeem, wallet authentication, on-ramp/off-ramp integrations, and administrative tools. The blockchain networks used (for example Base L2) are also part of the covered ecosystem.
+It applies to all functionalities of Achylo Protocol: P2P escrow, APAY mint/redeem, wallet authentication, on-ramp/off-ramp integrations, and administrative tools. The blockchain networks used (for example Base L2) are also part of the covered ecosystem.
 
 ## 2. Information We Collect
 

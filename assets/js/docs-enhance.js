@@ -9,7 +9,14 @@
   const THEME_KEY = 'achylo-theme';
   const LANG_KEY = 'achylo-docs-lang';
   const NAV_STATE_KEY = 'achylo-docs-nav-groups';
+  const NAV_STATE_VERSION_KEY = 'achylo-docs-nav-groups-v';
   const LANG_MAP = { en: 'English', es: 'Español', pt: 'Português' };
+
+  // Reset stale collapsed-nav state that could hide all links
+  if (localStorage.getItem(NAV_STATE_VERSION_KEY) !== '2') {
+    localStorage.removeItem(NAV_STATE_KEY);
+    localStorage.setItem(NAV_STATE_VERSION_KEY, '2');
+  }
 
   const ICONS = {
     search:
@@ -166,8 +173,13 @@
     const menuBtn = document.getElementById('docsMenuToggle');
     const backdrop = document.getElementById('docsSidebarBackdrop');
     const toggleNav = (open) => {
-      const shouldOpen = typeof open === 'boolean' ? open : !document.body.classList.contains('docs-nav-open');
+      const shouldOpen =
+        typeof open === 'boolean' ? open : !document.body.classList.contains('docs-nav-open');
       document.body.classList.toggle('docs-nav-open', shouldOpen);
+      // Sync with Docsify's mobile close flag so its CSS doesn't fight the drawer
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.body.classList.toggle('close', !shouldOpen);
+      }
       backdrop?.classList.toggle('is-open', shouldOpen);
       if (menuBtn) {
         menuBtn.setAttribute('aria-expanded', String(shouldOpen));
@@ -175,8 +187,23 @@
         menuBtn.innerHTML = shouldOpen ? ICONS.close : ICONS.menu;
       }
     };
-    menuBtn?.addEventListener('click', () => toggleNav());
+    menuBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNav();
+    });
     backdrop?.addEventListener('click', () => toggleNav(false));
+    // Close drawer after Docsify navigation starts (don't block the click)
+    document.addEventListener(
+      'click',
+      (e) => {
+        const link = e.target.closest?.('.sidebar a[href]');
+        if (!link) return;
+        if (!window.matchMedia('(max-width: 768px)').matches) return;
+        setTimeout(() => toggleNav(false), 10);
+      },
+      true
+    );
 
     document.getElementById('docsSearchTrigger')?.addEventListener('click', openSearch);
     document.getElementById('docsSearchOverlay')?.addEventListener('click', (e) => {
@@ -242,6 +269,31 @@
     });
   }
 
+  function scrubGoogleTranslateChrome() {
+    const selectors = [
+      '.goog-te-banner-frame',
+      '.goog-te-balloon-frame',
+      '.goog-te-menu-frame',
+      '#goog-gt-tt',
+      '.VIpgJd-ZVi9od-ORHb',
+      '.VIpgJd-ZVi9od-aZ2wEe',
+      '.VIpgJd-ZVi9od-aZ2wEe-wOHMyf',
+      '.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc',
+      'iframe.skiptranslate',
+      'iframe[src*="translate.googleapis.com"]',
+      'iframe[src*="translate.google"]'
+    ];
+    selectors.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.setAttribute('aria-hidden', 'true');
+      });
+    });
+    document.body.style.top = '0';
+    document.documentElement.style.top = '0';
+  }
+
   function initGoogleTranslate() {
     window.googleTranslateElementInit = function () {
       // eslint-disable-next-line no-undef
@@ -255,6 +307,9 @@
       );
       const stored = localStorage.getItem(LANG_KEY) || 'en';
       setTimeout(() => applyLang(stored), 50);
+      scrubGoogleTranslateChrome();
+      setTimeout(scrubGoogleTranslateChrome, 300);
+      setTimeout(scrubGoogleTranslateChrome, 1200);
     };
 
     if (!document.querySelector('script[data-google-translate]')) {
@@ -263,6 +318,14 @@
       script.setAttribute('data-google-translate', 'true');
       document.body.appendChild(script);
     }
+
+    // Light cleanup only when Google injects top-level nodes (avoid UI freezes)
+    let scrubTimer = null;
+    const observer = new MutationObserver(() => {
+      clearTimeout(scrubTimer);
+      scrubTimer = setTimeout(scrubGoogleTranslateChrome, 250);
+    });
+    observer.observe(document.body, { childList: true });
   }
 
   /* ---------- Search ---------- */
@@ -461,7 +524,8 @@
 
     if (rest) {
       const wrap = document.createElement('div');
-      wrap.className = 'docs-code-wrap';
+      wrap.className = 'docs-code-wrap notranslate';
+      wrap.setAttribute('translate', 'no');
       const header = document.createElement('div');
       header.className = 'docs-code-header';
       header.innerHTML = `<div class="docs-code-header__meta"><span class="docs-code-lang">Headers</span></div>`;
@@ -680,8 +744,8 @@
       const nested = li.querySelector(':scope > ul');
       if (!nested) return;
 
-      if (li.classList.contains('docs-nav-group') && li.querySelector('.docs-nav-group__label')) {
-        // Keep group containing the active page expanded
+      // Already wired — only ensure active section stays open
+      if (li.dataset.docsGroupReady === '1') {
         if (li.querySelector('li.active, .active')) li.classList.remove('is-collapsed');
         return;
       }
@@ -690,7 +754,8 @@
       let labelEl =
         li.querySelector(':scope > p') ||
         li.querySelector(':scope > strong') ||
-        li.querySelector(':scope > span');
+        li.querySelector(':scope > span') ||
+        li.querySelector(':scope > .docs-nav-group__label');
 
       // Docsify often wraps group title as text node + ul
       if (!labelEl) {
@@ -729,16 +794,23 @@
       }
 
       const hasActive = !!li.querySelector('li.active, a.active, .active');
+      // Default open; only collapse if user previously collapsed AND section is inactive
       const collapsed = state[key] === true && !hasActive;
       li.classList.toggle('is-collapsed', collapsed);
+      li.dataset.docsGroupReady = '1';
 
-      labelEl.onclick = (e) => {
+      labelEl.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
         li.classList.toggle('is-collapsed');
-        state[key] = li.classList.contains('is-collapsed');
-        localStorage.setItem(NAV_STATE_KEY, JSON.stringify(state));
-      };
+        try {
+          const next = JSON.parse(localStorage.getItem(NAV_STATE_KEY) || '{}');
+          next[key] = li.classList.contains('is-collapsed');
+          localStorage.setItem(NAV_STATE_KEY, JSON.stringify(next));
+        } catch (_) {
+          /* ignore */
+        }
+      });
     });
   }
 
@@ -809,16 +881,86 @@
     root.appendChild(pager);
   }
 
+  /* ---------- Protect technical tokens from Google Translate ---------- */
+
+  function isTechnicalToken(text) {
+    const t = String(text || '').trim();
+    if (!t || t.length > 24) return false;
+    // CUP, COP, PEN, APAY, USD_CLASICA, USDC, EUR, etc.
+    if (/^[A-Z][A-Z0-9_]{1,20}$/.test(t)) return true;
+    // Optional short forms like "USD Classic" kept as product codes
+    if (/^[A-Z]{2,6}(?:[_\s-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]+)?$/.test(t) && /[A-Z]{2,}/.test(t)) {
+      // Avoid locking normal Title Case words ("Public Order")
+      const letters = t.replace(/[^A-Za-z]/g, '');
+      const upper = (letters.match(/[A-Z]/g) || []).length;
+      return upper / Math.max(letters.length, 1) >= 0.6;
+    }
+    return false;
+  }
+
+  function lockNoTranslate(el) {
+    if (!el || el.nodeType !== 1) return;
+    el.classList.add('notranslate');
+    el.setAttribute('translate', 'no');
+  }
+
+  const PROTECTED_NAMES = new Set([
+    'ethereum',
+    'arbitrum',
+    'optimism',
+    'polygon',
+    'bsc',
+    'avalanche',
+    'base',
+    'solana',
+    'bitcoin'
+  ]);
+
+  function protectTechnicalTokens(root) {
+    // Inline code is almost always technical
+    root.querySelectorAll('code').forEach(lockNoTranslate);
+
+    // Bold tickers / chain names: **CUP**, **Ethereum**
+    root.querySelectorAll('strong, b').forEach((el) => {
+      const text = (el.textContent || '').trim();
+      if (isTechnicalToken(text) || PROTECTED_NAMES.has(text.toLowerCase())) {
+        lockNoTranslate(el);
+      }
+    });
+
+    // Table cells with codes, tickers, or chain/token lists
+    root.querySelectorAll('table td').forEach((cell) => {
+      const text = (cell.textContent || '').trim();
+      if (!text || text.length > 64) return;
+      if (isTechnicalToken(text) || PROTECTED_NAMES.has(text.toLowerCase())) {
+        lockNoTranslate(cell);
+        return;
+      }
+      // Token lists like "ETH, USDC, USDT, DAI"
+      if (/^[A-Z0-9]+(?:\s*,\s*[A-Z0-9_]+)+$/.test(text)) {
+        lockNoTranslate(cell);
+      }
+    });
+  }
+
   /* ---------- Page enhance pipeline ---------- */
 
   function enhancePage() {
     const section = document.querySelector('.markdown-section');
     if (!section) return;
 
+    // Keep sidebar labels in English — Google Translate mangles terms (Staking → Apostaje)
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      sidebar.classList.add('notranslate');
+      sidebar.setAttribute('translate', 'no');
+    }
+
     enhanceBreadcrumbs(section);
     enhanceCallouts(section);
     enhanceTables(section);
     enhanceCodeBlocks(section);
+    protectTechnicalTokens(section);
     enhanceAnchors();
     buildToc(section);
     enhancePager(section);
@@ -827,51 +969,56 @@
     // Close mobile nav on route change
     document.body.classList.remove('docs-nav-open');
     document.getElementById('docsSidebarBackdrop')?.classList.remove('is-open');
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      document.body.classList.add('close');
+    }
+    const menuBtn = document.getElementById('docsMenuToggle');
+    if (menuBtn) {
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuBtn.setAttribute('aria-label', 'Open navigation');
+      menuBtn.innerHTML = ICONS.menu;
+    }
   }
 
   /* ---------- Docsify plugin ---------- */
 
   function docsEnhancePlugin(hook) {
-    function markSidebarNoTranslate() {
+    function lockSidebarLanguage() {
       const sidebar = document.querySelector('.sidebar');
-      if (sidebar) {
-        sidebar.classList.add('notranslate');
-        sidebar.setAttribute('translate', 'no');
-      }
+      if (!sidebar) return;
+      sidebar.classList.add('notranslate');
+      sidebar.setAttribute('translate', 'no');
+    }
+
+    function resetSidebarGroupFlags() {
+      document.querySelectorAll('.sidebar-nav .docs-nav-group').forEach((li) => {
+        delete li.dataset.docsGroupReady;
+      });
     }
 
     function scheduleEnhance() {
       requestAnimationFrame(() => {
         enhancePage();
+        // One delayed pass for late Docsify/sidebar paint — no MutationObserver loops
         setTimeout(() => {
-          enhancePage();
+          resetSidebarGroupFlags();
           enhanceSidebarGroups();
-          markSidebarNoTranslate();
-        }, 120);
-        setTimeout(() => {
-          enhanceSidebarGroups();
-          markSidebarNoTranslate();
-        }, 400);
+          lockSidebarLanguage();
+        }, 150);
       });
     }
 
     hook.ready(() => {
       ensureHeader();
       applyTheme(resolveTheme());
-      markSidebarNoTranslate();
+      lockSidebarLanguage();
       initGoogleTranslate();
-
-      const sidebarHost = document.querySelector('.sidebar') || document.body;
-      const mo = new MutationObserver(() => {
-        enhanceSidebarGroups();
-        markSidebarNoTranslate();
-      });
-      mo.observe(sidebarHost, { childList: true, subtree: true });
+      setTimeout(enhanceSidebarGroups, 200);
     });
 
     hook.doneEach(() => {
       ensureHeader();
-      markSidebarNoTranslate();
+      lockSidebarLanguage();
       scheduleEnhance();
     });
   }

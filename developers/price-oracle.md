@@ -1,4 +1,4 @@
-# On-Chain Price Oracle (Chainlink Compatible)
+﻿# On-Chain Price Oracle (Chainlink Compatible)
 
 The **Achylo Price Oracle** (`AchyloPriceOracle`) is a decentralized, manipulation-resistant on-chain pricing engine deployed on **Base Mainnet**. It provides real-time, volume-weighted exchange rates between fiat currencies and stablecoins (USDC) derived directly from completed, on-chain settled P2P escrows.
 
@@ -27,7 +27,7 @@ The oracle indexes each fiat currency by its dynamic `currencyId` (defined in th
 | `currencyId` | Code | Name | Example Rate (6 Decimals) | Scaled Price |
 | :---: | :---: | :--- | :---: | :---: |
 | `0` | **CUP** | Peso Cubano | `930000000` | 930.00 CUP / USDC |
-| `1` | **CUBT** | CUBT Token | `1000000` | 1.00 CUBT / USDC |
+| `1` | **APAY** | APAY Token | `1000000` | 1.00 APAY / USDC |
 | `2` | **MLC** | Moneda Libremente Convertible | *Configured on-demand* | *Dynamic* |
 | `3+` | *Dynamic* | Additional fiat currencies | *Configured on-demand* | *Dynamic* |
 
