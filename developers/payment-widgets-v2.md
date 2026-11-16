@@ -1,5 +1,7 @@
 # Payment Widgets v2
 
+> **Note:** Payment Widgets V1 is deprecated and will be discontinued in future API versions. V2 is the supported path going forward and receives new features.
+
 Add a **"Pay with Crypto"** button to any website with the new server-driven architecture. More secure, flexible, and independent from V1 configuration.
 
 ## Base URL (API)
@@ -23,7 +25,7 @@ All API paths in this guide (e.g. `/api/v1/widgets`) are relative to that host u
 
 ---
 
-## 🆕 Server-Driven Architecture
+## Server-Driven Architecture
 
 V2 uses a **server-driven** approach for maximum security:
 
@@ -136,8 +138,8 @@ console.log('Widget ID:', widget.id); // wgt_def67890
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `resourceType` | ✅ | `"product"` or `"payment_link"` |
-| `resourceId` | ✅ | Product ID (`prod_...`) or Payment Link ID |
+| `resourceType` | Yes | `"product"` or `"payment_link"` |
+| `resourceId` | Yes | Product ID (`prod_...`) or Payment Link ID |
 | `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `payoutAddress` | — | wallet address that receives payments (auto-detected if omitted) |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
@@ -190,15 +192,15 @@ console.log('Embed code:', widget.embedCode);
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `resourceType` | ✅ | `"product"` or `"payment_link"` |
-| `productDetails` | ✅* | Product fields when `resourceType` is `"product"` (*omit when linking an existing payment link) |
-| `productDetails.name` | ✅ | Product name |
+| `resourceType` | Yes | `"product"` or `"payment_link"` |
+| `productDetails` | Required* | Product fields when `resourceType` is `"product"` (*omit when linking an existing payment link) |
+| `productDetails.name` | Yes | Product name |
 | `productDetails.description` | — | Optional description |
-| `productDetails.amount` | ✅* | Fixed amount in USDC (*required unless `allowCustomAmount` is `true`) |
+| `productDetails.amount` | Required* | Fixed amount in USDC (*required unless `allowCustomAmount` is `true`) |
 | `productDetails.allowCustomAmount` | — | Allow payer to enter amount (default `false`) |
 | `productDetails.goalAmount` | — | Fundraising goal in USDC — enables donation progress bar |
-| `resourceId` | ✅* | Payment Link UUID when `resourceType` is `"payment_link"` |
-| `payoutAddress` | ✅ | wallet address that receives payments |
+| `resourceId` | Required* | Payment Link UUID when `resourceType` is `"payment_link"` |
+| `payoutAddress` | Yes | wallet address that receives payments |
 | `originWhitelist` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads (max 64 chars) |
@@ -260,7 +262,7 @@ await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
       name: 'Help us reach our goal',
       description: 'Support the campaign',
       allowCustomAmount: true,   // donors choose the amount
-      goalAmount: '80000'        // 👈 fundraising goal in USDC → enables the progress bar
+      goalAmount: '80000'        // fundraising goal in USDC → enables the progress bar
     },
     originWhitelist: ['https://yourcause.org'],
     payoutAddress: '0x...WALLET_ADDRESS'
@@ -314,7 +316,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 <achylo-button widget-id="wgt_def67890"></achylo-button>
 ```
 
-### 🟣 Wix (Detailed step-by-step)
+### Wix (Detailed step-by-step)
 
 1. **In Wix Editor**, click the **"+ Add"** button
 2. Select **"Embed"** → **"Embed HTML"** or **"HTML Code"**
@@ -338,7 +340,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 
 | Attribute | Required | Description |
 |-----------|----------|-------------|
-| `widget-id` | ✅ | V2 widget ID (`wgt_...`) |
+| `widget-id` | Yes | V2 widget ID (`wgt_...`) |
 | `label` | — | Button text (default: product name) |
 | `color` | — | Hex color (default: `#ff7f41`) |
 
@@ -347,14 +349,14 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 ```html
 <achylo-button 
   widget-id="wgt_def67890"
-  label="💳 Subscribe Now"
+  label="Subscribe Now"
   color="#10b981">
 </achylo-button>
 ```
 
 ---
 
-## 🎯 V2 Payment Flow
+## V2 Payment Flow
 
 1. **Customer clicks button**
 2. **SDK loads configuration from backend** using `widget-id`
@@ -366,7 +368,7 @@ The SDK reads these to render the bar (`progressPercent`), the amounts (`raisedA
 
 ---
 
-## 🛡️ Advanced Security
+## Advanced Security
 
 ### Server-Driven Configuration
 
@@ -420,10 +422,10 @@ When creating payment links via API or dashboard, `expiresInMinutes` must be one
 |---------|--------------|------------------|
 | **Configuration** | Server-driven | Client-side |
 | **Security** | Maximum | Good |
-| **Fixed amounts** | ✅ | ✅ |
-| **Variable amounts** | ✅ | ❌ |
-| **Recurring billing** | ✅ | ❌ |
-| **Wallet address receiver** | ✅ | ✅ |
+| **Fixed amounts** | Yes | Yes |
+| **Variable amounts** | Yes | No |
+| **Recurring billing** | Yes | No |
+| **Wallet address receiver** | Yes | Yes |
 
 ---
 
@@ -456,7 +458,7 @@ export function ProductButton({ widgetId, label }) {
 // Usage
 <ProductButton 
   widgetId="wgt_def67890" 
-  label="💳 Subscribe Now" 
+  label="Subscribe Now" 
 />
 ```
 
@@ -617,21 +619,21 @@ X-API-Key: YOUR_API_KEY
 ## Troubleshooting V2
 
 ### Widget doesn't appear
-- ✅ Check `widget.js?v=1.7` loaded in console
-- ✅ Confirm correct `widget-id` (`wgt_...`)
-- ✅ Product exists and is active
+- Check `widget.js?v=1.7` loaded in console
+- Confirm correct `widget-id` (`wgt_...`)
+- Product exists and is active
 
 ### "Domain not authorized"
-- ✅ Add domain to widget whitelist
-- ✅ Include full `https://` prefix
+- Add domain to widget whitelist
+- Include full `https://` prefix
 
 ### "Product not found"
-- ✅ Check `resourceId` in widget
-- ✅ Confirm product is `active=true`
+- Check `resourceId` in widget
+- Confirm product is `active=true`
 
 ### Popup doesn't open (variable amount)
-- ✅ Check popup blockers
-- ✅ Click must be direct user action
+- Check popup blockers
+- Click must be direct user action
 
 ---
 
@@ -645,10 +647,10 @@ X-API-Key: YOUR_API_KEY
 | Wallet address receiver | Wallet address receiver |
 
 **Migration benefits:**
-- ✅ More security (server-driven)
-- ✅ Variable amount support
-- ✅ Reusable products
-- ✅ Native wallet address
+- More security (server-driven)
+- Variable amount support
+- Reusable products
+- Native wallet address
 
 ---
 

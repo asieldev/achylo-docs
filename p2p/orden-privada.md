@@ -1,4 +1,4 @@
-#  Private Order
+# Private Order
 
 ## Create a Private Order (Directed to a Trusted Counterparty)
 
@@ -22,11 +22,11 @@ Private orders are the ideal tool when you already have a trusted buyer or selle
 
 ---
 
-###  Important Considerations
+### Important Considerations
 * **Privacy:** Private orders **do not appear in the public marketplace**. Only the specified counterparty will be able to see the order on their dashboard.
 * **Notifications:** If the counterparty has notifications enabled, they will receive an automatic alert at the time of creation.
 
-###  Advantages
+### Advantages
 * **Total control:** You choose exactly who to trade with.
 * **No noise:** Your offer stays off the general marketplace radar.
 * **Security:** You enjoy the same smart contract protection as with public orders.
@@ -36,4 +36,4 @@ Private orders are the ideal tool when you already have a trusted buyer or selle
 <p align="center">
   <img src="/assets/images/active-orders.png" alt="View of the 'Create New Escrow' modal" width="75%" />
 </p>
-<p align="center"><strong>📍 Img. No.1. View of the 'Create New Escrow' modal.</strong></p>
+<p align="center"><strong>Img. No.1. View of the 'Create New Escrow' modal.</strong></p>

@@ -1,10 +1,10 @@
-#  Buy and Sell Flow (P2P)
+# Buy and Sell Flow (P2P)
 
 Once the escrow is active, the process is divided according to your role in the transaction:
 
 ---
 
-##  Buyer Flow (Who Pays in Fiat)
+## Buyer Flow (Who Pays in Fiat)
 *This is the user who accepts a sell offer and must send the money outside the application.*
 
 1.  **Tracking:** In the **“Active Orders”** section, locate the status of your current escrow.
@@ -15,11 +15,11 @@ Once the escrow is active, the process is divided according to your role in the 
 6.  **Evidence:** Attach the proof of payment in the order **Chat**. This is recorded and is vital in case of disputes.
 7.  **Completion:** Wait for the seller to verify the receipt and release the escrow funds to your wallet.
 
-> **⚠️ NOTE:** Save all evidence of the payment (receipts, screenshots, emails). It will be your only backup if an issue arises.
+> ** NOTE:** Save all evidence of the payment (receipts, screenshots, emails). It will be your only backup if an issue arises.
 
 ---
 
-##  Seller Flow (Who Releases USDC)
+## Seller Flow (Who Releases USDC)
 *This is the user who has the assets locked in the contract and waits for the fiat payment.*
 
 1.  **Monitoring:** Check the escrow status in the **“Active Orders”** tab.

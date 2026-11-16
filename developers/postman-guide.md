@@ -10,7 +10,7 @@ Complete guide to test the Achylo Pay API using **Postman**. Covers both **V1** 
 - An Achylo account at [achylo.com](https://achylo.com)
 - An **API Key** (created from your User Profile → API Keys)
 
-> ⚠️ **Important**: API Key creation requires JWT authentication (login via wallet). Once created, you can use the API Key for all subsequent requests.
+> **Important**: API Key creation requires JWT authentication (login via wallet). Once created, you can use the API Key for all subsequent requests.
 
 ---
 
@@ -84,7 +84,7 @@ POST {{base_url}}/api/widget-merchants
 }
 ```
 
-> 📌 Save the `merchantId` — you'll need it for the embed code.
+> **Note:** Save the `merchantId` — you'll need it for the embed code.
 
 ---
 
@@ -216,7 +216,7 @@ Paste this on your website:
   merchant-id="achylo_a1b2c3d4"
   amount="29.99"
   currency="USDC"
-  label="💳 Pay with Crypto">
+  label="Pay with Crypto">
 </achylo-button>
 ```
 
@@ -293,7 +293,7 @@ POST {{base_url}}/api/v1/products
 }
 ```
 
-> 📌 Save the `id` (e.g. `prod_e5f6g7h8`) — you'll need it for the widget.
+> **Note:** Save the `id` (e.g. `prod_e5f6g7h8`) — you'll need it for the widget.
 
 **Billing Interval options:** `one_time`, `daily`, `weekly`, `monthly`, `yearly`
 
@@ -425,7 +425,7 @@ POST {{base_url}}/api/v1/widgets
 }
 ```
 
-> 📌 Save the `id` (e.g. `wgt_i9j0k1l2`) and the `embedCode`.
+> **Note:** Save the `id` (e.g. `wgt_i9j0k1l2`) and the `embedCode`.
 
 ---
 
@@ -508,7 +508,7 @@ POST {{base_url}}/api/v1/widgets/bundle
 }
 ```
 
-> 📌 Save `widget.id`, `widget.embedCode`, and `product.id` if you need to reference the product later.
+> **Note:** Save `widget.id`, `widget.embedCode`, and `product.id` if you need to reference the product later.
 
 ---
 

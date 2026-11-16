@@ -20,7 +20,7 @@
   <img src="/assets/images/p2p_menu.png" alt="Path to the P2P module in the main menu" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1. P2P Path.</strong></p>
+<p align="center"><strong>Img. No.1. P2P Path.</strong></p>
 
 ---
 

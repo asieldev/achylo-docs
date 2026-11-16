@@ -1,16 +1,16 @@
-#  Mint APAY
+# Mint APAY
 
 Guide to deposit **USDC** and receive **APAY** using the **Mint** tab of the “Mint & Redeem” module.
 
 ---
 
-##  Prerequisites
+## Prerequisites
 - Wallet connected on the correct network (**Base** or **Base Sepolia**).
 - Sufficient USDC balance and allowance available for the Mint contract (managed automatically if you use the **Approve & Mint** button).
 
 ---
 
-##  Step by Step
+## Step by Step
 1. **Enter the amount**: in the Mint tab, write how many USDC you want to deposit. Use the quick 25%, 50%, 75%, or 100% buttons to fill the field according to your balance.
 2. **Analyze the simulator**: the simulation card shows
    - Estimated APAY to receive (net).
@@ -24,7 +24,7 @@ Guide to deposit **USDC** and receive **APAY** using the **Mint** tab of the “
 
 ---
 
-##  Useful Notes
+## Useful Notes
 - If you changed networks or made operations outside the dApp, use the **Refresh** button at the top to synchronize balances.
 - When the simulator shows “Overcollateralization”, it means that 1% of the USDC amount is sent to the Treasury as backing. This portion is not converted to APAY.
 - If your account is marked as **feeExempt** or you have discounts (staking / minimum APAY balance), you will see the reduced fee directly in the simulator.

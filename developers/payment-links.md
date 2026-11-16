@@ -91,10 +91,10 @@ Content-Type: application/json
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `amount` | string | ✅ | Amount in micro-USDC. `"1000000"` = 1 USDC |
-| `receiver` | string | ✅ | Ethereum address that receives the payment |
+| `amount` | string | Yes | Amount in micro-USDC. `"1000000"` = 1 USDC |
+| `receiver` | string | Yes | Ethereum address that receives the payment |
 | `description` | string | — | Order description (max 500 chars) |
-| `expiresInMinutes` | number | ✅ | Expiry in minutes. Allowed values: `15`, `60`, `360`, `720`, `1440` (15m, 1h, 6h, 12h, 24h). Defaults to `15` |
+| `expiresInMinutes` | number | Yes | Expiry in minutes. Allowed values: `15`, `60`, `360`, `720`, `1440` (15m, 1h, 6h, 12h, 24h). Defaults to `15` |
 | `webhookUrl` | string | — | HTTPS URL to receive payment events |
 | `webhookSecret` | string | — | Your hex secret for HMAC verification (32–64 chars). If omitted, one is auto-generated and returned once |
 

@@ -350,17 +350,33 @@
     }
   }
 
+  function restoreSidebarAfterSearch() {
+    const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+    // Docsify may leave .hide on nav when hideOtherSidebarContent was used
+    sidebar.querySelectorAll('.hide').forEach((el) => el.classList.remove('hide'));
+    const nav = sidebar.querySelector('.sidebar-nav');
+    if (nav) nav.style.removeProperty('display');
+  }
+
   function closeSearch() {
     const overlay = document.getElementById('docsSearchOverlay');
     overlay?.classList.remove('is-open');
 
-    // Return search widget to sidebar so Docsify keeps working
     const dialog = document.getElementById('docsSearchDialog');
     const searchEl = dialog?.querySelector('.search');
+    const input = dialog?.querySelector('input');
+    if (input) {
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    // Return search widget to sidebar so Docsify keeps working
     const sidebar = document.querySelector('.sidebar');
     if (searchEl && sidebar && searchEl.parentElement === dialog) {
       sidebar.insertBefore(searchEl, sidebar.firstChild);
     }
+    restoreSidebarAfterSearch();
   }
 
   /* ---------- Clipboard ---------- */
@@ -557,16 +573,21 @@
 
   function detectCallout(text) {
     const t = text.trim();
-    if (/^(⚠️|⚠)|danger|irreversible|do\s*\*\*not\*\*|do not use/i.test(t) && /warning|important|danger|⚠️/i.test(t.slice(0, 80))) {
+    if (/^(\*\*)?(deprecated)\b/i.test(t)) return { type: 'warning', title: 'Deprecated' };
+    if (
+      /^(⚠️|⚠)|danger|irreversible|do\s*\*\*not\*\*|do not use/i.test(t) &&
+      /warning|important|danger|⚠️/i.test(t.slice(0, 80))
+    ) {
       if (/danger|irreversible|cannot be turned off/i.test(t.slice(0, 120))) {
         return { type: 'danger', title: 'Danger' };
       }
       return { type: 'warning', title: 'Warning' };
     }
-    if (/^(\*\*)?(tip|💡)/i.test(t)) return { type: 'tip', title: 'Tip' };
-    if (/^(\*\*)?(success|✅)/i.test(t)) return { type: 'success', title: 'Success' };
-    if (/^(\*\*)?(info|ℹ️)/i.test(t)) return { type: 'info', title: 'Info' };
-    if (/^(\*\*)?(note|important)/i.test(t)) {
+    if (/^(\*\*)?(warning)\b/i.test(t)) return { type: 'warning', title: 'Warning' };
+    if (/^(\*\*)?(tip|💡)\b/i.test(t)) return { type: 'tip', title: 'Tip' };
+    if (/^(\*\*)?(success|✅)\b/i.test(t)) return { type: 'success', title: 'Success' };
+    if (/^(\*\*)?(info|ℹ️)\b/i.test(t)) return { type: 'info', title: 'Info' };
+    if (/^(\*\*)?(note|important)\b/i.test(t)) {
       if (/important/i.test(t.slice(0, 40))) return { type: 'warning', title: 'Important' };
       return { type: 'note', title: 'Note' };
     }
@@ -606,8 +627,14 @@
       if (firstP) {
         firstP.innerHTML = firstP.innerHTML
           .replace(/^(\s*(?:⚠️|⚠|💡|ℹ️|✅)\s*)/u, '')
-          .replace(/^(\s*<strong>\s*)?(TIP|NOTE|WARNING|IMPORTANT|DANGER|INFO|SUCCESS)(\s*:?\s*<\/strong>)?\s*/i, '')
-          .replace(/^(\*\*)?(TIP|NOTE|WARNING|IMPORTANT|DANGER|INFO|SUCCESS)(\*\*)?:?\s*/i, '');
+          .replace(
+            /^(\s*<strong>\s*)?(TIP|NOTE|WARNING|IMPORTANT|DANGER|INFO|SUCCESS|DEPRECATED)(\s*:?\s*<\/strong>)?\s*/i,
+            ''
+          )
+          .replace(
+            /^(\*\*)?(TIP|NOTE|WARNING|IMPORTANT|DANGER|INFO|SUCCESS|DEPRECATED)(\*\*)?:?\s*/i,
+            ''
+          );
       }
 
       bq.innerHTML = '';
@@ -624,13 +651,51 @@
 
   /* ---------- Tables ---------- */
 
+  function statusBadge(kind, label) {
+    const el = document.createElement('span');
+    el.className = `docs-status docs-status--${kind}`;
+    el.setAttribute('aria-label', label);
+    const icon = document.createElement('span');
+    icon.className = 'docs-status__icon';
+    icon.setAttribute('aria-hidden', 'true');
+    if (kind === 'yes' || kind === 'required') icon.innerHTML = ICONS.check;
+    else if (kind === 'no') icon.innerHTML = ICONS.close;
+    else icon.innerHTML = ICONS.note;
+    const text = document.createElement('span');
+    text.className = 'docs-status__label';
+    text.textContent = label;
+    el.appendChild(icon);
+    el.appendChild(text);
+    return el;
+  }
+
+  function enhanceStatusCells(table) {
+    table.querySelectorAll('td').forEach((td) => {
+      if (td.querySelector('.docs-status')) return;
+      const raw = (td.textContent || '').trim();
+      if (/^Yes$/i.test(raw)) {
+        td.textContent = '';
+        td.appendChild(statusBadge('yes', 'Yes'));
+      } else if (/^No$/i.test(raw)) {
+        td.textContent = '';
+        td.appendChild(statusBadge('no', 'No'));
+      } else if (/^Required\*?$/i.test(raw)) {
+        const optionalStar = /\*$/.test(raw);
+        td.textContent = '';
+        td.appendChild(statusBadge('required', optionalStar ? 'Required*' : 'Required'));
+      }
+    });
+  }
+
   function enhanceTables(root) {
     root.querySelectorAll('table').forEach((table) => {
-      if (table.parentElement?.classList.contains('table-wrapper')) return;
-      const wrapper = document.createElement('div');
-      wrapper.className = 'table-wrapper';
-      table.parentNode.insertBefore(wrapper, table);
-      wrapper.appendChild(table);
+      if (!table.parentElement?.classList.contains('table-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      }
+      enhanceStatusCells(table);
     });
   }
 
@@ -725,6 +790,28 @@
       { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
     );
     headings.forEach((h) => observer.observe(h));
+  }
+
+  /* ---------- Sidebar deprecation badges ---------- */
+
+  function enhanceSidebarDeprecations() {
+    const links = document.querySelectorAll('.sidebar-nav a[href]');
+    links.forEach((a) => {
+      const href = (a.getAttribute('href') || '').replace(/\/+$/, '');
+      const isWidgetsV1 =
+        /(?:^|\/)developers\/payment-widgets(?:\.md)?$/i.test(href) ||
+        /(?:^|\/)developers\/payment-widgets\/?$/i.test(href);
+      if (!isWidgetsV1) return;
+      if (a.querySelector('.docs-nav-badge')) return;
+
+      const badge = document.createElement('span');
+      badge.className = 'docs-nav-badge docs-nav-badge--deprecated';
+      badge.textContent = 'Deprecated';
+      badge.title =
+        'Discontinued in future API versions. Use Payment Widgets V2 for new features.';
+      a.appendChild(document.createTextNode(' '));
+      a.appendChild(badge);
+    });
   }
 
   /* ---------- Sidebar groups ---------- */
@@ -965,6 +1052,7 @@
     buildToc(section);
     enhancePager(section);
     enhanceSidebarGroups();
+    enhanceSidebarDeprecations();
 
     // Close mobile nav on route change
     document.body.classList.remove('docs-nav-open');

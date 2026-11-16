@@ -152,7 +152,7 @@ app.post('/webhooks/achylo', express.raw({ type: 'application/json' }), (req: Re
   switch (event.event) {
     case 'payment.completed': {
       const { payment_link_id, amount_usdc, payer_address, tx_hash } = event.data;
-      console.log(`✅ Payment received: ${amount_usdc} USDC from ${payer_address}`);
+      console.log(`Payment received: ${amount_usdc} USDC from ${payer_address}`);
       console.log(`   Payment Link: ${payment_link_id}`);
       console.log(`   TX: ${tx_hash}`);
       // → fulfill order, update DB, send confirmation email, etc.
@@ -190,7 +190,7 @@ function verifyAchyloSignature(
 app.listen(3000);
 ```
 
-> ⚠️ Do **not** use `express.json()` before the webhook route — it parses the body and you lose the raw bytes needed for verification.
+> Do **not** use `express.json()` before the webhook route — it parses the body and you lose the raw bytes needed for verification.
 
 ---
 
@@ -238,7 +238,7 @@ def achylo_webhook():
 
     if event['event'] == 'payment.completed':
         data = event['data']
-        print(f"✅ Payment received: {data['amount_usdc']} USDC")
+        print(f"Payment received: {data['amount_usdc']} USDC")
         print(f"   From:    {data['payer_address']}")
         print(f"   Link ID: {data['payment_link_id']}")
         print(f"   TX:      {data['tx_hash']}")
@@ -298,7 +298,7 @@ async def achylo_webhook(
     if event['event'] == 'payment.completed':
         data = event['data']
         # Process payment...
-        print(f"✅ {data['amount_usdc']} USDC — TX: {data['tx_hash']}")
+        print(f"{data['amount_usdc']} USDC — TX: {data['tx_hash']}")
 
     return {'received': True}
 ```
@@ -344,7 +344,7 @@ $event = json_decode($rawBody, true);
 
 if ($event['event'] === 'payment.completed') {
     $data = $event['data'];
-    error_log("✅ Payment received: {$data['amount_usdc']} USDC");
+    error_log("Payment received: {$data['amount_usdc']} USDC");
     error_log("   From: {$data['payer_address']}");
     error_log("   TX:   {$data['tx_hash']}");
 
@@ -406,7 +406,7 @@ class AchyloWebhookController extends Controller
 
     private function handlePaymentCompleted(array $data): void
     {
-        Log::info('✅ Achylo payment completed', $data);
+        Log::info('Achylo payment completed', $data);
         // Order::where('achylo_link_id', $data['payment_link_id'])->update([
         //     'status' => 'paid',
         //     'tx_hash' => $data['tx_hash'],

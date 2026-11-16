@@ -1,17 +1,17 @@
-# 💸 P2P Marketplace Fees
+# P2P Marketplace Fees
 
 P2P module fees fund Achylo's **gas sponsorship** system. Every time you confirm an on-chain action from the app (create/accept orders, release funds, register merchants, start disputes, etc.), the protocol covers the gas for you and recovers that cost with a **flat USDC fee per escrow**. Always check the **Stats** section for the current value (for example, "Fee per escrow: X USDC").
 
 ---
 
-## 🧠 What are these fees used for?
+## What are these fees used for?
 - Payment of on-chain gas when the user signs sponsored actions.
 - Maintenance and monitoring of the gas pool to ensure availability.
 - Sustaining the Transaction Guard and other anti-abuse layers.
 
 > **Important:** You don't need to worry about network gas fluctuations; Achylo covers them as long as there is balance in the pool.
 
-## ⏱️ When are fees deducted?
+## When are fees deducted?
 The escrow contract charges the fee **only once** when the transaction is successfully completed or a dispute is resolved. Specifically, the amount is deducted in the following cases:
 
 1. **When completing a buy/sell:** It is deducted (from the total amount in custody) at the exact moment the seller **releases the funds** to the buyer (`releaseFunds`).
@@ -21,20 +21,20 @@ The escrow contract charges the fee **only once** when the transaction is succes
 
 ---
 
-## 👥 Who pays and who is exempt?
+## Who pays and who is exempt?
 - The fee is **always deducted from the seller**.
 - **Gold Users:** are exempt from the charge and enjoy 0% protocol fees. You can obtain Gold status by purchasing the membership or through the monthly [Referral System](p2p/referrals.md). If the seller is Gold, the contract omits the fee for that operation.
 
 ---
 
-## 👀 How it appears in the UI
+## How it appears in the UI
 - Each action modal (Accept Order, Release Funds, Register Merchant, etc.) includes a summary showing the exact fee.
 - Tooltips explain the fee destination and the net amount that will reach the buyer.
-- If you are Gold or the action is exempt, the interface marks it with the badge "⭐ Gold User - No protocol fees".
+- If you are Gold or the action is exempt, the interface marks it with the badge "Gold User - No protocol fees".
 
 ---
 
-## 📏 Fee Structure
+## Fee Structure
 - **Contract-defined fee:** same amount for all completed operations, can be checked at Stats > Protocol > P2P Escrow Protocol > Fixed Fee and Percentage Fee. The value is defined by the protocol and varies according to the order value (e.g. 0.1 USDC for orders < 100 USDC and 0.1% for orders > 100 USDC).
 - **Basic requirement:** these are automatically deducted from the contract when any buy/sell action is executed.
 
@@ -42,7 +42,7 @@ The escrow contract charges the fee **only once** when the transaction is succes
 
 ---
 
-## 🧾 Quick Summary
+## Quick Summary
 | Question | Answer |
 | :--- | :--- |
 | Who defines the amount? | Governance (composed of Gold users, stakers, and holders); published on the Stats page. |

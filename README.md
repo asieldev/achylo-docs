@@ -4,13 +4,13 @@
 
 ---
 
-### 🌐 Available Network
+### Available Network
 * **Base Mainnet**.
 * **Note:** Before sending USDC to your wallet, always verify the available network.
 
 ---
 
-## 📖 Introduction
+## Introduction
 This guide walks you step by step so you can use the **Achylo** dApp (Base Network). Take your time and follow the instructions in order.
 
 ## What Can You Do with Achylo?
@@ -25,7 +25,7 @@ Achylo is a Web3 platform with six core superpowers:
     * **Private:** Only for your trusted counterparty.
 
 ### 2. Mint/Redeem APAY (Stablecoin backed by USDC)
-* **Conversion:** Swap `USDC ↔️ APAY` at any time.
+* **Conversion:** Swap `USDC ↔ APAY` at any time.
 * **Discounts:** Get lower P2P fees when operating with APAY.
 * **Utility:** Ideal for users who want to move across the *on-chain* world in a yield-bearing stablecoin.
 
@@ -50,7 +50,7 @@ curl -X POST https://api.achylo.com/api/payment-links \
   }'
 ```
 
-📖 Full documentation: [Payment Links](developers/payment-links.md)
+Full documentation: [Payment Links](developers/payment-links.md)
 
 ### 4. Payment Widgets ("Pay with Crypto" Button)
 * **No-code integration:** Copy and paste a simple HTML button into any website.
@@ -70,11 +70,11 @@ curl -X POST https://api.achylo.com/api/payment-links \
   data-currency="USDC"
   data-description="Order #1234"
 >
-  💳 Pay with Crypto
+  Pay with Crypto
 </button>
 ```
 
-📖 Full documentation: [Payment Widgets](developers/payment-widgets.md)
+Full documentation: [Payment Widgets](developers/payment-widgets.md)
 
 ---
 
@@ -92,7 +92,7 @@ const sig = crypto.createHmac('sha256', webhookSecret)
 if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signature');
 ```
 
-📖 Full documentation: [Webhooks](developers/webhooks.md)
+Full documentation: [Webhooks](developers/webhooks.md)
 
 ---
 
@@ -107,7 +107,7 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 * **Institutional safety:** VWAP volume weighting, median sorting, circuit breakers, anti-wash trading.
 * **Chainlink standard:** Compatible with `AggregatorV3Interface` for easy integration into lending markets, vaults, and DeFi contracts.
 
-📖 Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
+Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
 
 ---
 
@@ -117,4 +117,4 @@ if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signatur
 * **API Key + permissions:** You approve limited bot permissions in your profile; then your backend calls the Achylo API.
 * **Revocable anytime:** Turn actions off or Revoke all from the same screen.
 
-📖 Full documentation: [Bots / Automation](developers/bots-automation.md)
+Full documentation: [Bots / Automation](developers/bots-automation.md)

@@ -22,7 +22,7 @@ Your server                    Achylo API                   Your customer
 1. POST /api/payment-links  →  Returns paymentUrl
 2. Redirect customer        →  Customer pays with USDC on Base
 3.                          →  Achylo verifies on-chain
-4.                          →  POST to your webhookUrl ✅
+4.                          →  POST to your webhookUrl
 ```
 
 ---
@@ -31,7 +31,7 @@ Your server                    Achylo API                   Your customer
 
 Log in to [achylo.com](https://achylo.com), open your **User Profile → Developer API Keys**, and create a key with a label like `"Production"`.
 
-> ⚠️ The key is shown **only once**. Store it securely (e.g. environment variable).
+> The key is shown **only once**. Store it securely (e.g. environment variable).
 
 ```bash
 export ACHYLO_API_KEY="achylo_a3f2c8b9d4e1f6a7..."

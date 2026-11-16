@@ -1,6 +1,6 @@
-#  Getting Started
+# Getting Started
 
-###  Before You Start
+### Before You Start
 Make sure you have **USDC** (stablecoin) available on the **Base** network. Depending on the version you use, you can obtain it as follows:
 
 * **Testnet (Base Sepolia):** You can use the *Achylo USDC* test contract or request test tokens directly from the support service.
@@ -8,14 +8,14 @@ Make sure you have **USDC** (stablecoin) available on the **Base** network. Depe
 
 ---
 
-##  Fund Management
+## Fund Management
 You can add funds to your Wallet from any external source (exchange or other wallet).
 
-###  Multi-Chain Deposits
+### Multi-Chain Deposits
 
 Achylo supports **multi-chain deposits**, allowing you to deposit funds from multiple blockchains and receive them automatically as **USDC on the Base network**.
 
-####  How It Works
+#### How It Works
 
 1. **Select your source chain:** Choose from supported chains (Arbitrum, Optimism, Polygon, BSC, and more).
 
@@ -25,7 +25,7 @@ Achylo supports **multi-chain deposits**, allowing you to deposit funds from mul
 
 4. **Single balance:** All your capital is unified in USDC on Base, ready to use in the protocol.
 
-####  Supported Chains for Deposit
+#### Supported Chains for Deposit
 
 | Chain | Common Tokens |
 |--------|----------------|
@@ -38,7 +38,7 @@ Achylo supports **multi-chain deposits**, allowing you to deposit funds from mul
 
 > **Note:** The full list of supported chains and tokens is updated dynamically based on availability.
 
-####  Benefits of Multi-Chain Deposits
+#### Benefits of Multi-Chain Deposits
 
 * **No manual bridges:** Forget about using multiple platforms to move funds between chains.
 * **No worries about gas on other networks:** The process automatically optimizes the lowest-cost routes.
@@ -52,7 +52,7 @@ Achylo supports **multi-chain deposits**, allowing you to deposit funds from mul
 
 ---
 
-##  "My Wallet" Interface
+## "My Wallet" Interface
 
 When you open your profile, you will see the following options to manage your assets:
 
@@ -78,4 +78,4 @@ When you open your profile, you will see the following options to manage your as
   <img src="/assets/images/wallet.png" alt="View of the 'My Wallet' section with the main balance" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1 Wallet Balance.</strong></p>
+<p align="center"><strong>Img. No.1 Wallet Balance.</strong></p>

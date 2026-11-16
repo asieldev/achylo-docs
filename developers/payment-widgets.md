@@ -1,5 +1,7 @@
 # Payment Widgets
 
+> **Deprecated:** Payment Widgets (V1) will be discontinued in future API versions. New integrations should use [Payment Widgets V2](developers/payment-widgets-v2.md), which will remain available with new features.
+
 Add a **"Pay with Crypto"** button to any website. Your customers click, a payment window opens, and they pay. Simple as that.
 
 ## Base URL (API)
@@ -37,7 +39,7 @@ For non-developers. Works on WordPress, Wix, Shopify, or plain HTML.
   merchant-id="achylo_YOUR_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pay with Crypto"
+  label="Pay with Crypto"
   description="Payment for order #1234">
 </achylo-button>
 ```
@@ -59,7 +61,7 @@ Replace in the code:
   merchant-id="achylo_cv80520f"    <!-- Your Widget ID -->
   amount="50.00"                    <!-- Value in USDC -->
   currency="USDC"                     <!-- Always USDC -->
-  label="💳 Pay now"                  <!-- Button text -->
+  label="Pay now"                  <!-- Button text -->
   description="Monthly subscription"  <!-- Payment description -->
   color="#6366f1">                  <!-- Button color (optional) -->
 </achylo-button>
@@ -67,7 +69,7 @@ Replace in the code:
 
 ### Step 4 — Paste on your site
 
-#### 🟣 Wix (Detailed step-by-step)
+#### Wix (Detailed step-by-step)
 
 1. **In the Wix Editor**, click the **"+ Add"** button
 2. Select **"Embed"** → **"Embed HTML"** or **"HTML Code"**
@@ -80,7 +82,7 @@ Replace in the code:
   merchant-id="achylo_YOUR_WIDGET_ID"
   amount="29.99"
   currency="USDC"
-  label="💳 Pay with Crypto"
+  label="Pay with Crypto"
   description="Payment for order #1234">
 </achylo-button>
 ```
@@ -89,7 +91,7 @@ Replace in the code:
 6. Position the button where you want on the page
 7. **Publish** the site to see it working
 
-> 💡 **Tip**: If the button doesn't appear, check that the domain `yoursite.wixsite.com` was added to the widget whitelist.
+> **Tip**: If the button doesn't appear, check that the domain `yoursite.wixsite.com` was added to the widget whitelist.
 
 ---
 
@@ -105,7 +107,7 @@ Replace in the code:
 1. Open your site in the browser
 2. Click the button
 3. A payment modal should open
-4. ✅ Ready!
+4. Ready!
 
 ---
 
@@ -117,9 +119,9 @@ For developers who need to listen to events or control the flow.
 
 | Attribute | Required | Description |
 |-----------|----------|-------------|
-| `merchant-id` | ✅ | Your Widget ID (`achylo_...`) |
-| `amount` | ✅* | Value in USDC (e.g. `"10.50"`). Ignored if `amount-from` is set. |
-| `currency` | ✅ | Always `"USDC"` |
+| `merchant-id` | Yes | Your Widget ID (`achylo_...`) |
+| `amount` | Required* | Value in USDC (e.g. `"10.50"`). Ignored if `amount-from` is set. |
+| `currency` | Yes | Always `"USDC"` |
 | `label` | — | Button text (default: `"Pay with Crypto"`) |
 | `description` | — | Custom payment description (optional) |
 | `color` | — | Hex color (default: `#ff7f41`) |
@@ -157,7 +159,7 @@ The button emits custom DOM events you can listen to. All event data is availabl
 
   // Payment error
   btn.addEventListener('achylo:payment-error', (e) => {
-    console.error('❌ Error:', e.detail.error);
+    console.error('Error:, e.detail.error);
     alert('Payment failed. Try again.');
   });
 
@@ -205,7 +207,7 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 | Field | Required | Description |
 |-------|----------|-------------|
 | `origins` | — | Optional array of allowed domains. Omit, send `[]`, or leave empty to allow embedding from any domain (public widget). |
-| `payoutAddress` | ✅ | Your wallet address that receives payments |
+| `payoutAddress` | Yes | Your wallet address that receives payments |
 | `webhookUrl` | — | HTTPS endpoint to notify on payment confirmation |
 | `webhookSecret` | — | Secret to sign webhook payloads. Required if `webhookUrl` is set. Use `whsec_` + 64 hex chars or any string |
 
@@ -223,7 +225,7 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 }
 ```
 
-> 💡 **Webhook tip**: When a customer pays through your widget, Achylo sends a `POST` to your `webhookUrl` signed with `webhookSecret`. See [Webhooks →](developers/webhooks.md) for signature verification.
+> **Webhook tip**: When a customer pays through your widget, Achylo sends a `POST` to your `webhookUrl` signed with `webhookSecret`. See [Webhooks →](developers/webhooks.md) for signature verification.
 
 ### Step 2 — List Your Widgets
 
@@ -305,7 +307,7 @@ console.log('Payment URL:', link.paymentUrl);
 }
 ```
 
-> 💡 **Amount format**: Use micro-units. `1 USDC = 1000000`. So `"29990000"` = 29.99 USDC.
+> **Amount format**: Use micro-units. `1 USDC = 1000000`. So `"29990000"` = 29.99 USDC.
 
 ### Step 6 — Check Payment Status
 
@@ -370,7 +372,7 @@ Use `amount-from` to automatically read the cart total from the page. The value 
 </achylo-button>
 ```
 
-> 💡 **Not capturing the total?** Right-click the cart total → Inspect. The highlighted code will show `id="something"`. Use `#something` in `amount-from`.
+> **Not capturing the total?** Right-click the cart total → Inspect. The highlighted code will show `id="something"`. Use `#something` in `amount-from`.
 
 ### Manual control via JavaScript
 
@@ -466,7 +468,7 @@ When origins are configured, the widget only works on authorized domains:
    - `https://www.yourstore.com`
    - `https://checkout.yourstore.com`
 
-> ⚠️ **Important**: If the list contains domains, missing domains will be rejected. Use an empty list for a public widget, and use `*` only in development (never in production).
+> **Important**: If the list contains domains, missing domains will be rejected. Use an empty list for a public widget, and use `*` only in development (never in production).
 
 ---
 
@@ -591,7 +593,7 @@ app.post('/webhooks/achylo', express.json(), (req, res) => {
 }
 ```
 
-> ⚠️ Delivery retries up to 5 times with exponential backoff.
+> Delivery retries up to 5 times with exponential backoff.
 
 See full documentation at [Webhooks →](developers/webhooks.md)
 
@@ -612,7 +614,7 @@ export function PaymentButton({ amount, orderId, description }) {
     btn.setAttribute('merchant-id', process.env.REACT_APP_ACHYLO_WIDGET_ID);
     btn.setAttribute('amount', amount);
     btn.setAttribute('currency', 'USDC');
-    btn.setAttribute('label', '💳 Pay with Crypto');
+    btn.setAttribute('label', 'Pay with Crypto');
     btn.setAttribute('description', description || `Payment for order ${orderId}`);
 
     btn.addEventListener('achylo:success', () => {
@@ -689,16 +691,16 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 ## Troubleshooting
 
 ### The button doesn't appear
-- ✅ Check if the `achylo.js` script loaded (console F12)
-- ✅ Confirm the `merchant-id` is correct
+- Check if the `achylo.js` script loaded (console F12)
+- Confirm the `merchant-id` is correct
 
 ### "Domain not authorized"
-- ✅ Add your domain to the widget whitelist
-- ✅ Include `https://` (e.g. `https://yourstore.com`)
+- Add your domain to the widget whitelist
+- Include `https://` (e.g. `https://yourstore.com`)
 
 ### The modal doesn't open
-- ✅ Check popup blockers
-- ✅ The click must be a direct user action (not via script)
+- Check popup blockers
+- The click must be a direct user action (not via script)
 
 ---
 
@@ -706,11 +708,11 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 
 ```html
 <achylo-button
-  merchant-id="achylo_YOUR_ID"     <!-- ✅ Required -->
-  amount="10.00"                    <!-- ✅ Required (or use amount-from) -->
-  currency="USDC"                  <!-- ✅ Required -->
+  merchant-id="achylo_YOUR_ID"     <!-- Required -->
+  amount="10.00"                    <!-- Required (or use amount-from) -->
+  currency="USDC"                  <!-- Required -->
   amount-from="#cartTotal"         <!-- Optional: reads total from DOM -->
-  label="💳 Pay"                   <!-- Optional -->
+  label="Pay"                   <!-- Optional -->
   description="Description"        <!-- Optional -->
   color="#ff7f41">                 <!-- Optional -->
 </achylo-button>
@@ -726,7 +728,7 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 | `achylo:opened` | `paymentId, mode, url` | Modal or tab opened |
 | `achylo:ready` | — | Script loaded and ready |
 
-> ℹ️ The events `achylo:success`, `achylo:error`, and `achylo:cancel` are still emitted for backward compatibility.
+> The events `achylo:success`, `achylo:error`, and `achylo:cancel` are still emitted for backward compatibility.
 
 ---
 

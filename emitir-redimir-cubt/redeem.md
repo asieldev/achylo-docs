@@ -1,16 +1,16 @@
-#  Redeem APAY
+# Redeem APAY
 
 Guide to redeem **APAY** and receive **USDC** using the **Redeem** tab of the “Mint & Redeem” module.
 
 ---
 
-##  Before You Begin
+## Before You Begin
 - Wallet connected on Base / Base Sepolia.
 - APAY available in your balance (and not locked in an escrow).
 
 ---
 
-##  Step by Step
+## Step by Step
 1. **Select Redeem**: switch to the Redeem tab within the module.
 2. **Enter the amount**: write how many APAY you want to redeem. You can use the **MAX** button if you want to free up your entire balance.
 3. **Review the simulator**:
@@ -21,7 +21,7 @@ Guide to redeem **APAY** and receive **USDC** using the **Redeem** tab of the �
 
 ---
 
-##  Tips
+## Tips
 - If you just received APAY from another account or contract, use **Refresh** to update the balance before redeeming.
 - If the simulator shows the fee is zero, it means you are exempt (feeExempt or applicable Gold/staking status).
 - The Redeem flow has no overcollateralization: only the fee configured at that time is deducted.

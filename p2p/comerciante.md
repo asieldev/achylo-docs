@@ -1,4 +1,4 @@
-#  Merchant
+# Merchant
 
 ## How to Become a Merchant
 Being a **Merchant** allows you to have an active role on the platform: you can create your own public orders and accept exchange requests from other users.
@@ -14,14 +14,14 @@ Being a **Merchant** allows you to have an active role on the platform: you can 
 
 ---
 
-##  Collateral Management
+## Collateral Management
 
 It is important to understand how your guarantee funds are locked:
 
 * **Locked status:** While you hold the merchant role, the collateral will remain locked to secure your operations.
 * **Withdraw funds:** If you decide to stop being a merchant, you can use the **“Withdraw Fund”** option.
 * **Cooldown period:** There is a waiting time before you can withdraw the full collateral.
-    * ⚠️ **24-hour rule:** This preventive lock is only activated if you have performed any buy or sell operation in the last **24 hours**.
+    * **24-hour rule:** This preventive lock is only activated if you have performed any buy or sell operation in the last **24 hours**.
 
 > **Tip:** Make sure you have no pending operations before starting the withdrawal process to facilitate the release of your funds.
 
@@ -31,11 +31,11 @@ It is important to understand how your guarantee funds are locked:
   <img src="/assets/images/merchant.png" alt="View of the process to become a Merchant" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1. Becoming a merchant.</strong></p>
+<p align="center"><strong>Img. No.1. Becoming a merchant.</strong></p>
 
 
 <p align="center">
   <img src="/assets/images/merchant_dashboard.png" alt="View of the Merchant Dashboard" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.2. Merchant dashboard.</strong></p>
+<p align="center"><strong>Img. No.2. Merchant dashboard.</strong></p>

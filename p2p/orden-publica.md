@@ -1,9 +1,9 @@
-#  Public Order Management
+# Public Order Management
 
-##  Create a Public Order 
+## Create a Public Order 
 > **Note:** This function is exclusive to users with the **Merchant** role. If you don't see the "Create Public Order" button, make sure you have completed your registration in the *Become a Merchant* menu.
 
-###  Order Capacity and Collateral
+### Order Capacity and Collateral
 When opening the modal, you will see a summary of your operational capacity based on your guarantee:
 * **Your Merchant Collateral:** The total balance you have deposited as collateral.
 * **Max order capacity (2x multiplier):** Achylo allows you to publish orders for up to **double (2x)** your collateral.
@@ -35,7 +35,7 @@ When opening the modal, you will see a summary of your operational capacity base
    * Time the buyer has to complete the payment before the seller can reclaim the funds.
    * *Range:* From 15 minutes to 360 days. If left empty, the default value applies.
 
-8. **🏪 Merchant Only:** * If you check this box, **only registered merchants** will be able to see and accept your order, adding an extra layer of security.
+8. **Merchant Only:** * If you check this box, **only registered merchants** will be able to see and accept your order, adding an extra layer of security.
 
 ---
 
@@ -43,18 +43,18 @@ When opening the modal, you will see a summary of your operational capacity base
   <img src="/assets/images/order.png" alt="View of the 'Create Public Order' modal" width="75%" />
 </p>
 
-<p align="center"><strong>📍 Img. No.1. View of Create Public Order.</strong></p>
+<p align="center"><strong>Img. No.1. View of Create Public Order.</strong></p>
 
 ---
 
-###  “Merchant Only” Orders
+### “Merchant Only” Orders
 Some orders are restricted and can only be accepted by users who already have **Merchant** status. 
 * If you see a **red warning** on an order, it means it is exclusive to merchants. 
 * If you want to access them, you must register first in the *Become a Merchant* menu.
 
 ---
 
-##  Accept a Public Order
+## Accept a Public Order
 
 If you have found an offer that suits your needs, follow these steps to carry out the exchange safely:
 
@@ -74,7 +74,7 @@ If you have found an offer that suits your needs, follow these steps to carry ou
 
 ---
 
-###  “Merchant Only” Orders
+### “Merchant Only” Orders
 Some orders are restricted and can only be accepted by users who already have **Merchant** status. 
 * If you see a **red warning** on an order, it means it is exclusive to merchants. 
 * If you want to access them, you must register first in the *Become a Merchant* menu.
@@ -84,4 +84,4 @@ Some orders are restricted and can only be accepted by users who already have **
 <p align="center">
   <img src="/assets/images/card_accept.png" alt="View of the 'Accept Order' card" width="50%" />
 </p>
-<p align="center"><strong>📍 Img. No.2. Accept a public order</strong></p>
+<p align="center"><strong>Img. No.2. Accept a public order</strong></p>

@@ -138,7 +138,7 @@ curl_close($ch);
 
 After you create at least one API Key, the same profile section shows **Bots / Automation**. Use it to allow your backend to run P2P public-order actions (create, accept, confirm, cancel, dispute) within limits you choose.
 
-📖 Full guide: [Bots / Automation](developers/bots-automation.md)
+Full guide: [Bots / Automation](developers/bots-automation.md)
 
 ---
 
