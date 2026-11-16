@@ -1,4 +1,5 @@
 * [Welcome](README.md)
+
 * P2P
   * [Access](p2p/acceso.md)
   * [Getting Started](p2p/inicio.md)
@@ -9,13 +10,15 @@
   * [Transaction Limits](p2p/limites-de-transacciones.md)
   * [Fees](p2p/fees.md)
   * [Referrals](p2p/referrals.md)
-* MINT AND REDEEM CUBT
+
+* Mint & Redeem CUBT
   * [CUBT Token](emitir-redimir-cubt/token-cubt.md)
   * [Mint](emitir-redimir-cubt/mint.md)
   * [Redeem](emitir-redimir-cubt/redeem.md)
   * [Fees](emitir-redimir-cubt/fees.md)
-* DEVELOPERS
-  * [Quickstart](developers/quickstart.md) — API: `https://api.achylo.com`
+
+* Developers
+  * [Quickstart](developers/quickstart.md)
   * [API Keys](developers/api-keys.md)
   * [Bots / Automation](developers/bots-automation.md)
   * [Payment Links](developers/payment-links.md)
@@ -24,14 +27,19 @@
   * [Price Oracle (On-Chain)](developers/price-oracle.md)
   * [Postman Guide](developers/postman-guide.md)
   * [Webhooks](developers/webhooks.md)
-* STAKING
+
+* Staking
   * [Staking](staking/staking.md)
-* SECURITY
+
+* Security
   * [Wallet Protection / MFA](security/2fa.md)
-* CONTACT
+
+* Contact
   * [Community](contacto/comunidad.md)
-* WHITE PAPER
+
+* White Paper
   * [White Paper](white-paper/white-paper.md)
-* TERMS OF SERVICE
+
+* Terms of Service
   * [Terms of Use](terms-of-service/terminos-de-uso.md)
   * [Privacy Policy](terms-of-service/politica-de-privacidad.md)
