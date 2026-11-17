@@ -41,7 +41,13 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
     note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
     success:
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    tocList:
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg>',
+    chevronDown:
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>',
+    copyPage:
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
   };
 
   const LANG_LABELS = {
@@ -730,45 +736,197 @@
   }
 
   function enhanceBreadcrumbs(root) {
+    root.querySelector('.docs-page-toolbar')?.remove();
     root.querySelector('.docs-breadcrumbs')?.remove();
 
     const path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
-    if (path === '/' || path === '/README' || path === '/index.html') return;
+    const isHome = path === '/' || path === '/README' || path === '/index.html';
 
-    const parts = path.split('/').filter(Boolean);
-    const crumbs = [{ label: 'Docs', href: '/' }];
-    let acc = '';
-    parts.forEach((part, i) => {
-      acc += `/${part}`;
-      const isLast = i === parts.length - 1;
-      const label = decodeURIComponent(part)
-        .replace(/\.md$/i, '')
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-      // Intermediate folders (e.g. /developers) are not pages — link to first child or plain text
-      let href = null;
-      if (!isLast) {
-        href = sectionLandingHref(acc);
-      }
-      crumbs.push({ label, href });
-    });
+    const toolbar = document.createElement('div');
+    toolbar.className = 'docs-page-toolbar';
 
-    const nav = document.createElement('nav');
-    nav.className = 'docs-breadcrumbs';
-    nav.setAttribute('aria-label', 'Breadcrumb');
-    nav.innerHTML = crumbs
-      .map((c, i) => {
-        const sep = i ? `<span class="docs-breadcrumbs__sep" aria-hidden="true">/</span>` : '';
-        if (!c.href) {
-          return `${sep}<span class="docs-breadcrumbs__current">${escapeHtml(c.label)}</span>`;
+    if (!isHome) {
+      const parts = path.split('/').filter(Boolean);
+      const crumbs = [{ label: 'Docs', href: '/' }];
+      let acc = '';
+      parts.forEach((part, i) => {
+        acc += `/${part}`;
+        const isLast = i === parts.length - 1;
+        const label = decodeURIComponent(part)
+          .replace(/\.md$/i, '')
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+        // Intermediate folders (e.g. /developers) are not pages — link to first child or plain text
+        let href = null;
+        if (!isLast) {
+          href = sectionLandingHref(acc);
         }
-        return `${sep}<a href="${c.href}">${escapeHtml(c.label)}</a>`;
-      })
-      .join('');
+        crumbs.push({ label, href });
+      });
+
+      const nav = document.createElement('nav');
+      nav.className = 'docs-breadcrumbs';
+      nav.setAttribute('aria-label', 'Breadcrumb');
+      nav.innerHTML = crumbs
+        .map((c, i) => {
+          const sep = i ? `<span class="docs-breadcrumbs__sep" aria-hidden="true">/</span>` : '';
+          if (!c.href) {
+            return `${sep}<span class="docs-breadcrumbs__current">${escapeHtml(c.label)}</span>`;
+          }
+          return `${sep}<a href="${c.href}">${escapeHtml(c.label)}</a>`;
+        })
+        .join('');
+      toolbar.appendChild(nav);
+    } else {
+      const spacer = document.createElement('div');
+      spacer.className = 'docs-page-toolbar__spacer';
+      toolbar.appendChild(spacer);
+    }
+
+    toolbar.appendChild(buildCopyPageControl(root));
 
     const h1 = root.querySelector('h1');
-    if (h1) root.insertBefore(nav, h1);
-    else root.prepend(nav);
+    if (h1) root.insertBefore(toolbar, h1);
+    else root.prepend(toolbar);
+  }
+
+  function pageMarkdownUrl() {
+    let path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
+    if (path === '/' || path === '/index.html') return '/README.md';
+    if (path.endsWith('.md')) return path;
+    return `${path}.md`;
+  }
+
+  function pagePlainText(root) {
+    const clone = root.cloneNode(true);
+    clone
+      .querySelectorAll(
+        '.docs-page-toolbar, .docs-breadcrumbs, .docs-pager, .docs-anchor, .docs-callout__icon, .docs-callout__title'
+      )
+      .forEach((el) => el.remove());
+    return (clone.innerText || '').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  async function getPageMarkdown(root) {
+    try {
+      const res = await fetch(pageMarkdownUrl(), { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        if (text && !text.trim().startsWith('<!')) return text.trim();
+      }
+    } catch (_) {
+      /* fall through */
+    }
+    return pagePlainText(root);
+  }
+
+  function buildCopyPageControl(root) {
+    const wrap = document.createElement('div');
+    wrap.className = 'docs-copy-page';
+
+    const mainBtn = document.createElement('button');
+    mainBtn.type = 'button';
+    mainBtn.className = 'docs-copy-page__btn';
+    mainBtn.setAttribute('aria-label', 'Copy page');
+    mainBtn.innerHTML = `${ICONS.copyPage}<span class="docs-copy-page__label">Copy page</span>`;
+
+    const menuBtn = document.createElement('button');
+    menuBtn.type = 'button';
+    menuBtn.className = 'docs-copy-page__menu-btn';
+    menuBtn.setAttribute('aria-label', 'Copy page options');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-haspopup', 'true');
+    menuBtn.innerHTML = ICONS.chevronDown;
+
+    const menu = document.createElement('div');
+    menu.className = 'docs-copy-page__menu';
+    menu.hidden = true;
+    menu.innerHTML = `
+      <button type="button" class="docs-copy-page__item" data-action="markdown">Copy as Markdown</button>
+      <button type="button" class="docs-copy-page__item" data-action="link">Copy page link</button>
+    `;
+
+    const setCopied = (label) => {
+      wrap.classList.add('is-copied');
+      mainBtn.innerHTML = `${ICONS.check}<span class="docs-copy-page__label">${label || 'Copied'}</span>`;
+      setTimeout(() => {
+        wrap.classList.remove('is-copied');
+        mainBtn.innerHTML = `${ICONS.copyPage}<span class="docs-copy-page__label">Copy page</span>`;
+      }, 1800);
+    };
+
+    const copyMarkdown = async () => {
+      const text = await getPageMarkdown(root);
+      const finish = () => setCopied('Copied');
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(finish).catch(() => fallbackCopy(text, finish));
+      } else {
+        fallbackCopy(text, finish);
+      }
+    };
+
+    const copyLink = () => {
+      const url = window.location.href.split('#')[0];
+      const finish = () => setCopied('Link copied');
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(url).then(finish).catch(() => fallbackCopy(url, finish));
+      } else {
+        fallbackCopy(url, finish);
+      }
+    };
+
+    const closeMenu = () => {
+      menu.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
+      wrap.classList.remove('is-open');
+    };
+
+    const toggleMenu = () => {
+      const open = menu.hidden;
+      menu.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      wrap.classList.toggle('is-open', open);
+    };
+
+    mainBtn.addEventListener('click', () => {
+      closeMenu();
+      copyMarkdown();
+    });
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+    menu.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-action]');
+      if (!item) return;
+      closeMenu();
+      if (item.dataset.action === 'link') copyLink();
+      else copyMarkdown();
+    });
+
+    wrap.appendChild(mainBtn);
+    wrap.appendChild(menuBtn);
+    wrap.appendChild(menu);
+    return wrap;
+  }
+
+  // One shared outside-click closer for Copy page menus
+  if (!window.__achyloCopyPageOutsideBound) {
+    window.__achyloCopyPageOutsideBound = true;
+    document.addEventListener(
+      'click',
+      (e) => {
+        document.querySelectorAll('.docs-copy-page.is-open').forEach((wrap) => {
+          if (wrap.contains(e.target)) return;
+          const menu = wrap.querySelector('.docs-copy-page__menu');
+          const menuBtn = wrap.querySelector('.docs-copy-page__menu-btn');
+          if (menu) menu.hidden = true;
+          if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+          wrap.classList.remove('is-open');
+        });
+      },
+      true
+    );
   }
 
   /* ---------- TOC ---------- */
@@ -817,7 +975,10 @@
     }
 
     toc.innerHTML = `
-      <div class="docs-toc__title">On this page</div>
+      <div class="docs-toc__title">
+        <span class="docs-toc__title-icon">${ICONS.tocList}</span>
+        <span>On this page</span>
+      </div>
       <ul class="docs-toc__list">
         ${headings
           .map((h) => {

@@ -1002,7 +1002,7 @@ body.close .content {
 .markdown-section {
   max-width: var(--docs-content-max) !important;
   width: 100% !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   color: var(--docs-text);
   position: relative;
@@ -1138,13 +1138,27 @@ body.close .content {
   text-decoration: none !important;
 }
 
-/* Breadcrumbs */
+/* Page toolbar — breadcrumbs + Copy page */
+.docs-page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 var(--docs-space-4);
+  min-height: 32px;
+}
+
+.docs-page-toolbar__spacer {
+  flex: 1;
+}
+
 .docs-breadcrumbs {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin: 0 0 var(--docs-space-4);
+  margin: 0;
+  min-width: 0;
   font-size: 12.5px;
   color: var(--docs-text-muted);
 }
@@ -1165,6 +1179,106 @@ body.close .content {
 .docs-breadcrumbs__current {
   color: var(--docs-text-secondary);
   font-weight: 500;
+}
+
+/* Copy page — Coinbase-style split control */
+.docs-copy-page {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: var(--docs-surface-elevated);
+  overflow: visible;
+}
+
+.docs-copy-page__btn,
+.docs-copy-page__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: var(--docs-text);
+  font-family: var(--docs-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--docs-duration), color var(--docs-duration);
+}
+
+.docs-copy-page__btn {
+  height: 30px;
+  padding: 0 10px 0 12px;
+  border-radius: 999px 0 0 999px;
+}
+
+.docs-copy-page__menu-btn {
+  width: 28px;
+  height: 30px;
+  border-left: 1px solid var(--docs-border);
+  border-radius: 0 999px 999px 0;
+  color: var(--docs-text-muted);
+}
+
+.docs-copy-page__btn:hover,
+.docs-copy-page__menu-btn:hover {
+  background: var(--docs-code-btn-hover);
+}
+
+.docs-copy-page.is-copied .docs-copy-page__btn {
+  color: var(--docs-callout-success-icon);
+}
+
+.docs-copy-page__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  min-width: 168px;
+  padding: 4px;
+  border: 1px solid var(--docs-border);
+  border-radius: 10px;
+  background: var(--docs-surface-elevated);
+  box-shadow: var(--docs-shadow-md);
+}
+
+.docs-copy-page__item {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--docs-text);
+  font-family: var(--docs-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.docs-copy-page__item:hover {
+  background: var(--docs-code-btn-hover);
+}
+
+@media (max-width: 640px) {
+  .docs-page-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .docs-copy-page__label {
+    display: none;
+  }
+
+  .docs-copy-page__btn {
+    padding: 0 10px;
+  }
 }
 
 /* ------------------------------------------------------------
@@ -1431,21 +1545,29 @@ body.close .content {
 }
 
 /* ------------------------------------------------------------
-   Callouts — Coinbase CDP message boxes (NOTE style from docs.cdp)
+   Callouts — Coinbase CDP message boxes (soft shell, no accent bar)
    ------------------------------------------------------------ */
 
+/* Soft Coinbase shell — overrides Docsify vue.css green left bar */
+.markdown-section blockquote,
+.markdown-section blockquote.docs-callout,
+.docs-callout {
+  margin: var(--docs-space-5) 0;
+  padding: 16px 18px;
+  border: 1px solid var(--docs-callout-note-border) !important;
+  border-left: 1px solid var(--docs-callout-note-border) !important;
+  border-radius: 14px !important;
+  background: var(--docs-callout-note-bg) !important;
+  color: var(--docs-callout-note-text) !important;
+  box-shadow: none !important;
+}
+
+.markdown-section blockquote.docs-callout,
 .docs-callout {
   display: grid;
   grid-template-columns: 20px 1fr;
   gap: 12px;
   align-items: start;
-  margin: var(--docs-space-5) 0;
-  padding: 16px 18px;
-  border: 1px solid var(--docs-callout-note-border);
-  border-radius: 14px;
-  background: var(--docs-callout-note-bg);
-  color: var(--docs-callout-note-text);
-  box-shadow: none;
 }
 
 .docs-callout__icon {
@@ -1491,60 +1613,43 @@ body.close .content {
   color: inherit;
 }
 
-.docs-callout--note {
-  background: var(--docs-callout-note-bg);
-  border-color: var(--docs-callout-note-border);
-  color: var(--docs-callout-note-text);
+.docs-callout--note,
+.docs-callout--tip,
+.docs-callout--success,
+.docs-callout--info {
+  background: var(--docs-callout-note-bg) !important;
+  border: 1px solid var(--docs-callout-note-border) !important;
+  color: var(--docs-callout-note-text) !important;
 }
-.docs-callout--note .docs-callout__icon {
+.docs-callout--note .docs-callout__icon,
+.docs-callout--tip .docs-callout__icon,
+.docs-callout--success .docs-callout__icon,
+.docs-callout--info .docs-callout__icon {
   color: var(--docs-callout-note-icon);
 }
 
-.docs-callout--info {
-  background: var(--docs-callout-info-bg);
-  border-color: var(--docs-callout-info-border);
-  color: var(--docs-callout-info-text);
-}
-.docs-callout--info .docs-callout__icon {
-  color: var(--docs-callout-info-icon);
-}
-
-.docs-callout--tip {
-  background: var(--docs-callout-tip-bg);
-  border-color: var(--docs-callout-tip-border);
-  color: var(--docs-callout-tip-text);
-}
-.docs-callout--tip .docs-callout__icon { color: var(--docs-callout-tip-icon); }
-
 .docs-callout--warning {
-  background: var(--docs-callout-warn-bg);
-  border-color: var(--docs-callout-warn-border);
-  color: var(--docs-callout-warn-text);
+  background: var(--docs-callout-warn-bg) !important;
+  border: 1px solid var(--docs-callout-warn-border) !important;
+  color: var(--docs-callout-warn-text) !important;
 }
 .docs-callout--warning .docs-callout__icon { color: var(--docs-callout-warn-icon); }
 
 .docs-callout--danger {
-  background: var(--docs-callout-danger-bg);
-  border-color: var(--docs-callout-danger-border);
-  color: var(--docs-callout-danger-text);
+  background: var(--docs-callout-danger-bg) !important;
+  border: 1px solid var(--docs-callout-danger-border) !important;
+  color: var(--docs-callout-danger-text) !important;
 }
 .docs-callout--danger .docs-callout__icon { color: var(--docs-callout-danger-icon); }
 
-.docs-callout--success {
-  background: var(--docs-callout-success-bg);
-  border-color: var(--docs-callout-success-border);
-  color: var(--docs-callout-success-text);
-}
-.docs-callout--success .docs-callout__icon { color: var(--docs-callout-success-icon); }
-
-/* Unenhanced blockquotes → Coinbase NOTE shell */
+/* Unenhanced blockquotes → Coinbase NOTE shell (no green bar) */
 .markdown-section blockquote:not(.docs-callout) {
   margin: var(--docs-space-5) 0;
   padding: 16px 18px;
-  border: 1px solid var(--docs-callout-note-border);
-  background: var(--docs-callout-note-bg);
+  border: 1px solid var(--docs-callout-note-border) !important;
+  background: var(--docs-callout-note-bg) !important;
   border-radius: 14px;
-  color: var(--docs-callout-note-text);
+  color: var(--docs-callout-note-text) !important;
 }
 
 .markdown-section blockquote:not(.docs-callout) p {
@@ -1791,6 +1896,9 @@ body.close .content {
 }
 
 .docs-toc__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -1798,6 +1906,20 @@ body.close .content {
   color: var(--docs-text-muted);
   margin: 0 0 12px;
   text-align: left;
+}
+
+.docs-toc__title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--docs-text-muted);
+  opacity: 0.9;
+}
+
+.docs-toc__title-icon svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Kill Docsify .app-nav inline-block / right-align layout on TOC */
