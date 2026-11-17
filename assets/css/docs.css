@@ -694,7 +694,7 @@ font {
   font-weight: 500;
   font-size: 13.5px;
   line-height: 1.35;
-  border-left: 2px solid transparent;
+  border: none !important;
   transition: background var(--docs-duration) var(--docs-ease),
     color var(--docs-duration) var(--docs-ease);
   text-decoration: none !important;
@@ -710,10 +710,13 @@ font {
   color: var(--docs-accent) !important;
   background: var(--docs-accent-muted) !important;
   font-weight: 600;
-  border-left-color: var(--docs-accent);
+  /* Soft fill only — no strong orange left/right outline (Docsify adds border-right) */
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.sidebar-nav li.active > a::before {
+.sidebar-nav li.active > a::before,
+.sidebar-nav a.active::before {
   display: none !important;
 }
 
@@ -1534,13 +1537,18 @@ body.close .content {
   vertical-align: top;
   line-height: 1.5;
   background: transparent !important;
-  word-break: break-word;
+  /* Prefer natural column widths — avoid mid-word crushing */
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+  min-width: 7rem;
 }
 
-/* Let the last column absorb leftover width so no empty “ghost” zone */
-.markdown-section th:last-child,
-.markdown-section td:last-child {
-  width: 99%;
+/* Long values can wrap; keep labels readable */
+.markdown-section td:first-child {
+  white-space: nowrap;
+  min-width: 8rem;
+  width: 1%;
 }
 
 /* Override Docsify vue.css zebra (applies on <tr>, not only <td>) */

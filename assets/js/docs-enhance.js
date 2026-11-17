@@ -708,6 +708,27 @@
 
   /* ---------- Breadcrumbs ---------- */
 
+  function normalizeBreadcrumbHref(href) {
+    if (!href) return '';
+    let h = String(href).trim();
+    if (h.startsWith('http')) return h;
+    h = h.replace(/\.md$/i, '').replace(/\/+$/, '');
+    if (!h.startsWith('/')) h = `/${h.replace(/^\.\//, '')}`;
+    return h || '/';
+  }
+
+  /** First real sidebar page under a section folder (folders have no Docsify index). */
+  function sectionLandingHref(sectionPath) {
+    const prefix = normalizeBreadcrumbHref(sectionPath);
+    if (!prefix || prefix === '/') return '/';
+    const links = Array.from(document.querySelectorAll('.sidebar-nav a[href]'));
+    for (const a of links) {
+      const href = normalizeBreadcrumbHref(a.getAttribute('href'));
+      if (href === prefix || href.startsWith(`${prefix}/`)) return href;
+    }
+    return null;
+  }
+
   function enhanceBreadcrumbs(root) {
     root.querySelector('.docs-breadcrumbs')?.remove();
 
@@ -724,7 +745,12 @@
         .replace(/\.md$/i, '')
         .replace(/-/g, ' ')
         .replace(/\b\w/g, (c) => c.toUpperCase());
-      crumbs.push({ label, href: isLast ? null : acc });
+      // Intermediate folders (e.g. /developers) are not pages — link to first child or plain text
+      let href = null;
+      if (!isLast) {
+        href = sectionLandingHref(acc);
+      }
+      crumbs.push({ label, href });
     });
 
     const nav = document.createElement('nav');
