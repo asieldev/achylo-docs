@@ -33,7 +33,7 @@ It applies to all functionalities of Achylo Protocol: P2P escrow, APAY mint/rede
 
 ### 2.4 Third-party integrations
 
-When the user uses external services (Coinbase on-ramp, RPC providers, hosting, analytics tools, or push notifications) such third parties may collect information under their own policies. Achylo only shares the data strictly necessary to operate the integration.
+When the user uses external services (on-ramp providers, RPC providers, hosting, analytics tools, or push notifications) such third parties may collect information under their own policies. Achylo only shares the data strictly necessary to operate the integration.
 
 ## 3. Purposes of Processing
 
@@ -51,7 +51,7 @@ We use the information to:
 
 - We may store session identifiers, temporary tokens, or hashes related to the authentication flow.
 - We record failed attempts to detect abuse or malicious automation.
-- We never store or request private keys; custody remains under the control of the user or the wallet provider (e.g., Coinbase Smart Wallet).
+- We never store or request private keys; custody remains under the control of the user or the wallet provider.
 
 ## 5. Cookies and Similar Technologies
 

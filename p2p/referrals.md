@@ -9,7 +9,7 @@ The Achylo Referral System allows users to invite friends and trading partners t
 ### Option 1 (Link)
 1. **Receive a referral link** from another user (e.g. `https://www.achylo.com/p2p?ref=0x...` or `achylo.com/#/p2p?ref=0x...`).
 2. **Open the link in your browser:** The application automatically detects the referrer's wallet address from the URL parameter and saves it to your local session.
-3. **Connect your wallet:** Log in with your preferred wallet or Coinbase wallet.
+3. **Connect your wallet:** Log in with your preferred wallet.
 4. **Complete at least one transaction (buy or sell) to activate the referral:** To prevent spam and Sybil accounts, a referral only becomes eligible once the referred user completes a valid P2P transaction.
 5. **Automatic registration:** Registration is executed automatically after your first completed escrow (`releaseFunds`). You do not need to sign a separate registration transaction.
 
