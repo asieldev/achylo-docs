@@ -106,11 +106,11 @@
       <button type="button" class="docs-header__btn docs-header__menu-toggle" id="docsMenuToggle" aria-label="Open navigation" aria-expanded="false">
         ${ICONS.menu}
       </button>
-      <a class="docs-header__brand" href="/" aria-label="Achylo Docs home">
+      <a class="docs-header__brand" href="/" aria-label="AchyloPay Docs home">
         <span class="docs-header__mark" aria-hidden="true">
           <img src="/assets/images/logo_app.png" alt="" width="26" height="26" />
         </span>
-        <span class="docs-header__wordmark">Achylo</span>
+        <span class="docs-header__wordmark">Achylo<span class="docs-header__wordmark-pay">Pay</span></span>
         <span class="docs-header__badge">Docs</span>
       </a>
       <div class="docs-header__spacer"></div>

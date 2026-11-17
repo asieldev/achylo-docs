@@ -407,16 +407,25 @@ font {
   color: var(--docs-text);
 }
 
+.docs-header__wordmark-pay {
+  color: var(--docs-accent);
+}
+
 .docs-header__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 1px 8px 0;
+  box-sizing: border-box;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1;
   color: var(--docs-text-muted);
   border: 1px solid var(--docs-border);
   border-radius: 999px;
-  padding: 2px 8px;
-  line-height: 1.4;
 }
 
 .docs-header__spacer {
