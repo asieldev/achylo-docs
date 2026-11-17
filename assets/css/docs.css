@@ -3,12 +3,33 @@
    Premium developer documentation chrome
    ============================================================ */
 
+@font-face {
+  font-family: 'CoinbaseSans';
+  src: url('https://mintlify-assets.b-cdn.net/fonts/CoinbaseSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Coinbase Text';
+  src: url('https://mintlify-assets.b-cdn.net/fonts/coinbase/Coinbase_Text-Medium-web-1.32.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Brand */
   --docs-accent: #fd6702;
   --docs-accent-hover: #e55a00;
   --docs-accent-muted: rgba(253, 103, 2, 0.1);
   --docs-accent-border: rgba(253, 103, 2, 0.28);
+
+  /* Typography — match Coinbase CDP docs */
+  --docs-font-sans: 'CoinbaseSans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --docs-font-heading: 'CoinbaseSans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --docs-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Surfaces — white canvas like modern docs (Coinbase-style rails) */
   --docs-bg: #ffffff;
@@ -43,24 +64,30 @@
   --docs-method-patch: #7c3aed;
   --docs-method-delete: #dc2626;
 
-  /* Callouts */
-  --docs-callout-info-bg: #f0f7ff;
-  --docs-callout-info-border: #93c5fd;
-  --docs-callout-info-icon: #2563eb;
+  /* Callouts — exact Coinbase CDP tokens */
+  --docs-callout-info-bg: #f5f8fe;
+  --docs-callout-info-border: #ccdcfe;
+  --docs-callout-info-text: #0052fe;
+  --docs-callout-info-icon: #0052fe;
   --docs-callout-tip-bg: #f0fdf6;
-  --docs-callout-tip-border: #86efac;
+  --docs-callout-tip-border: #bbf7d0;
+  --docs-callout-tip-text: #15803d;
   --docs-callout-tip-icon: #16a34a;
   --docs-callout-warn-bg: #fffbeb;
-  --docs-callout-warn-border: #fcd34d;
+  --docs-callout-warn-border: #fde68a;
+  --docs-callout-warn-text: #b45309;
   --docs-callout-warn-icon: #d97706;
   --docs-callout-danger-bg: #fef2f2;
-  --docs-callout-danger-border: #fca5a5;
+  --docs-callout-danger-border: #fecaca;
+  --docs-callout-danger-text: #b91c1c;
   --docs-callout-danger-icon: #dc2626;
-  --docs-callout-note-bg: #f8f8f9;
-  --docs-callout-note-border: #d4d4d8;
-  --docs-callout-note-icon: #52525b;
+  --docs-callout-note-bg: rgba(250, 250, 250, 0.5);
+  --docs-callout-note-border: rgba(113, 113, 122, 0.2);
+  --docs-callout-note-text: #578bf9;
+  --docs-callout-note-icon: #578bf9;
   --docs-callout-success-bg: #f0fdf6;
-  --docs-callout-success-border: #86efac;
+  --docs-callout-success-border: #bbf7d0;
+  --docs-callout-success-text: #15803d;
   --docs-callout-success-icon: #16a34a;
 
   /* Layout — page shell inset (outer margins), rails sit inside the page */
@@ -138,18 +165,30 @@
   --docs-accent-muted: rgba(253, 103, 2, 0.14);
   --docs-accent-border: rgba(253, 103, 2, 0.35);
 
-  --docs-callout-info-bg: rgba(37, 99, 235, 0.1);
-  --docs-callout-info-border: rgba(59, 130, 246, 0.35);
-  --docs-callout-tip-bg: rgba(22, 163, 74, 0.1);
+  --docs-callout-info-bg: #001133;
+  --docs-callout-info-border: #2c406c;
+  --docs-callout-info-text: #578bf9;
+  --docs-callout-info-icon: #578bf9;
+  --docs-callout-tip-bg: rgba(22, 163, 74, 0.12);
   --docs-callout-tip-border: rgba(34, 197, 94, 0.35);
-  --docs-callout-warn-bg: rgba(217, 119, 6, 0.1);
+  --docs-callout-tip-text: #86efac;
+  --docs-callout-tip-icon: #4ade80;
+  --docs-callout-warn-bg: rgba(217, 119, 6, 0.12);
   --docs-callout-warn-border: rgba(245, 158, 11, 0.35);
-  --docs-callout-danger-bg: rgba(220, 38, 38, 0.1);
+  --docs-callout-warn-text: #fcd34d;
+  --docs-callout-warn-icon: #fbbf24;
+  --docs-callout-danger-bg: rgba(220, 38, 38, 0.12);
   --docs-callout-danger-border: rgba(248, 113, 113, 0.35);
-  --docs-callout-note-bg: rgba(255, 255, 255, 0.03);
-  --docs-callout-note-border: #3f3f46;
-  --docs-callout-success-bg: rgba(22, 163, 74, 0.1);
+  --docs-callout-danger-text: #fca5a5;
+  --docs-callout-danger-icon: #f87171;
+  --docs-callout-note-bg: rgba(113, 113, 122, 0.1);
+  --docs-callout-note-border: rgba(113, 113, 122, 0.3);
+  --docs-callout-note-text: #578bf9;
+  --docs-callout-note-icon: #578bf9;
+  --docs-callout-success-bg: rgba(22, 163, 74, 0.12);
   --docs-callout-success-border: rgba(34, 197, 94, 0.35);
+  --docs-callout-success-text: #86efac;
+  --docs-callout-success-icon: #4ade80;
 
   --docs-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --docs-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -195,9 +234,10 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--docs-font-sans);
   font-size: 15px;
   line-height: 1.7;
+  letter-spacing: 0.01em;
   color: var(--docs-text);
   background: var(--docs-bg);
   -webkit-font-smoothing: antialiased;
@@ -289,7 +329,7 @@ pre,
 .docs-inline-code,
 .docs-endpoint-path,
 .docs-kbd {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, monospace !important;
+  font-family: var(--docs-font-mono) !important;
 }
 
 a {
@@ -972,10 +1012,17 @@ body.close .content {
   margin-top: 0 !important;
 }
 
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  font-family: var(--docs-font-heading);
+  letter-spacing: 0.02em;
+}
+
 .markdown-section h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-size: 2.125rem;
+  font-weight: 600;
   line-height: 1.2;
   margin: 0 0 var(--docs-space-4);
   color: var(--docs-text);
@@ -984,7 +1031,6 @@ body.close .content {
 .markdown-section h2 {
   font-size: 1.375rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
   line-height: 1.3;
   margin: var(--docs-space-7) 0 var(--docs-space-4);
   padding-bottom: 10px;
@@ -996,7 +1042,6 @@ body.close .content {
 .markdown-section h3 {
   font-size: 1.0625rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
   margin: var(--docs-space-6) 0 var(--docs-space-3);
   color: var(--docs-text);
   scroll-margin-top: calc(var(--docs-header-height) + 16px);
@@ -1009,20 +1054,28 @@ body.close .content {
   color: var(--docs-text);
 }
 
+.markdown-section > p:first-of-type {
+  font-size: 1.0625rem;
+  color: var(--docs-text-muted);
+  line-height: 1.65;
+}
+
 .markdown-section p {
   margin: 0 0 var(--docs-space-4);
   color: var(--docs-text-secondary);
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .markdown-section a {
-  color: var(--docs-accent);
+  color: var(--docs-text);
   font-weight: 500;
-  text-underline-offset: 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
 }
 
 .markdown-section a:hover {
-  color: var(--docs-accent-hover);
+  color: var(--docs-accent);
 }
 
 .markdown-section ul,
@@ -1150,13 +1203,13 @@ body.close .content {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--docs-code-meta);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--docs-font-sans);
 }
 
 .docs-code-filename {
   font-size: 12px;
   color: var(--docs-code-filename);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--docs-font-mono);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1174,7 +1227,7 @@ body.close .content {
   color: var(--docs-code-meta);
   font-size: 12px;
   font-weight: 500;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--docs-font-sans);
   cursor: pointer;
   flex-shrink: 0;
   transition: background var(--docs-duration), color var(--docs-duration),
@@ -1341,7 +1394,7 @@ body.close .content {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--docs-font-sans);
   color: #fff;
   line-height: 1.3;
 }
@@ -1378,20 +1431,21 @@ body.close .content {
 }
 
 /* ------------------------------------------------------------
-   Callouts
+   Callouts — Coinbase CDP message boxes (NOTE style from docs.cdp)
    ------------------------------------------------------------ */
 
 .docs-callout {
   display: grid;
   grid-template-columns: 20px 1fr;
-  gap: 10px;
+  gap: 12px;
+  align-items: start;
   margin: var(--docs-space-5) 0;
-  padding: 12px 14px;
-  border: 1px solid var(--docs-border);
-  border-left-width: 3px;
-  border-radius: var(--docs-radius-md);
+  padding: 16px 18px;
+  border: 1px solid var(--docs-callout-note-border);
+  border-radius: 14px;
   background: var(--docs-callout-note-bg);
-  border-left-color: var(--docs-callout-note-icon);
+  color: var(--docs-callout-note-text);
+  box-shadow: none;
 }
 
 .docs-callout__icon {
@@ -1399,85 +1453,103 @@ body.close .content {
   height: 18px;
   margin-top: 2px;
   color: var(--docs-callout-note-icon);
+  opacity: 0.85;
 }
 
 .docs-callout__body {
   min-width: 0;
 }
 
+/* Coinbase callouts are message-first — no NOTE/TIP label */
 .docs-callout__title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin: 0 0 4px;
-  color: var(--docs-text);
+  display: none;
 }
 
 .docs-callout__body p {
   margin: 0;
-  color: var(--docs-text-secondary);
-  font-size: 14px;
-  line-height: 1.6;
+  color: inherit;
+  font-size: 14.5px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
 }
 
 .docs-callout__body p + p {
   margin-top: 8px;
 }
 
+.docs-callout__body a {
+  color: inherit !important;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+
+.docs-callout__body code {
+  background: rgba(87, 139, 249, 0.1);
+  border: 1px solid rgba(87, 139, 249, 0.22);
+  color: inherit;
+}
+
+.docs-callout--note {
+  background: var(--docs-callout-note-bg);
+  border-color: var(--docs-callout-note-border);
+  color: var(--docs-callout-note-text);
+}
+.docs-callout--note .docs-callout__icon {
+  color: var(--docs-callout-note-icon);
+}
+
 .docs-callout--info {
   background: var(--docs-callout-info-bg);
-  border-left-color: var(--docs-callout-info-icon);
   border-color: var(--docs-callout-info-border);
+  color: var(--docs-callout-info-text);
 }
-.docs-callout--info .docs-callout__icon { color: var(--docs-callout-info-icon); }
+.docs-callout--info .docs-callout__icon {
+  color: var(--docs-callout-info-icon);
+}
 
 .docs-callout--tip {
   background: var(--docs-callout-tip-bg);
-  border-left-color: var(--docs-callout-tip-icon);
   border-color: var(--docs-callout-tip-border);
+  color: var(--docs-callout-tip-text);
 }
 .docs-callout--tip .docs-callout__icon { color: var(--docs-callout-tip-icon); }
 
 .docs-callout--warning {
   background: var(--docs-callout-warn-bg);
-  border-left-color: var(--docs-callout-warn-icon);
   border-color: var(--docs-callout-warn-border);
+  color: var(--docs-callout-warn-text);
 }
 .docs-callout--warning .docs-callout__icon { color: var(--docs-callout-warn-icon); }
 
 .docs-callout--danger {
   background: var(--docs-callout-danger-bg);
-  border-left-color: var(--docs-callout-danger-icon);
   border-color: var(--docs-callout-danger-border);
+  color: var(--docs-callout-danger-text);
 }
 .docs-callout--danger .docs-callout__icon { color: var(--docs-callout-danger-icon); }
 
 .docs-callout--success {
   background: var(--docs-callout-success-bg);
-  border-left-color: var(--docs-callout-success-icon);
   border-color: var(--docs-callout-success-border);
+  color: var(--docs-callout-success-text);
 }
 .docs-callout--success .docs-callout__icon { color: var(--docs-callout-success-icon); }
 
-.docs-callout--note {
-  background: var(--docs-callout-note-bg);
-  border-left-color: var(--docs-callout-note-icon);
-  border-color: var(--docs-callout-note-border);
-}
-
-/* Unenhanced blockquotes */
+/* Unenhanced blockquotes → Coinbase NOTE shell */
 .markdown-section blockquote:not(.docs-callout) {
   margin: var(--docs-space-5) 0;
-  padding: 12px 16px;
-  border-left: 3px solid var(--docs-accent);
-  background: var(--docs-accent-muted);
-  border-radius: 0 var(--docs-radius-md) var(--docs-radius-md) 0;
+  padding: 16px 18px;
+  border: 1px solid var(--docs-callout-note-border);
+  background: var(--docs-callout-note-bg);
+  border-radius: 14px;
+  color: var(--docs-callout-note-text);
 }
 
 .markdown-section blockquote:not(.docs-callout) p {
   margin: 0;
-  color: var(--docs-text-secondary);
+  color: inherit;
 }
 
 /* ------------------------------------------------------------
