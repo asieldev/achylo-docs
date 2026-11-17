@@ -63,16 +63,20 @@
   --docs-callout-success-border: #86efac;
   --docs-callout-success-icon: #16a34a;
 
-  /* Layout — left nav + centered article + right TOC, pronounced gutters */
+  /* Layout — page shell inset (outer margins), rails sit inside the page */
   --docs-header-height: 56px;
-  --docs-sidebar-width: 272px;
-  --docs-toc-width: 220px;
-  --docs-content-max: 640px;
-  --docs-content-pad-x: clamp(24px, 4vw, 48px);
-  --docs-content-pad-y: 48px;
-  --docs-toc-inset: clamp(20px, 2.5vw, 36px);
-  /* Space between sidebar→article and article→TOC (Coinbase-style) */
-  --docs-rail-gap: clamp(56px, 9vw, 160px);
+  --docs-page-max: 1400px;
+  --docs-page-gutter: clamp(28px, 4vw, 72px);
+  --docs-page-inset: max(
+    var(--docs-page-gutter),
+    calc((100vw - var(--docs-page-max)) / 2)
+  );
+  --docs-sidebar-width: 260px;
+  --docs-toc-width: 200px;
+  --docs-content-max: 760px;
+  --docs-content-pad-x: 28px;
+  --docs-content-pad-y: 40px;
+  --docs-toc-gap: 28px;
 
   /* Radius */
   --docs-radius-sm: 6px;
@@ -365,7 +369,8 @@ font {
   display: flex;
   align-items: center;
   gap: var(--docs-space-3);
-  padding: 0 var(--docs-space-4);
+  /* Match page outer margins so chrome aligns with sidebars */
+  padding: 0 max(var(--docs-page-inset), var(--docs-space-4));
   background: color-mix(in srgb, var(--docs-surface) 85%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -620,6 +625,8 @@ font {
 }
 
 .sidebar {
+  /* Inset from the viewport edge — page margin, not content gutter */
+  left: var(--docs-page-inset) !important;
   top: var(--docs-header-height) !important;
   height: calc(100vh - var(--docs-header-height)) !important;
   max-height: calc(100vh - var(--docs-header-height)) !important;
@@ -926,8 +933,7 @@ body[data-theme='dark'] .sidebar-nav a.active .docs-nav-badge--deprecated {
 }
 
 /* ------------------------------------------------------------
-   Main content — centered article between left nav + right TOC
-   Docsify vue.css left-aligns .markdown-section; force true centering.
+   Main content — fills the middle band between inset side rails
    ------------------------------------------------------------ */
 
 main,
@@ -937,37 +943,29 @@ main,
 
 .content {
   position: absolute !important;
-  left: var(--docs-sidebar-width) !important;
-  right: 0 !important;
+  left: calc(var(--docs-page-inset) + var(--docs-sidebar-width)) !important;
+  right: var(--docs-page-inset) !important;
   top: 0 !important;
   bottom: auto !important;
   min-height: 100vh;
   display: block !important;
   padding: calc(var(--docs-header-height) + var(--docs-content-pad-y))
-    var(--docs-rail-gap) 120px !important;
+    var(--docs-content-pad-x) 120px !important;
   background: transparent !important;
   box-sizing: border-box !important;
-  text-align: left !important;
 }
 
 body.close .content {
-  left: 0 !important;
+  left: var(--docs-page-inset) !important;
 }
 
-/* Narrow column, centered in the band between the two rails */
 .markdown-section {
-  display: block !important;
-  box-sizing: border-box !important;
   max-width: var(--docs-content-max) !important;
-  width: min(100%, var(--docs-content-max)) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
   padding: 0 !important;
-  float: none !important;
   color: var(--docs-text);
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
+  position: relative;
 }
 
 .markdown-section > :first-child {
@@ -1696,14 +1694,14 @@ body.close .content {
 }
 
 /* ------------------------------------------------------------
-   TOC — right rail, mirrored gutters around centered article
+   TOC — right rail, aligned to the same page outer margin
    ------------------------------------------------------------ */
 
 .docs-toc,
 .docs-toc.app-nav {
   position: fixed !important;
   top: calc(var(--docs-header-height) + var(--docs-content-pad-y)) !important;
-  right: var(--docs-toc-inset) !important;
+  right: var(--docs-page-inset) !important;
   left: auto !important;
   width: var(--docs-toc-width) !important;
   max-height: calc(100vh - var(--docs-header-height) - 72px);
@@ -1795,23 +1793,12 @@ body.close .content {
   font-size: 12px;
 }
 
-/* Reserve the right rail so auto-margins center in the remaining middle band */
+/* Leave room for the right TOC inside the page shell */
 @media (min-width: 1280px) {
   .content.has-toc {
-    padding-left: var(--docs-rail-gap) !important;
-    padding-right: calc(var(--docs-toc-width) + var(--docs-toc-inset) + var(--docs-rail-gap)) !important;
-  }
-
-  .content:not(.has-toc) {
-    padding-left: var(--docs-rail-gap) !important;
-    padding-right: var(--docs-rail-gap) !important;
-  }
-}
-
-@media (min-width: 1600px) {
-  :root {
-    --docs-content-max: 680px;
-    --docs-rail-gap: clamp(80px, 11vw, 200px);
+    right: calc(var(--docs-page-inset) + var(--docs-toc-width) + var(--docs-toc-gap)) !important;
+    padding-left: var(--docs-content-pad-x) !important;
+    padding-right: var(--docs-content-pad-x) !important;
   }
 }
 
