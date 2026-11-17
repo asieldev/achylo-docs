@@ -10,8 +10,8 @@
   --docs-accent-muted: rgba(253, 103, 2, 0.1);
   --docs-accent-border: rgba(253, 103, 2, 0.28);
 
-  /* Surfaces */
-  --docs-bg: #f7f7f8;
+  /* Surfaces — white canvas like modern docs (Coinbase-style rails) */
+  --docs-bg: #ffffff;
   --docs-surface: #ffffff;
   --docs-surface-elevated: #ffffff;
   --docs-code-bg: #f4f4f5;
@@ -63,13 +63,15 @@
   --docs-callout-success-border: #86efac;
   --docs-callout-success-icon: #16a34a;
 
-  /* Layout */
-  --docs-header-height: 52px;
-  --docs-sidebar-width: 264px;
-  --docs-toc-width: 200px;
-  --docs-content-max: 760px;
-  --docs-content-pad-x: 48px;
-  --docs-content-pad-y: 40px;
+  /* Layout — left nav + centered article + right TOC, pronounced gutters */
+  --docs-header-height: 56px;
+  --docs-sidebar-width: 272px;
+  --docs-toc-width: 220px;
+  --docs-content-max: 680px;
+  --docs-content-pad-x: clamp(32px, 5vw, 88px);
+  --docs-content-pad-y: 48px;
+  --docs-toc-inset: clamp(16px, 2vw, 28px);
+  --docs-rail-gap: clamp(28px, 4vw, 64px);
 
   /* Radius */
   --docs-radius-sm: 6px;
@@ -107,9 +109,9 @@
 }
 
 [data-theme='dark'] {
-  --docs-bg: #09090b;
-  --docs-surface: #111113;
-  --docs-surface-elevated: #18181b;
+  --docs-bg: #0a0a0b;
+  --docs-surface: #0a0a0b;
+  --docs-surface-elevated: #141416;
   --docs-code-bg: #0c0c0e;
   --docs-code-surface: #141416;
   --docs-code-border: rgba(255, 255, 255, 0.06);
@@ -621,7 +623,7 @@ font {
   height: calc(100vh - var(--docs-header-height)) !important;
   max-height: calc(100vh - var(--docs-header-height)) !important;
   width: var(--docs-sidebar-width) !important;
-  padding: 12px 0 32px !important;
+  padding: 16px 0 40px !important;
   background: var(--docs-surface) !important;
   border-right: 1px solid var(--docs-border) !important;
   box-shadow: none !important;
@@ -648,7 +650,7 @@ font {
 }
 
 .sidebar-nav {
-  padding: 0 12px !important;
+  padding: 0 14px !important;
   margin-top: 4px;
 }
 
@@ -723,8 +725,8 @@ font {
 .sidebar-nav li > a {
   display: block;
   color: var(--docs-text-secondary) !important;
-  padding: 7px 10px !important;
-  border-radius: var(--docs-radius-sm);
+  padding: 8px 12px !important;
+  border-radius: 8px;
   font-weight: 500;
   font-size: 13.5px;
   line-height: 1.35;
@@ -923,7 +925,7 @@ body[data-theme='dark'] .sidebar-nav a.active .docs-nav-badge--deprecated {
 }
 
 /* ------------------------------------------------------------
-   Main content
+   Main content — centered article between left nav + right TOC
    ------------------------------------------------------------ */
 
 main,
@@ -933,8 +935,14 @@ main,
 
 .content {
   left: var(--docs-sidebar-width) !important;
-  padding: calc(var(--docs-header-height) + var(--docs-content-pad-y)) var(--docs-content-pad-x) 120px !important;
+  right: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: calc(var(--docs-header-height) + var(--docs-content-pad-y))
+    var(--docs-content-pad-x) 120px !important;
   background: transparent !important;
+  box-sizing: border-box !important;
 }
 
 body.close .content {
@@ -943,9 +951,12 @@ body.close .content {
 
 .markdown-section {
   max-width: var(--docs-content-max) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   color: var(--docs-text);
   position: relative;
+  flex: 0 1 var(--docs-content-max);
 }
 
 .markdown-section > :first-child {
@@ -1674,19 +1685,19 @@ body.close .content {
 }
 
 /* ------------------------------------------------------------
-   TOC
+   TOC — right rail, mirrored gutters around centered article
    ------------------------------------------------------------ */
 
 .docs-toc,
 .docs-toc.app-nav {
   position: fixed !important;
-  top: calc(var(--docs-header-height) + 40px) !important;
-  right: 24px !important;
+  top: calc(var(--docs-header-height) + var(--docs-content-pad-y)) !important;
+  right: var(--docs-toc-inset) !important;
   left: auto !important;
   width: var(--docs-toc-width) !important;
-  max-height: calc(100vh - var(--docs-header-height) - 64px);
+  max-height: calc(100vh - var(--docs-header-height) - 72px);
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 0 4px 0 0 !important;
   overflow-y: auto;
   overscroll-behavior: contain;
   display: none;
@@ -1704,7 +1715,7 @@ body.close .content {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--docs-text-muted);
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   text-align: left;
 }
 
@@ -1736,9 +1747,9 @@ body.close .content {
   display: block !important;
   width: auto !important;
   margin: 0 !important;
-  padding: 4px 0 4px 12px !important;
+  padding: 5px 0 5px 14px !important;
   font-size: 12.5px;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--docs-text-muted) !important;
   text-align: left !important;
   text-decoration: none !important;
@@ -1753,30 +1764,43 @@ body.close .content {
 
 .docs-toc .docs-toc__list a.is-active {
   color: var(--docs-accent) !important;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Orange marker flush with the grey track */
+/* Accent marker flush with the grey track */
 .docs-toc .docs-toc__list a.is-active::before {
   content: '';
   position: absolute;
   left: -1px;
-  top: 2px;
-  bottom: 2px;
+  top: 3px;
+  bottom: 3px;
   width: 2px;
   background: var(--docs-accent);
   border-radius: 1px;
 }
 
 .docs-toc .docs-toc__list a.docs-toc__h3 {
-  padding-left: 22px !important;
+  padding-left: 24px !important;
   font-size: 12px;
 }
 
-/* Content room for TOC on wide screens */
+/* Reserve the right rail so the article stays centered in the middle band */
 @media (min-width: 1280px) {
   .content.has-toc {
-    padding-right: calc(var(--docs-toc-width) + 48px) !important;
+    padding-left: var(--docs-rail-gap) !important;
+    padding-right: calc(var(--docs-toc-width) + var(--docs-toc-inset) + var(--docs-rail-gap)) !important;
+  }
+
+  .content:not(.has-toc) {
+    padding-left: var(--docs-rail-gap) !important;
+    padding-right: var(--docs-rail-gap) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --docs-content-max: 720px;
+    --docs-rail-gap: clamp(48px, 7vw, 120px);
   }
 }
 
@@ -1954,7 +1978,9 @@ body.close .content {
     display: none !important;
   }
 
+  .content,
   .content.has-toc {
+    padding-left: var(--docs-content-pad-x) !important;
     padding-right: var(--docs-content-pad-x) !important;
   }
 }
