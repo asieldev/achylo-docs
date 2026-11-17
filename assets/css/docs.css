@@ -67,11 +67,12 @@
   --docs-header-height: 56px;
   --docs-sidebar-width: 272px;
   --docs-toc-width: 220px;
-  --docs-content-max: 680px;
-  --docs-content-pad-x: clamp(32px, 5vw, 88px);
+  --docs-content-max: 640px;
+  --docs-content-pad-x: clamp(24px, 4vw, 48px);
   --docs-content-pad-y: 48px;
-  --docs-toc-inset: clamp(16px, 2vw, 28px);
-  --docs-rail-gap: clamp(28px, 4vw, 64px);
+  --docs-toc-inset: clamp(20px, 2.5vw, 36px);
+  /* Space between sidebar→article and article→TOC (Coinbase-style) */
+  --docs-rail-gap: clamp(56px, 9vw, 160px);
 
   /* Radius */
   --docs-radius-sm: 6px;
@@ -926,6 +927,7 @@ body[data-theme='dark'] .sidebar-nav a.active .docs-nav-badge--deprecated {
 
 /* ------------------------------------------------------------
    Main content — centered article between left nav + right TOC
+   Docsify vue.css left-aligns .markdown-section; force true centering.
    ------------------------------------------------------------ */
 
 main,
@@ -934,29 +936,38 @@ main,
 }
 
 .content {
+  position: absolute !important;
   left: var(--docs-sidebar-width) !important;
   right: 0 !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: flex-start !important;
+  top: 0 !important;
+  bottom: auto !important;
+  min-height: 100vh;
+  display: block !important;
   padding: calc(var(--docs-header-height) + var(--docs-content-pad-y))
-    var(--docs-content-pad-x) 120px !important;
+    var(--docs-rail-gap) 120px !important;
   background: transparent !important;
   box-sizing: border-box !important;
+  text-align: left !important;
 }
 
 body.close .content {
   left: 0 !important;
 }
 
+/* Narrow column, centered in the band between the two rails */
 .markdown-section {
+  display: block !important;
+  box-sizing: border-box !important;
   max-width: var(--docs-content-max) !important;
-  width: 100% !important;
-  margin: 0 auto !important;
+  width: min(100%, var(--docs-content-max)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   padding: 0 !important;
+  float: none !important;
   color: var(--docs-text);
-  position: relative;
-  flex: 0 1 var(--docs-content-max);
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
 }
 
 .markdown-section > :first-child {
@@ -1784,7 +1795,7 @@ body.close .content {
   font-size: 12px;
 }
 
-/* Reserve the right rail so the article stays centered in the middle band */
+/* Reserve the right rail so auto-margins center in the remaining middle band */
 @media (min-width: 1280px) {
   .content.has-toc {
     padding-left: var(--docs-rail-gap) !important;
@@ -1797,10 +1808,10 @@ body.close .content {
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1600px) {
   :root {
-    --docs-content-max: 720px;
-    --docs-rail-gap: clamp(48px, 7vw, 120px);
+    --docs-content-max: 680px;
+    --docs-rail-gap: clamp(80px, 11vw, 200px);
   }
 }
 
