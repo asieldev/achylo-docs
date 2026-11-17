@@ -1978,6 +1978,7 @@ body.close .content {
 
   .content,
   .content.has-toc {
+    right: var(--docs-page-inset) !important;
     padding-left: var(--docs-content-pad-x) !important;
     padding-right: var(--docs-content-pad-x) !important;
   }
@@ -1985,6 +1986,7 @@ body.close .content {
 
 @media (max-width: 768px) {
   :root {
+    --docs-page-inset: 0px;
     --docs-content-pad-x: 20px;
     --docs-content-pad-y: 24px;
   }
