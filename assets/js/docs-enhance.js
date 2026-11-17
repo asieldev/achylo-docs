@@ -746,6 +746,36 @@
 
   /* ---------- TOC ---------- */
 
+  function scrollToHeadingId(id) {
+    if (!id) return false;
+    const el = document.getElementById(id);
+    if (!el) return false;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Keep current Docsify path; bare "#id" would navigate to "/#id" and hang on Loading
+    const next = `${location.pathname}${location.search}#${id}`;
+    if (location.pathname + location.search + location.hash !== next) {
+      history.replaceState(history.state, '', next);
+    }
+    return true;
+  }
+
+  function bindInPageHashLinks(root) {
+    if (!root || root.dataset.docsHashBound === '1') return;
+    root.dataset.docsHashBound = '1';
+    root.addEventListener('click', (e) => {
+      const a = e.target.closest?.('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (!href.startsWith('#') || href === '#') return;
+      // Only same-page section anchors
+      const id = decodeURIComponent(href.slice(1));
+      if (!document.getElementById(id)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      scrollToHeadingId(id);
+    });
+  }
+
   function buildToc(root) {
     const toc = document.getElementById('docsToc');
     const content = document.querySelector('.content');
@@ -777,6 +807,10 @@
     `;
     toc.classList.add('is-visible');
     content?.classList.add('has-toc');
+
+    // Prevent Docsify history router from treating TOC hashes as new routes
+    bindInPageHashLinks(toc);
+    bindInPageHashLinks(root);
 
     const links = Array.from(toc.querySelectorAll('a'));
     const observer = new IntersectionObserver(
