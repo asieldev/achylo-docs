@@ -33,6 +33,7 @@
   /* Borders & focus */
   --docs-border: #e4e4e7;
   --docs-border-subtle: #f0f0f2;
+  --docs-table-border: rgba(0, 0, 0, 0.08);
   --docs-focus-ring: rgba(253, 103, 2, 0.35);
 
   /* HTTP method colors */
@@ -126,6 +127,7 @@
 
   --docs-border: #27272a;
   --docs-border-subtle: #1c1c1f;
+  --docs-table-border: rgba(255, 255, 255, 0.08);
   --docs-accent-muted: rgba(253, 103, 2, 0.14);
   --docs-accent-border: rgba(253, 103, 2, 0.35);
 
@@ -1430,7 +1432,7 @@ body.close .content {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: var(--docs-space-5) 0;
-  border: 1px solid var(--docs-border);
+  border: 1px solid var(--docs-table-border);
   border-radius: var(--docs-radius-md);
   background: var(--docs-surface);
 }
@@ -1494,11 +1496,23 @@ body.close .content {
 }
 
 .markdown-section table {
-  width: 100%;
+  /* vue.css sets display:block — that leaves empty width beside columns */
+  display: table !important;
+  width: 100% !important;
+  max-width: 100%;
+  table-layout: auto;
   border-collapse: collapse;
+  border-spacing: 0;
   margin: 0;
   border: none;
+  overflow: visible;
   background: var(--docs-surface) !important;
+}
+
+.markdown-section th,
+.markdown-section td {
+  /* Override Docsify vue.css hard #ddd cell borders */
+  border: 1px solid var(--docs-table-border) !important;
 }
 
 .markdown-section th {
@@ -1509,19 +1523,24 @@ body.close .content {
   letter-spacing: 0.04em;
   padding: 10px 14px;
   text-align: left;
-  border-bottom: 1px solid var(--docs-border);
   color: var(--docs-text-muted);
   white-space: nowrap;
 }
 
 .markdown-section td {
   padding: 10px 14px;
-  border-bottom: 1px solid var(--docs-border-subtle);
   font-size: 13.5px;
   color: var(--docs-text-secondary) !important;
   vertical-align: top;
   line-height: 1.5;
   background: transparent !important;
+  word-break: break-word;
+}
+
+/* Let the last column absorb leftover width so no empty “ghost” zone */
+.markdown-section th:last-child,
+.markdown-section td:last-child {
+  width: 99%;
 }
 
 /* Override Docsify vue.css zebra (applies on <tr>, not only <td>) */
@@ -1546,8 +1565,13 @@ body.close .content {
   background: transparent !important;
 }
 
+.markdown-section tr,
+.markdown-section tr:nth-child(2n) {
+  border-color: var(--docs-table-border) !important;
+}
+
 .markdown-section tr:last-child td {
-  border-bottom: none;
+  border-bottom-color: transparent !important;
 }
 
 .markdown-section tr:hover,
