@@ -1635,20 +1635,25 @@ body.close .content {
    TOC
    ------------------------------------------------------------ */
 
-.docs-toc {
-  position: fixed;
-  top: calc(var(--docs-header-height) + 40px);
-  right: 24px;
-  width: var(--docs-toc-width);
+.docs-toc,
+.docs-toc.app-nav {
+  position: fixed !important;
+  top: calc(var(--docs-header-height) + 40px) !important;
+  right: 24px !important;
+  left: auto !important;
+  width: var(--docs-toc-width) !important;
   max-height: calc(100vh - var(--docs-header-height) - 64px);
+  margin: 0 !important;
+  padding: 0 !important;
   overflow-y: auto;
   overscroll-behavior: contain;
   display: none;
   z-index: 20;
+  text-align: left !important;
 }
 
 .docs-toc.is-visible {
-  display: block;
+  display: block !important;
 }
 
 .docs-toc__title {
@@ -1658,39 +1663,71 @@ body.close .content {
   text-transform: uppercase;
   color: var(--docs-text-muted);
   margin: 0 0 10px;
+  text-align: left;
 }
 
-.docs-toc__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Kill Docsify .app-nav inline-block / right-align layout on TOC */
+.docs-toc .docs-toc__list,
+.docs-toc.app-nav ul {
+  list-style: none !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
   border-left: 1px solid var(--docs-border);
 }
 
-.docs-toc__list a {
-  display: block;
-  padding: 4px 0 4px 12px;
+.docs-toc .docs-toc__list > li,
+.docs-toc.app-nav li {
+  display: block !important;
+  position: static !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.docs-toc .docs-toc__list a,
+.docs-toc.app-nav a {
+  position: relative;
+  display: block !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 4px 0 4px 12px !important;
   font-size: 12.5px;
   line-height: 1.4;
-  color: var(--docs-text-muted);
-  text-decoration: none;
-  border-left: 2px solid transparent;
-  margin-left: -1px;
-  transition: color var(--docs-duration), border-color var(--docs-duration);
+  color: var(--docs-text-muted) !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  transition: color var(--docs-duration);
 }
 
-.docs-toc__list a:hover {
-  color: var(--docs-text);
+.docs-toc .docs-toc__list a:hover {
+  color: var(--docs-text) !important;
 }
 
-.docs-toc__list a.is-active {
-  color: var(--docs-accent);
-  border-left-color: var(--docs-accent);
+.docs-toc .docs-toc__list a.is-active {
+  color: var(--docs-accent) !important;
   font-weight: 500;
 }
 
-.docs-toc__list a.docs-toc__h3 {
-  padding-left: 22px;
+/* Orange marker flush with the grey track */
+.docs-toc .docs-toc__list a.is-active::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background: var(--docs-accent);
+  border-radius: 1px;
+}
+
+.docs-toc .docs-toc__list a.docs-toc__h3 {
+  padding-left: 22px !important;
   font-size: 12px;
 }
 

@@ -154,7 +154,8 @@
     searchOverlay.innerHTML = `<div class="docs-search-dialog" id="docsSearchDialog" role="dialog" aria-modal="true" aria-label="Search"></div>`;
     document.body.appendChild(searchOverlay);
 
-    const toc = document.createElement('nav');
+    // Use <aside>, not <nav> — Docsify promotes body <nav> to .app-nav and breaks TOC layout
+    const toc = document.createElement('aside');
     toc.className = 'docs-toc';
     toc.id = 'docsToc';
     toc.setAttribute('aria-label', 'On this page');
@@ -807,6 +808,8 @@
     `;
     toc.classList.add('is-visible');
     content?.classList.add('has-toc');
+    // Docsify may inject app-nav classes which break TOC layout (inline-block + right align)
+    toc.classList.remove('app-nav', 'no-badge');
 
     // Prevent Docsify history router from treating TOC hashes as new routes
     bindInPageHashLinks(toc);
