@@ -436,6 +436,7 @@ font {
   color: var(--docs-text-muted);
   font-size: 13px;
   font-family: inherit;
+  line-height: 1;
   cursor: pointer;
   transition: border-color var(--docs-duration) var(--docs-ease),
     background var(--docs-duration) var(--docs-ease);
@@ -449,7 +450,10 @@ font {
 }
 
 .docs-header__search svg {
+  display: block;
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
   opacity: 0.7;
 }
 
@@ -483,6 +487,12 @@ font {
   gap: 4px;
 }
 
+.docs-lang-wrap {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
 .docs-header__btn {
   display: inline-flex;
   align-items: center;
@@ -498,6 +508,7 @@ font {
   font-size: 13px;
   font-weight: 500;
   font-family: inherit;
+  line-height: 1;
   cursor: pointer;
   text-decoration: none;
   transition: background var(--docs-duration) var(--docs-ease),
@@ -517,6 +528,8 @@ font {
 }
 
 .docs-header__btn svg {
+  display: block;
+  flex-shrink: 0;
   width: 16px;
   height: 16px;
   stroke: currentColor;
@@ -528,6 +541,16 @@ font {
 
 .docs-header__menu-toggle {
   display: none;
+}
+
+.docs-theme-btn .icon-sun,
+.docs-theme-btn .icon-moon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  line-height: 0;
 }
 
 [data-theme='light'] .docs-theme-btn .icon-moon,
@@ -553,10 +576,6 @@ font {
 
 .docs-lang-menu.is-open {
   display: flex;
-}
-
-.docs-lang-wrap {
-  position: relative;
 }
 
 .docs-lang-menu button {
