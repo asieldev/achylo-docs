@@ -111,10 +111,10 @@ Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
 
 ---
 
-### 8. Bots / Automation (Developers)
+### 8. Agents (Developers)
 * **API Base URL (production):** `https://api.achylo.com` (e.g. `/api/v1/automation/...`)
 * **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
 * **API Key + permissions:** You approve limited bot permissions in your profile; then your backend calls the Achylo API.
 * **Revocable anytime:** Turn actions off or Revoke all from the same screen.
 
-Full documentation: [Bots / Automation](developers/bots-automation.md)
+Full documentation: [Agents](developers/agents.md)

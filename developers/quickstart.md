@@ -133,6 +133,6 @@ For programmatic integrations, always use **API Keys**.
 ## Next steps
 
 - [API Keys →](developers/api-keys.md)
-- [Bots / Automation →](developers/bots-automation.md) — automate P2P public orders from your backend
+- [Agents →](developers/agents.md) — automate P2P public orders from your backend
 - [Payment Links API Reference →](developers/payment-links.md)
 - [Webhook Events & Verification →](developers/webhooks.md)
