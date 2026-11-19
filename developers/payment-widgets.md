@@ -46,11 +46,15 @@ For non-developers. Works on WordPress, Wix, Shopify, or plain HTML.
 
 ### Step 2 — Get your Widget ID
 
+> Prefer [Payment Widgets V2](developers/payment-widgets-v2.md) under **Payment Links → Widgets**. V1 below is legacy.
+
 1. Go to [achylo.com](https://achylo.com) and log in
-2. Open your **User Profile** → **"Payment Widgets"** section
+2. Open **User Profile → Payment Widgets** (legacy V1 only)
 3. Click **"Create new widget"**
 4. Add the domains where you'll use the widget (e.g. `https://yourstore.com`)
 5. Copy the **Widget ID** (starts with `achylo_`)
+
+For products and V2 widgets, use **Payment Links → Widgets** instead.
 
 ### Step 3 — Customize
 
@@ -461,7 +465,7 @@ Allowed Origins are optional. If no origins are configured, the widget is public
 
 When origins are configured, the widget only works on authorized domains:
 
-1. Go to **Profile → Payment Widgets**
+1. Go to **User Profile → Payment Widgets** (legacy V1) or **Payment Links → Widgets** (V2)
 2. Edit your widget
 3. In **"Allowed Origins"**, add:
    - `https://yourstore.com`

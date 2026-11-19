@@ -37,16 +37,15 @@ V2 uses a **server-driven** approach for maximum security:
 
 ## Dashboard Location
 
-Product and Widget v2 management **is no longer available in the User Profile modal**. Use the dedicated panel instead:
+Products and Widget v2 are managed only from the **Payment Links** page (`/payment-links`) — not under Stats, and not as the primary flow in User Profile.
 
 1. Go to [achylo.com](https://achylo.com) and log in
-2. Open **Stats** (navigation menu)
-3. Select the **Payments** tab
-4. Open **Widgets & Products**
+2. Open **Payment Links** (Tools menu, or the Links entry in the app nav)
+3. Select the **Widgets** tab
 
-From there you can create and manage **Products**, **Widgets v1**, and **Widgets v2** (including embed codes and domain whitelists).
+Inside that tab you can manage **Products** and **Widgets** (V2), including embed codes and domain whitelists.
 
-> **Note:** The User Profile modal may still show API Keys and legacy Widget v1 shortcuts, but full product/widget management lives under **Stats → Payments → Widgets & Products**.
+> **Note:** **User Profile → Payment Widgets** may still show legacy V1 shortcuts. For products and V2 widgets, use **Payment Links → Widgets** only. API Keys stay under **User Profile → Developer API Keys**.
 
 ---
 
@@ -56,8 +55,8 @@ Before creating a widget with an existing product, you need to define the produc
 
 ### Via Dashboard
 
-1. Go to **Stats → Payments → Widgets & Products**
-2. Open the **Products** tab
+1. Go to **Payment Links → Widgets**
+2. Open the **Products** sub-tab
 3. Click **"Create Product"**
 4. Fill in:
    - **Name**: Product name (e.g., "Monthly Subscription")
@@ -98,18 +97,19 @@ Associate a product with a widget, or create both in a single API call (see [bun
 
 ### Via Dashboard
 
-1. In **Stats → Payments → Widgets & Products**, open the **Widgets v2** tab
-2. Click **"Create Widget"**
-3. Configure:
+1. Go to **Payment Links → Widgets**
+2. Open the **Widgets** sub-tab
+3. Click **"Create Widget"**
+4. Configure:
    - **Resource Type**: Select `Product`
    - **Product**: Choose the product created earlier
    - **Origin Whitelist** *(optional)*: Add domains where you'll use the widget. Leave empty to allow embedding from any domain (public widget).
      - `https://yourstore.com`
      - `https://www.yourstore.com`
      - `https://checkout.yourstore.com`
-4. Click **"Create"**
-5. Copy the **Widget ID** (starts with `wgt_`)
-6. Copy the generated **Embed Code**
+5. Click **"Create"**
+6. Copy the **Widget ID** (starts with `wgt_`)
+7. Copy the generated **Embed Code**
 
 ### Via API
 
@@ -237,9 +237,15 @@ console.log('Embed code:', widget.embedCode);
 
 Turn any product into a **donation / fundraising widget** by giving it a **goal** (`goalAmount`). When a product has a goal, the widget automatically renders a **progress bar** showing how much has been raised versus the goal, plus a **Donate** button — no extra configuration needed.
 
-![Donation widget — progress card with goal, raised amount, and Donate Now button](../assets/images/donation-widget-card.png)
+**[Live demo →](https://achylo.com/donate)** — try the donation widget on [achylo.com/donate](https://achylo.com/donate).
 
-![Donation widget — amount entry modal with orange description and payment preview](../assets/images/donation-widget-modal.png)
+<p align="center">
+  <img src="/assets/images/donation-widget-card.png" alt="Donation widget — progress card with goal, raised amount, and Donate Now button" width="42%" />
+</p>
+
+<p align="center">
+  <img src="/assets/images/donation-widget-modal.png" alt="Donation widget — amount entry modal with orange description and payment preview" width="42%" />
+</p>
 
 **Visual style (matches the Home screen):**
 
@@ -276,8 +282,8 @@ await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
 
 Set **"Fundraising goal (USDC)"** when creating a product or a Widget v2 bundle:
 
-- **Stats → Payments → Widgets & Products** (recommended)
-- **User Profile → Payment Widgets → Create Widget V2** (Step 3: Product Details)
+- **Payment Links → Widgets → Products** (create/edit product)
+- **Payment Links → Widgets → Widgets** (create widget / product bundle; product details step)
 
 When `goalAmount` is set, the embed shows the donation progress bar automatically.
 

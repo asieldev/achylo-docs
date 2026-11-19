@@ -226,7 +226,7 @@ Paste this on your website:
 
 V2 widgets use a **server-driven architecture**: you create a Product first (or use the bundle endpoint), then associate it with a Widget. The frontend only uses the `widget-id` — no amount or currency exposed.
 
-**Dashboard:** manage products and widgets under **Stats → Payments → Widgets & Products** (not in the User Profile modal).
+**Dashboard:** manage products and V2 widgets under **Payment Links → Widgets** (not Stats, and not as the primary User Profile flow).
 
 **Two API paths:**
 

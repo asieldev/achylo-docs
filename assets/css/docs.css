@@ -410,11 +410,23 @@ font {
   align-items: center;
   gap: var(--docs-space-3);
   /* Match page outer margins so chrome aligns with sidebars */
-  padding: 0 max(var(--docs-page-inset), var(--docs-space-4));
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: max(
+    var(--docs-page-inset),
+    var(--docs-space-4),
+    env(safe-area-inset-left, 0px)
+  );
+  padding-right: max(
+    var(--docs-page-inset),
+    var(--docs-space-4),
+    env(safe-area-inset-right, 0px)
+  );
   background: color-mix(in srgb, var(--docs-surface) 85%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--docs-border);
+  box-sizing: border-box;
 }
 
 .docs-header__brand {
@@ -542,6 +554,8 @@ font {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
+  margin-right: 2px;
 }
 
 .docs-lang-wrap {
@@ -2166,8 +2180,14 @@ body.close .content {
    ------------------------------------------------------------ */
 
 @media (max-width: 1279px) {
-  .docs-toc {
+  /* Must beat .docs-toc.is-visible { display:block !important } */
+  .docs-toc,
+  .docs-toc.is-visible,
+  .docs-toc.app-nav,
+  aside.docs-toc {
     display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
   .content,
@@ -2183,6 +2203,17 @@ body.close .content {
     --docs-page-inset: 0px;
     --docs-content-pad-x: 20px;
     --docs-content-pad-y: 24px;
+  }
+
+  .docs-header {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .docs-header__actions {
+    gap: 2px;
+    margin-right: 0;
+    padding-right: 4px;
   }
 
   .docs-header__search-label,

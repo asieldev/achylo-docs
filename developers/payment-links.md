@@ -26,27 +26,18 @@ Ideal for merchants who don't want to integrate APIs. Embed a payment button on 
   - **Widget V2** (`widget.js`): `GET /api/payment-links/widget-v2/:widgetId` (resolve config) and `POST /api/payment-links/widget-v2/:widgetId/checkout` (checkout)
 - **Usage**: Create the widget from the dashboard, copy the embed code, paste it on your site
 
-**Step-by-step setup from the Dashboard:**
+**Step-by-step setup from the Dashboard (V2 recommended):**
 
 1. Go to [achylo.com](https://achylo.com) and connect your wallet
-2. Open your **User Profile** (click your avatar or address)
-3. Scroll to the **"Payment Widgets"** section
-4. Click **"Create new widget"**
-5. Add the domains where you'll use the widget (e.g. `https://yourstore.com`)
-6. Click **"Create"** — you'll get a unique Widget ID (`achylo_...`)
-7. Copy the embed code and paste it on your website
+2. Open **Payment Links** (`/payment-links`)
+3. Select the **Widgets** tab
+4. Create a **Product** (Products sub-tab) and/or a **Widget** (Widgets sub-tab)
+5. Add allowed origins if you want to restrict embed domains
+6. Copy the **Widget ID** and embed code, then paste them on your website
 
-**Embed code:**
-```html
-<script src="https://achylo.com/achylo.js?v=5"></script>
-<achylo-button
-  merchant-id="achylo_YOUR_WIDGET_ID"
-  amount="29.99"
-  currency="USDC">
-</achylo-button>
-```
+> **Legacy V1:** old `achylo-button` widgets may still appear under **User Profile → Payment Widgets**. New integrations should use [Payment Widgets V2](/developers/payment-widgets-v2) from **Payment Links → Widgets**.
 
-**Full documentation**: [Payment Widgets →](/developers/payment-widgets)
+**Full documentation**: [Payment Widgets V2 →](/developers/payment-widgets-v2) · [Payment Widgets V1 (deprecated) →](/developers/payment-widgets)
 
 ---
 
