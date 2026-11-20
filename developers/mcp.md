@@ -335,6 +335,8 @@ Off-chain scopes never grant on-chain power. Forwarder grants never expand MCP t
 
 Transport: **Streamable HTTP** (stateless).
 
+> **Not a website:** opening `/mcp` in a browser will not show a docs page. Without an API key you should get **401**. If you see `{"error":"not_found"}`, public nginx is not proxying `/mcp` to the MCP service yet (ops: enable `location /mcp` → `:8081`).
+
 ```http
 X-API-Key: achylo_your_key_here
 ```
