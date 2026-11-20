@@ -6,6 +6,38 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/api-keys",
+        "destination": "/developers/api-keys",
+        "type": 301
+      },
+      {
+        "source": "/agents",
+        "destination": "/developers/mcp",
+        "type": 301
+      },
+      {
+        "source": "/mcp",
+        "destination": "/developers/mcp",
+        "type": 301
+      },
+      {
+        "source": "/payment-links",
+        "destination": "/developers/payment-links",
+        "type": 301
+      },
+      {
+        "source": "/developers/agents",
+        "destination": "/developers/mcp",
+        "type": 301
+      },
+      {
+        "source": "/developers/bots-automation",
+        "destination": "/developers/mcp",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",

@@ -1,6 +1,6 @@
 # Payment Widgets
 
-> **Deprecated:** Payment Widgets (V1) will be discontinued in future API versions. New integrations should use [Payment Widgets V2](developers/payment-widgets-v2.md), which will remain available with new features.
+> **Deprecated:** Payment Widgets (V1) will be discontinued in future API versions. New integrations should use [Payment Widgets V2](/developers/payment-widgets-v2), which will remain available with new features.
 
 Add a **"Pay with Crypto"** button to any website. Your customers click, a payment window opens, and they pay. Simple as that.
 
@@ -46,7 +46,7 @@ For non-developers. Works on WordPress, Wix, Shopify, or plain HTML.
 
 ### Step 2 — Get your Widget ID
 
-> Prefer [Payment Widgets V2](developers/payment-widgets-v2.md) under **Payment Links → Widgets**. V1 below is legacy.
+> Prefer [Payment Widgets V2](/developers/payment-widgets-v2) under **Payment Links → Widgets**. V1 below is legacy.
 
 1. Go to [achylo.com](https://achylo.com) and log in
 2. Open **User Profile → Payment Widgets** (legacy V1 only)
@@ -180,7 +180,7 @@ The button emits custom DOM events you can listen to. All event data is availabl
 
 For developers who need to create and manage widgets programmatically from their backend.
 
-> **Authentication**: All endpoints accept `X-API-Key` header. See [API Keys →](developers/api-keys.md)
+> **Authentication**: All endpoints accept `X-API-Key` header. See [API Keys →](/developers/api-keys)
 
 ### Step 1 — Create a Widget
 
@@ -229,7 +229,7 @@ console.log('Widget ID:', widget.merchantId); // achylo_a1b2c3d4
 }
 ```
 
-> **Webhook tip**: When a customer pays through your widget, Achylo sends a `POST` to your `webhookUrl` signed with `webhookSecret`. See [Webhooks →](developers/webhooks.md) for signature verification.
+> **Webhook tip**: When a customer pays through your widget, Achylo sends a `POST` to your `webhookUrl` signed with `webhookSecret`. See [Webhooks →](/developers/webhooks) for signature verification.
 
 ### Step 2 — List Your Widgets
 
@@ -357,7 +357,7 @@ Base: `https://api.achylo.com`
 | `GET` | `/api/payment-links/history` | API Key | List payment history |
 | `DELETE` | `/api/payment-links/:id` | API Key | Cancel payment link |
 
-> See [Payment Links API →](developers/payment-links.md) for full documentation and code examples in Python, PHP, and TypeScript.
+> See [Payment Links API →](/developers/payment-links) for full documentation and code examples in Python, PHP, and TypeScript.
 
 ---
 
@@ -599,7 +599,7 @@ app.post('/webhooks/achylo', express.json(), (req, res) => {
 
 > Delivery retries up to 5 times with exponential backoff.
 
-See full documentation at [Webhooks →](developers/webhooks.md)
+See full documentation at [Webhooks →](/developers/webhooks)
 
 ---
 
@@ -738,6 +738,6 @@ export function AchyloButton({ amount, description }: { amount: string; descript
 
 ## Related Resources
 
-- [Payment Links API →](developers/payment-links.md) – Programmatic payment links
-- [Webhooks →](developers/webhooks.md) – Real-time notifications
-- [API Keys →](developers/api-keys.md) – Manage API keys
+- [Payment Links API →](/developers/payment-links) – Programmatic payment links
+- [Webhooks →](/developers/webhooks) – Real-time notifications
+- [API Keys →](/developers/api-keys) – Manage API keys

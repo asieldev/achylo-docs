@@ -100,7 +100,7 @@ When the payment is confirmed on-chain, Achylo sends a `POST` to your `webhookUr
 }
 ```
 
-Always **verify the signature** before processing the event. See [Webhooks →](developers/webhooks.md)
+Always **verify the signature** before processing the event. See [Webhooks →](/developers/webhooks)
 
 ---
 
@@ -132,7 +132,7 @@ For programmatic integrations, always use **API Keys**.
 
 ## Next steps
 
-- [API Keys →](developers/api-keys.md)
-- [Agents →](developers/agents.md) — automate P2P public orders from your backend
-- [Payment Links API Reference →](developers/payment-links.md)
-- [Webhook Events & Verification →](developers/webhooks.md)
+- [API Keys →](/developers/api-keys)
+- [Achylo MCP →](/developers/mcp) — MCP + P2P automation (scopes, Forwarder, REST curls)
+- [Payment Links API Reference →](/developers/payment-links)
+- [Webhook Events & Verification →](/developers/webhooks)

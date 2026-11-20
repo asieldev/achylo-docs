@@ -182,7 +182,7 @@ When a link expires:
 - The hosted checkout page returns `410 Payment link has expired`
 - A background job runs every **15 minutes** to mark overdue pending links
 
-See also: [Payment Widgets V1 →](developers/payment-widgets.md#payment-link-expiration) · [Payment Widgets V2 →](developers/payment-widgets-v2.md#payment-link-expiration)
+See also: [Payment Widgets V1 →](/developers/payment-widgets#payment-link-expiration) · [Payment Widgets V2 →](/developers/payment-widgets-v2#payment-link-expiration)
 
 ---
 

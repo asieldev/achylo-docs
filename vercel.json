@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    { "source": "/api-keys", "destination": "/developers/api-keys", "permanent": true },
+    { "source": "/agents", "destination": "/developers/mcp", "permanent": true },
+    { "source": "/mcp", "destination": "/developers/mcp", "permanent": true },
+    { "source": "/payment-links", "destination": "/developers/payment-links", "permanent": true },
+    { "source": "/developers/agents", "destination": "/developers/mcp", "permanent": true },
+    { "source": "/developers/bots-automation", "destination": "/developers/mcp", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],

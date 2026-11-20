@@ -50,7 +50,7 @@ curl -X POST https://api.achylo.com/api/payment-links \
   }'
 ```
 
-Full documentation: [Payment Links](developers/payment-links.md)
+Full documentation: [Payment Links](/developers/payment-links)
 
 ### 4. Payment Widgets ("Pay with Crypto" Button)
 * **No-code integration:** Copy and paste a simple HTML button into any website.
@@ -74,7 +74,7 @@ Full documentation: [Payment Links](developers/payment-links.md)
 </button>
 ```
 
-Full documentation: [Payment Widgets](developers/payment-widgets.md)
+Full documentation: [Payment Widgets](/developers/payment-widgets)
 
 ---
 
@@ -92,7 +92,7 @@ const sig = crypto.createHmac('sha256', webhookSecret)
 if (sig !== req.headers['x-achylo-signature']) throw new Error('Invalid signature');
 ```
 
-Full documentation: [Webhooks](developers/webhooks.md)
+Full documentation: [Webhooks](/developers/webhooks)
 
 ---
 
@@ -112,28 +112,18 @@ Full documentation: [Webhooks](developers/webhooks.md)
 * **Chainlink standard:** Compatible with `AggregatorV3Interface` for lending markets, vaults, AMMs, and payment processors.
 * **Native interface:** `IAchyloPriceOracle` for VWAP, Median, ring-buffer observations, and feed status.
 
-Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
+Full documentation: [Price Oracle (On-Chain)](/developers/price-oracle)
 
 ---
 
-### 8. Agents (Developers)
-* **API Base URL (production):** `https://api.achylo.com` (e.g. `/api/v1/automation/...`)
-* **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
-* **API Key + permissions:** You approve limited Agent permissions in your profile; then your backend calls the Achylo API.
-* **Revocable anytime:** Turn actions off or Revoke all from the same screen.
+### 8. Achylo MCP & P2P automation (Developers)
 
-Full documentation: [Agents](developers/agents.md)
-
----
-
-### 9. Achylo MCP (Agentic Payments)
-
-**Summary:** Remote Model Context Protocol server (`https://api.achylo.com/mcp`) so AI hosts can call Achylo with an API Key.
+**Summary:** Remote MCP server (`https://api.achylo.com/mcp`) and Automation REST (`/api/v1/automation`) for AI hosts and backends.
 
 **Details:**
-* **Transport:** Streamable HTTP, API Key auth (`X-API-Key: achylo_…`).
-* **Phase now:** read-only tools (automation config, Agent permissions, payment methods, payment-link status/history, operation polling).
-* **Writes:** still via REST Agents API (`/api/v1/automation`, async `202` + poll) until scoped MCP write tools ship.
-* **Security:** MCP is a thin adapter; business logic and Forwarder execution stay in Achylo Server.
+* **Dashboard setup:** create an API Agent + bound key, enable on-chain Forwarder actions (create / accept / confirm / cancel / dispute / **update** / **release** / **reclaim**).
+* **Auth:** `X-API-Key` or OAuth 2.1 + PKCE.
+* **Tools:** reads + writes (payment links + full P2P lifecycle). Async writes return `202` — poll `get_operation`.
+* **Security:** MCP is a thin adapter; scopes and Forwarder grants stay in Achylo Server / your wallet.
 
-Full documentation: [Achylo MCP (Agentic Payments)](developers/mcp.md)
+Full documentation: [Achylo MCP (Agentic Payments)](/developers/mcp)

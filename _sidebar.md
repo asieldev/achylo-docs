@@ -20,7 +20,6 @@
 * Developers
   * [Quickstart](developers/quickstart.md)
   * [API Keys](developers/api-keys.md)
-  * [Agents](developers/agents.md)
   * [Achylo MCP (Agentic Payments)](developers/mcp.md)
   * [Payment Links](developers/payment-links.md)
   * [Payment Widgets](developers/payment-widgets.md)

@@ -673,7 +673,7 @@ X-API-Key: YOUR_API_KEY
 
 ## Related Resources
 
-- [Payment Links API →](developers/payment-links.md) – Programmatic payment links
-- [Webhooks →](developers/webhooks.md) – Real-time notifications
-- [API Keys →](developers/api-keys.md) – Manage API keys
-- [Payment Widgets V1 →](developers/payment-widgets.md) – Legacy version
+- [Payment Links API →](/developers/payment-links) – Programmatic payment links
+- [Webhooks →](/developers/webhooks) – Real-time notifications
+- [API Keys →](/developers/api-keys) – Manage API keys
+- [Payment Widgets V1 →](/developers/payment-widgets) – Legacy version

@@ -1,5 +1,5 @@
-# Agents
+# Agents / Bots automation
 
-> This page moved to [Agents](developers/agents.md).
+> This page moved to **[Achylo MCP (Agentic Payments)](/developers/mcp)**.
 
-The Automation API is unchanged: `https://api.achylo.com/api/v1/automation/...`
+Automation API base path (unchanged): `https://api.achylo.com/api/v1/automation/...`

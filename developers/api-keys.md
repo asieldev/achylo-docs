@@ -134,11 +134,11 @@ curl_close($ch);
 
 ---
 
-## Agents
+## API Agents & MCP
 
-After you create at least one API Key, the same profile section shows **Agents**. Use it to allow your backend to run P2P public-order actions (create, accept, confirm, cancel, dispute) within limits you choose.
+In the same profile section you can create an **API Agent**, bind a key to least-privilege scopes, and enable on-chain Forwarder actions (including update / release / reclaim). That is what MCP hosts and `/api/v1/automation` use.
 
-Full guide: [Agents](developers/agents.md)
+Full guide: [Achylo MCP (Agentic Payments)](/developers/mcp)
 
 ---
 
