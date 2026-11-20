@@ -22,11 +22,11 @@ If you only need payment links or widgets, you may still want an API Agent with 
 ## How it works (simple)
 
 1. In **User Profile → Developer / Agents**, create an **API Agent**, toggle scopes, optionally set max/daily USDC policy.
-2. Create a **bound API key** from that agent. Copy it once (`ACHYLO_API_KEY`).
+2. Connect a client either with a **bound API key** from that agent (`ACHYLO_API_KEY`), or via **OAuth 2.1 + PKCE** (MCP hosts open `/oauth/consent` and you pick the agent).
 3. For on-chain writes: under **On-chain Forwarder actions**, enable actions and click **Activate** (wallet confirms once).
-4. Your server or MCP host calls Achylo with that API Key. Reads need matching scopes; writes (later / REST today) also need live Forwarder perms.
+4. Your server or MCP host calls Achylo with that API Key or OAuth Bearer. Reads need matching scopes; writes also need live Forwarder perms.
 
-**Legacy unbound keys** (created without an agent) keep full **read** access. Prefer bound keys for MCP and new integrations.
+**Legacy unbound keys** (created without an agent) keep full **read** access. Prefer bound keys or OAuth for MCP and new integrations.
 
 ---
 
@@ -77,7 +77,17 @@ Unbound (legacy) API keys **cannot** call write scopes — bind the key to an ag
 | `POST` | `/api/v1/agents/:id/keys` | JWT (bound key) |
 | `GET` | `/api/v1/agents/scopes` | JWT / API key |
 
-Missing scope on an API-key request → `403` with `error: "SCOPE_DENIED"`.
+Missing scope on an API-key or OAuth request → `403` with `error: "SCOPE_DENIED"`.
+
+### OAuth grants (MCP)
+
+MCP hosts can use the Achylo Authorization Server instead of storing an API key:
+
+1. Host registers (`POST /oauth/register`) and starts PKCE authorize
+2. You approve on **`https://achylo.com/oauth/consent`**, selecting which **API Agent** to bind
+3. Host receives an access token (`Authorization: Bearer …`) scoped to that agent
+
+See [MCP → OAuth 2.1](mcp.md#oauth-21-mcp-hosts) for discovery endpoints and the full flow. REST automation writes accept the same OAuth Bearer (`authMethod=oauth`).
 
 ### Cached market / wallet reads
 

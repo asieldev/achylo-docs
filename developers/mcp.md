@@ -2,7 +2,7 @@
 
 **Achylo MCP** is the remote Model Context Protocol server for Achylo. It exposes **read and write** tools that call the Achylo API. It does not hold CDP signing keys; P2P writes still need on-chain OperatorForwarder grants.
 
-> **Summary:** Connect an MCP host to `https://api.achylo.com/mcp` with an API Key **bound to an API Agent**. Least-privilege scopes gate every tool. Writes also require Forwarder perms (and optional `policy` caps). Poll `get_operation` after async P2P tools.
+> **Summary:** Connect an MCP host to `https://api.achylo.com/mcp` with an **API Key bound to an API Agent**, or via **OAuth 2.1 + PKCE**. Least-privilege scopes gate every tool. Writes also require Forwarder perms (and optional `policy` caps). Poll `get_operation` after async P2P tools.
 
 ---
 
@@ -26,7 +26,37 @@ Transport: **Streamable HTTP** (stateless).
 X-API-Key: achylo_your_key_here
 ```
 
-Bearer form is also accepted: `Authorization: Bearer achylo_…`.
+Also accepted:
+
+- `Authorization: Bearer achylo_…` (API key)
+- `Authorization: Bearer <oauth_access_token>` (OAuth AT from the Achylo AS)
+
+Unauthenticated MCP requests return `401` with `WWW-Authenticate` pointing at protected-resource metadata (RFC 9728).
+
+---
+
+## OAuth 2.1 (MCP hosts)
+
+Prefer OAuth when the host should not store a long-lived API key (e.g. Claude Desktop / Cursor remote MCP with browser consent).
+
+| Discovery | URL |
+| :--- | :--- |
+| Authorization Server metadata | `GET https://api.achylo.com/.well-known/oauth-authorization-server` |
+| Protected resource (MCP) | `GET https://api.achylo.com/.well-known/oauth-protected-resource` |
+
+Flow:
+
+1. **DCR** — `POST /oauth/register` with `redirect_uris` → `client_id` (public client, `token_endpoint_auth_method=none`)
+2. **Authorize** — browser opens `GET /oauth/authorize?response_type=code&client_id=…&redirect_uri=…&code_challenge=…&code_challenge_method=S256&scope=…&state=…` → redirects to Achylo **`/oauth/consent`**
+3. **Consent** — user signs in (wallet JWT), picks an **API Agent**, approves overlapping scopes → authorization `code` back to `redirect_uri`
+4. **Token** — `POST /oauth/token` (`grant_type=authorization_code` + `code_verifier`) → short-lived AT (`typ=oauth_at`) + refresh token
+5. **MCP** — `Authorization: Bearer <access_token>` on `https://api.achylo.com/mcp`
+
+Refresh: `grant_type=refresh_token` (rotated). Revoke: `POST /oauth/revoke`.
+
+Scopes on the grant are **request ∩ agent scopes**. Editing the agent later shrinks live access; revoked grants / disabled agents → `401`.
+
+API keys remain fully supported for servers and CI.
 
 ---
 
@@ -84,6 +114,8 @@ Annotated `readOnlyHint=false`.
 
 ## Example host config
 
+**API key:**
+
 ```json
 {
   "mcpServers": {
@@ -97,12 +129,14 @@ Annotated `readOnlyHint=false`.
 }
 ```
 
+**OAuth:** point the host at `https://api.achylo.com/mcp` and let it discover the AS via RFC 9728 / AS metadata (no static key in config). Complete consent in the browser when prompted.
+
 ---
 
 ## Security model
 
-- Never embed API keys in frontend code or prompts.
-- Prefer agent-bound keys with least privilege scopes.
+- Never embed API keys or OAuth refresh tokens in frontend code or prompts.
+- Prefer agent-bound keys or OAuth grants with least privilege scopes.
 - Missing scope → audited `scope_deny`; policy cap → `policy_deny`.
 - Kill switch: `MCP_ENABLED=0`.
 
