@@ -60,8 +60,10 @@ If you only need payment links or widgets, you may still want an API Agent with 
 | `wallet:balance` | USDC balance reads |
 | `p2p:orders:read` | Public order list (subgraph) |
 
-**Writes (stored now, enforced in a later phase):**  
+**Writes (enforced on REST + MCP):**  
 `payment_links:write`, `p2p:create`, `p2p:accept`, `p2p:confirm`, `p2p:cancel`, `p2p:dispute`, `p2p:update`, `p2p:release`, `p2p:reclaim`
+
+Unbound (legacy) API keys **cannot** call write scopes — bind the key to an agent. Amount-bearing writes also respect agent `policy.maxAmountUsdc` / `dailyCapUsdc` (`403 POLICY_DENIED`). On-chain Forwarder `maxAmount` remains a separate ceiling.
 
 ### Agents REST API
 
@@ -350,7 +352,8 @@ Start small. You can Activate again anytime to refresh permissions.
 
 | Symptom | Likely cause |
 |---------|----------------|
-| `SCOPE_DENIED` | Bound agent lacks the required scope — edit scopes or use a legacy unbound key for reads |
+| `SCOPE_DENIED` | Bound agent lacks the required scope — or unbound key tried a write |
+| `POLICY_DENIED` | Amount exceeds agent `maxAmountUsdc` / `dailyCapUsdc` |
 | Error about missing account binding | Create a new API Key while logged into Achylo with your wallet |
 | Permission expired / no uses left | Open On-chain Forwarder actions and Activate again |
 | Amount too high | Accept amount is above the max you set |
