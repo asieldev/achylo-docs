@@ -1,51 +1,97 @@
 # Agents
 
-Agents let your **backend** create, accept, confirm, cancel, and dispute **P2P public orders** through the Achylo API — without opening the Achylo UI for every step.
+Achylo has **two** permission layers for automation. They are independent:
 
-You approve what the Agent is allowed to do (and for how long) once in your profile. After that, your server calls Achylo with your API Key.
+1. **API Agents (off-chain)** — scopes on an agent bound to an API key. They limit which REST/MCP tools a key may call.
+2. **On-chain Forwarder actions** — OperatorForwarder grants for the Settlement SA. They are the hard ceiling for money-moving writes.
+
+Off-chain scopes never grant on-chain power. Forwarder grants never expand API/MCP tool access.
 
 ---
 
 ## Who this is for
 
 - Merchants and integrators who already use **API Keys**
-- Backends that need to automate the P2P public-order lifecycle
+- Backends / MCP hosts that need least-privilege reads now and P2P writes later
+- Teams automating the P2P public-order lifecycle via `/api/v1/automation`
 
-If you only need payment links or widgets, you do **not** need Agents — see [Payment Links](developers/payment-links.md).
+If you only need payment links or widgets, you may still want an API Agent with `payment_links:read` — see [Payment Links](developers/payment-links.md) and [MCP](developers/mcp.md).
 
 ---
 
 ## How it works (simple)
 
-1. You create an **API Key** in Achylo.
-2. In **Agents**, you turn on the actions you want and click **Activate** (your wallet confirms once).
-3. Your server calls `https://api.achylo.com/api/v1/automation/...` with that API Key.
-4. Achylo runs the action on Base **as your account**, within the limits you approved.
+1. In **User Profile → Developer / Agents**, create an **API Agent**, toggle scopes, optionally set max/daily USDC policy.
+2. Create a **bound API key** from that agent. Copy it once (`ACHYLO_API_KEY`).
+3. For on-chain writes: under **On-chain Forwarder actions**, enable actions and click **Activate** (wallet confirms once).
+4. Your server or MCP host calls Achylo with that API Key. Reads need matching scopes; writes (later / REST today) also need live Forwarder perms.
 
-Permissions belong to **your Achylo wallet account**, not to each API Key separately. Several keys on the same account share the same Agent permissions.
+**Legacy unbound keys** (created without an agent) keep full **read** access. Prefer bound keys for MCP and new integrations.
 
 ---
 
 ## Prerequisites
 
 1. An Achylo account (logged in with your wallet).
-2. At least one **API Key** ([API Keys](developers/api-keys.md)).
+2. An **API Agent** + bound key, or a legacy unbound key ([API Keys](developers/api-keys.md)).
 3. Payment methods already saved in your Achylo profile (needed to create or accept orders).
 4. For creating public sell orders: merchant status / collateral as required by Achylo.
 
 ---
 
-## Step 1 — Create an API Key
+## Step 1 — Create an API Agent + bound key
 
-1. Open **User Profile → Developer API Keys**
-2. Create a key (label e.g. `"Production"`)
-3. Copy it once and store it as `ACHYLO_API_KEY`
+1. Open **User Profile → Developer / Agents**
+2. Under **API Agents (off-chain)**, create an agent, toggle scopes, save
+3. Click **Create bound key**, copy it once, store as `ACHYLO_API_KEY`
+
+### Scope catalog
+
+**Reads (enforced now):**
+
+| Scope | Purpose |
+|-------|---------|
+| `automation:config` | Automation / Forwarder config |
+| `automation:permissions` | On-chain Forwarder permission reads |
+| `automation:payment_methods` | List payment methods |
+| `automation:operations` | Poll async operations |
+| `payment_links:read` | Get / list payment links |
+| `oracle:read` | PriceOracle reads |
+| `wallet:balance` | USDC balance reads |
+| `p2p:orders:read` | Public order list (subgraph) |
+
+**Writes (stored now, enforced in a later phase):**  
+`payment_links:write`, `p2p:create`, `p2p:accept`, `p2p:confirm`, `p2p:cancel`, `p2p:dispute`, `p2p:update`, `p2p:release`, `p2p:reclaim`
+
+### Agents REST API
+
+| Method | Path | Auth |
+|--------|------|------|
+| `GET` | `/api/v1/agents` | JWT |
+| `POST` | `/api/v1/agents` | JWT |
+| `PATCH` | `/api/v1/agents/:id` | JWT |
+| `DELETE` | `/api/v1/agents/:id` | JWT (soft revoke) |
+| `POST` | `/api/v1/agents/:id/keys` | JWT (bound key) |
+| `GET` | `/api/v1/agents/scopes` | JWT / API key |
+
+Missing scope on an API-key request → `403` with `error: "SCOPE_DENIED"`.
+
+### Cached market / wallet reads
+
+TTL ≈ **15 seconds** (Redis when available):
+
+```http
+GET /api/v1/market/oracle/:currencyId
+GET /api/v1/wallet/usdc-balance?address=0x…
+GET /api/v1/p2p/public-orders?limit=20&offset=0
+X-API-Key: achylo_...
+```
 
 ---
 
-## Step 2 — Enable Agents
+## Step 2 — Enable on-chain Forwarder actions
 
-After you have at least one API Key, the same section shows **Agents**.
+Same profile section, panel **On-chain Forwarder actions** (independent of off-chain scopes).
 
 | Action | What it allows |
 |--------|----------------|
@@ -62,7 +108,7 @@ For each action you can set:
 - Max number of uses
 - Max amount in USDC (for Accept Public Order)
 
-Click **Activate** so Achylo saves those permissions.
+Click **Activate** so Achylo saves those permissions on-chain.
 
 Also available:
 
@@ -70,6 +116,8 @@ Also available:
 - **Revoke** (one action) or **Revoke all**
 
 > Activate / Reload **replace** the previous settings for those actions; they do not add extra uses on top.
+
+On-chain Forwarder permissions belong to **your Achylo Smart Account**, not to each API Key separately. Several keys on the same account share the same Forwarder grants.
 
 ---
 
@@ -79,6 +127,19 @@ Also available:
 **Path prefix:** `/api/v1/automation`  
 **Auth:** `X-API-Key`  
 **Every POST must include:** `Idempotency-Key: <unique-string>` (max 128 characters)
+
+Agent write operations are **asynchronous**. A successful POST returns HTTP `202`
+with an operation ID. Poll that operation until its status is terminal:
+
+- `queued` — accepted and waiting for the serialized blockchain executor
+- `pending` — simulated and being submitted/confirmed on Base
+- `success` — confirmed; `transactionHash` is available
+- `failed` — failed before broadcast and may be retried with the same idempotency key
+- `unknown` — a UserOperation was broadcast but final status could not be confirmed; do not retry automatically
+
+The same `Idempotency-Key` may be retried only with exactly the same operation
+parameters. Reusing it for different parameters returns
+`IDEMPOTENCY_KEY_REUSED`.
 
 Paths below are relative to `https://api.achylo.com`. Example full URL:
 
@@ -213,6 +274,19 @@ GET https://api.achylo.com/api/v1/automation/operations/:id
 X-API-Key: achylo_...
 ```
 
+Example accepted response from any write endpoint:
+
+```json
+{
+  "id": "8df7828c-8fb1-4f0e-aacf-763519ad0c80",
+  "status": "queued",
+  "action": "acceptPublicOrder",
+  "smartAccount": "0x...",
+  "userOpHash": null,
+  "transactionHash": null
+}
+```
+
 ---
 
 ## Example (Node.js)
@@ -232,7 +306,18 @@ async function acceptOrder(orderId: string, amount: string, takerPaymentMethodId
     body: JSON.stringify({ amount, takerPaymentMethodId }),
   });
   if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const operation = await res.json();
+
+  for (;;) {
+    const statusRes = await fetch(
+      `${BASE}/api/v1/automation/operations/${operation.id}`,
+      { headers: { 'X-API-Key': ACHYLO_API_KEY } },
+    );
+    if (!statusRes.ok) throw new Error(await statusRes.text());
+    const status = await statusRes.json();
+    if (['success', 'failed', 'unknown'].includes(status.status)) return status;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
 }
 ```
 
@@ -265,8 +350,9 @@ Start small. You can Activate again anytime to refresh permissions.
 
 | Symptom | Likely cause |
 |---------|----------------|
+| `SCOPE_DENIED` | Bound agent lacks the required scope — edit scopes or use a legacy unbound key for reads |
 | Error about missing account binding | Create a new API Key while logged into Achylo with your wallet |
-| Permission expired / no uses left | Open Agents and Activate again |
+| Permission expired / no uses left | Open On-chain Forwarder actions and Activate again |
 | Amount too high | Accept amount is above the max you set |
 | Invalid payment method | Call `GET /api/v1/automation/payment-methods` and use an active `id` |
 | Operator not configured (UI) | Temporary config issue — try Reload later or contact support |
@@ -276,6 +362,7 @@ Start small. You can Activate again anytime to refresh permissions.
 ## Related
 
 - [API Keys](developers/api-keys.md)
+- [MCP](developers/mcp.md) — read tools + scope enforcement
 - [Quickstart](developers/quickstart.md)
 - [Public Order (P2P)](../p2p/orden-publica.md)
 - [Webhooks](developers/webhooks.md)

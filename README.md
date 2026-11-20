@@ -128,12 +128,12 @@ Full documentation: [Agents](developers/agents.md)
 
 ### 9. Achylo MCP (Agentic Payments)
 
-**Summary:** Model Context Protocol tools so AI agents can create payment links and run Agent actions — collect and settle USDC on Base without custom HTTP glue.
+**Summary:** Remote Model Context Protocol server (`https://api.achylo.com/mcp`) so AI hosts can call Achylo with an API Key.
 
 **Details:**
-* **Agentic commerce:** Expose Payment Links + Agents as MCP tools for Cursor, Claude, LangGraph, MultiMCP, and other hosts.
-* **Same security model:** API Key auth and scoped Agent permissions you already manage in Achylo.
-* **End-to-end flow:** Discover tools → create escrow-backed links or automate public orders → settle on Base → optional HMAC webhooks.
-* **Built for stacks:** Drop into multi-agent orchestration without rewriting the Achylo REST surface.
+* **Transport:** Streamable HTTP, API Key auth (`X-API-Key: achylo_…`).
+* **Phase now:** read-only tools (automation config, Agent permissions, payment methods, payment-link status/history, operation polling).
+* **Writes:** still via REST Agents API (`/api/v1/automation`, async `202` + poll) until scoped MCP write tools ship.
+* **Security:** MCP is a thin adapter; business logic and Forwarder execution stay in Achylo Server.
 
 Full documentation: [Achylo MCP (Agentic Payments)](developers/mcp.md)

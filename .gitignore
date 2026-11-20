@@ -1,3 +1,9 @@
+### Node (docs site is static Markdown — keep installs out of this repo)
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
 ### macOS
 # Finder metadata
 .DS_Store
@@ -6,7 +12,7 @@
 ._*
 
 # Custom folder icons
-Icon
+Icon
 
 # Volume root files
 .DocumentRevisions-V100

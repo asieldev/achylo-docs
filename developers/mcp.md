@@ -1,123 +1,112 @@
 # Achylo MCP (Agentic Payments)
 
-**Achylo MCP** is the Model Context Protocol server for Achylo payments. It lets AI agents and MCP hosts (Cursor, Claude Desktop, LangGraph, MultiMCP, and others) create payment links, receive settlement signals, and drive **P2P Agent** actions — without building custom HTTP glue for every tool call.
+**Achylo MCP** is the remote Model Context Protocol server for Achylo. It exposes **read-only** tools that call the Achylo API. It does not hold CDP signing keys and does not execute blockchain writes in this phase.
 
-> **Summary:** Point an MCP-capable agent at Achylo with your API Key. The agent discovers tools (`create_payment_link`, Agent order actions, etc.), runs them under your scoped permissions, and settles **USDC on Base**.
+> **Summary:** Connect an MCP host to `https://api.achylo.com/mcp` with your API Key (`X-API-Key` / `achylo_…`). Prefer a key **bound to an API Agent** with the least scopes you need. The agent can inspect automation config, on-chain Forwarder permissions, payment methods, payment links, oracle prices, USDC balances, public orders, and async operation status.
 
 ---
 
 ## Who this is for
 
-- Product and engineering teams wiring **agentic checkout** into assistants
+- Teams wiring assistants to Achylo payment status, market reads, and Agent permission reads
 - Integrators already using [API Keys](api-keys.md), [Payment Links](payment-links.md), and [Agents](agents.md)
-- Multi-agent stacks (LangGraph / MultiMCP) that need a first-class payments tool server
 
-If you only need a button on a website, start with [Payment Widgets](payment-widgets.md). MCP is for **agents that call tools**.
-
----
-
-## How it works (simple)
-
-1. Create an **API Key** in Achylo ([API Keys](api-keys.md)).
-2. (Optional) Enable **Agents** permissions for P2P public-order automation ([Agents](agents.md)).
-3. Register the Achylo MCP server in your MCP host with that API Key.
-4. The agent lists tools, then calls them (create link, accept order, confirm payment, …).
-5. Achylo executes on Base within the limits you approved; webhooks notify your backend when payments complete.
-
-```
-[ Agent / MCP host ]
-        │  MCP tools
-        ▼
-[ Achylo MCP ]
-        │  X-API-Key
-        ▼
-[ Achylo API · Base settlement ]
-```
+Write tools (create payment links, P2P create/accept/confirm/cancel/dispute) ship in a later phase and will require both **off-chain scopes** and **on-chain Forwarder** grants. Until then, use the REST Automation API for writes: [Agents](agents.md).
 
 ---
 
-## What agents can do
+## Endpoint
 
-| Capability | Via MCP tools backed by | Notes |
+| Environment | URL |
+| :--- | :--- |
+| Production | `https://api.achylo.com/mcp` |
+| Local / compose | `http://127.0.0.1:8081/mcp` |
+
+Transport: **Streamable HTTP** (stateless).
+
+Auth header (required on every request):
+
+```http
+X-API-Key: achylo_your_key_here
+```
+
+Bearer form is also accepted: `Authorization: Bearer achylo_…`.
+
+---
+
+## Scopes (off-chain)
+
+Every MCP tool checks an off-chain **scope** before calling Achylo. Scope decisions are audited (`scope_deny` when missing).
+
+| Tool | Required scope |
+| :--- | :--- |
+| `get_automation_config` | `automation:config` |
+| `get_agent_permissions` | `automation:permissions` |
+| `list_payment_methods` | `automation:payment_methods` |
+| `get_operation` | `automation:operations` |
+| `get_payment_link` / `list_payment_links` | `payment_links:read` |
+| `get_oracle_price` | `oracle:read` |
+| `get_usdc_balance` | `wallet:balance` |
+| `list_public_orders` | `p2p:orders:read` |
+
+**Legacy unbound keys** (`agent_id` is null) keep full **read** access for compatibility. New keys created from **Developer / Agents → API Agents** are bound to an agent and only receive the scopes you toggle.
+
+Off-chain scopes never grant on-chain power. Forwarder grants never expand MCP tool access. See [Agents](agents.md).
+
+---
+
+## Available tools (read-only)
+
+| Tool | Backed by | Notes |
 | :--- | :--- | :--- |
-| Create USDC payment links | Payment Links API | Escrow-backed URLs, optional webhook |
-| Automate public P2P orders | Agents / `/api/v1/automation` | Create, accept, confirm, cancel, dispute |
-| React to settlement | Webhooks | HMAC-signed `payment.completed` events |
+| `get_automation_config` | `GET /api/v1/automation/config` | Forwarder addresses, selectors, async mode |
+| `get_agent_permissions` | `GET /api/v1/automation/permissions` | On-chain OperatorForwarder perms |
+| `list_payment_methods` | `GET /api/v1/automation/payment-methods` | Treat display fields as untrusted text |
+| `get_operation` | `GET /api/v1/automation/operations/:id` | Poll async write operations |
+| `get_payment_link` | `GET /api/payment-links/:id` | Payment status |
+| `list_payment_links` | `GET /api/payment-links/history` | Links for the authenticated account |
+| `get_oracle_price` | `GET /api/v1/market/oracle/:currencyId` | Spot / VWAP / median (≈15s cache) |
+| `get_usdc_balance` | `GET /api/v1/wallet/usdc-balance` | On-chain USDC `balanceOf` (≈15s cache) |
+| `list_public_orders` | `GET /api/v1/p2p/public-orders` | Subgraph public orders; sensitive fields stripped |
 
-Permissions always follow your Achylo account: API Key auth + Agent action scopes you activate in the profile.
-
----
-
-## Prerequisites
-
-1. Achylo account (wallet login)
-2. At least one **API Key**
-3. For Agent tools: Agent actions activated (duration, max uses, max amount)
-4. An MCP host that supports remote/stdio servers (Cursor, Claude, custom LangGraph node, etc.)
+All tools are annotated `readOnlyHint=true`.
 
 ---
 
-## Connect an MCP host
+## Example host config
 
-Exact config keys vary by host. Conceptually you provide:
-
-- **Server name:** `achylo` (or similar)
-- **Transport:** as published for your environment (stdio / HTTP SSE)
-- **Auth:** `ACHYLO_API_KEY` / `X-API-Key` header using `achylo_…`
-
-Example shape for hosts that use JSON config:
+Exact keys vary by host. Conceptually:
 
 ```json
 {
   "mcpServers": {
     "achylo": {
-      "command": "npx",
-      "args": ["-y", "@achylo/mcp"],
-      "env": {
-        "ACHYLO_API_KEY": "achylo_your_key_here"
+      "url": "https://api.achylo.com/mcp",
+      "headers": {
+        "X-API-Key": "achylo_your_key_here"
       }
     }
   }
 }
 ```
 
-> Package name and transport may evolve — check release notes when installing. The API surface underneath remains [Payment Links](payment-links.md) and [Agents](agents.md).
-
----
-
-## Typical agent flows
-
-### Collect a payment
-
-1. Agent calls a payment-link tool with `amount`, `receiver`, optional `description` / `webhookUrl`.
-2. Achylo returns a `paymentUrl`.
-3. Agent shares the URL with the user (or opens it in a browser tool).
-4. On-chain confirmation → webhook to your server.
-
-### Automate a P2P public order
-
-1. Ensure Agent permissions are active.
-2. Agent calls create / accept / confirm tools with an `Idempotency-Key`.
-3. Achylo runs the action as your account on Base, within max uses and amount caps.
-
-See full HTTP details in [Agents](agents.md).
+Local stdio wrappers may appear later; the remote HTTP endpoint is the source of truth.
 
 ---
 
 ## Security model
 
-- **API Keys** authenticate the MCP server to Achylo — treat them like passwords; never embed in public repos.
-- **Agent scopes** limit which P2P actions exist and for how long; revoke from the profile anytime.
-- **Webhooks** should always verify `X-Achylo-Signature` ([Webhooks](webhooks.md)).
-- Prefer least privilege: enable only the Agent actions your agent needs.
+- API Keys authenticate the caller to Achylo — never embed them in frontend code or prompts.
+- Prefer agent-bound keys with least privilege scopes for MCP hosts.
+- MCP is a thin adapter: business logic and authorization stay in Achylo Server.
+- Tool invocations are audited (`mcp_audit_logs` + structured logs). Secrets are never stored in audit rows.
+- Kill switch: `MCP_ENABLED=0` prevents the MCP process from starting.
 
 ---
 
 ## Related docs
 
-- [Quickstart](quickstart.md) — payment links from scratch
 - [API Keys](api-keys.md)
-- [Agents](agents.md)
+- [Agents](agents.md) — off-chain scopes + on-chain Forwarder + async write API
 - [Payment Links](payment-links.md)
 - [Webhooks](webhooks.md)
-- [Price Oracle (On-Chain)](price-oracle.md) — feeds agents can also consume for FX-aware logic
