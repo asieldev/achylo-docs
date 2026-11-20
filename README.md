@@ -14,7 +14,7 @@
 This guide walks you step by step so you can use the **Achylo** dApp (Base Network). Take your time and follow the instructions in order.
 
 ## What Can You Do with Achylo?
-Achylo is a Web3 platform with six core superpowers:
+Achylo is a Web3 platform with these core superpowers:
 
 ### 1. P2P Marketplace (Decentralized and Anonymous)
 * **Buy/Sell:** Exchange USDC using local fiat currencies.
@@ -103,9 +103,14 @@ Full documentation: [Webhooks](developers/webhooks.md)
 ---
 
 ### 7. On-Chain Price Oracle (Chainlink Compatible)
-* **Real P2P pricing:** Decentralized exchange rates generated directly from real liquidated trades.
-* **Institutional safety:** VWAP volume weighting, median sorting, circuit breakers, anti-wash trading.
-* **Chainlink standard:** Compatible with `AggregatorV3Interface` for easy integration into lending markets, vaults, and DeFi contracts.
+
+**Summary:** Fiat/USDC rates from real Achylo P2P settlements — not DEX spot flashes — published on Base for DeFi and payment rails.
+
+**Details:**
+* **Real P2P pricing:** Decentralized exchange rates generated directly from completed, liquidated escrows.
+* **Institutional safety:** VWAP volume weighting, median sorting, circuit breakers, anti-wash trading, and staleness checks.
+* **Chainlink standard:** Compatible with `AggregatorV3Interface` for lending markets, vaults, AMMs, and payment processors.
+* **Native interface:** `IAchyloPriceOracle` for VWAP, Median, ring-buffer observations, and feed status.
 
 Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
 
@@ -114,7 +119,21 @@ Full documentation: [Price Oracle (On-Chain)](developers/price-oracle.md)
 ### 8. Agents (Developers)
 * **API Base URL (production):** `https://api.achylo.com` (e.g. `/api/v1/automation/...`)
 * **Automate P2P:** Create, accept, confirm, cancel, and dispute public orders from your server.
-* **API Key + permissions:** You approve limited bot permissions in your profile; then your backend calls the Achylo API.
+* **API Key + permissions:** You approve limited Agent permissions in your profile; then your backend calls the Achylo API.
 * **Revocable anytime:** Turn actions off or Revoke all from the same screen.
 
 Full documentation: [Agents](developers/agents.md)
+
+---
+
+### 9. Achylo MCP (Agentic Payments)
+
+**Summary:** Model Context Protocol tools so AI agents can create payment links and run Agent actions — collect and settle USDC on Base without custom HTTP glue.
+
+**Details:**
+* **Agentic commerce:** Expose Payment Links + Agents as MCP tools for Cursor, Claude, LangGraph, MultiMCP, and other hosts.
+* **Same security model:** API Key auth and scoped Agent permissions you already manage in Achylo.
+* **End-to-end flow:** Discover tools → create escrow-backed links or automate public orders → settle on Base → optional HMAC webhooks.
+* **Built for stacks:** Drop into multi-agent orchestration without rewriting the Achylo REST surface.
+
+Full documentation: [Achylo MCP (Agentic Payments)](developers/mcp.md)
