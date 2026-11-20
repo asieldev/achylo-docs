@@ -57,6 +57,7 @@ If you only need payment links or widgets, you may still want an API Agent with 
 | `automation:operations` | Poll async operations |
 | `payment_links:read` | Get / list payment links |
 | `oracle:read` | PriceOracle reads |
+| `fiat:read` | Active fiat currency catalog (`fiatCurrency` ids) |
 | `wallet:balance` | USDC balance reads |
 | `p2p:orders:read` | Public order list (subgraph) |
 
@@ -84,10 +85,41 @@ TTL ≈ **15 seconds** (Redis when available):
 
 ```http
 GET /api/v1/market/oracle/:currencyId
+GET /api/v1/market/fiat-currencies
 GET /api/v1/wallet/usdc-balance?address=0x…
 GET /api/v1/p2p/public-orders?limit=20&offset=0
 X-API-Key: achylo_...
 ```
+
+### Fiat currencies (for `fiatCurrency`)
+
+```http
+GET https://api.achylo.com/api/v1/market/fiat-currencies
+X-API-Key: achylo_...
+```
+
+Requires scope `fiat:read` (or a legacy unbound key). Response (≈60s Redis cache):
+
+```json
+{
+  "registry": "0x7b024e8aeD5ADb762C40Ef31071fEbDef3E7b4B1",
+  "count": 2,
+  "currencies": [
+    {
+      "id": 0,
+      "code": "CUP",
+      "name": "Peso Cubano",
+      "symbol": "$",
+      "decimals": 2,
+      "isActive": true,
+      "createdAt": 1710000000
+    }
+  ],
+  "cached": false
+}
+```
+
+Use each item’s `id` as `fiatCurrency` when creating/updating public orders. Pair with [`GET /api/v1/automation/payment-methods`](#list-your-payment-methods) for `paymentMethodIds`.
 
 ---
 

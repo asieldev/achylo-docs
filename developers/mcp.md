@@ -53,6 +53,7 @@ Agent `policy.maxAmountUsdc` / `dailyCapUsdc` apply to amount-bearing writes (`4
 | `get_operation` | `automation:operations` | `GET /api/v1/automation/operations/:id` |
 | `get_payment_link` / `list_payment_links` | `payment_links:read` | payment-links API |
 | `get_oracle_price` | `oracle:read` | `GET /api/v1/market/oracle/:currencyId` |
+| `list_fiat_currencies` | `fiat:read` | `GET /api/v1/market/fiat-currencies` |
 | `get_usdc_balance` | `wallet:balance` | `GET /api/v1/wallet/usdc-balance` |
 | `list_public_orders` | `p2p:orders:read` | `GET /api/v1/p2p/public-orders` |
 
