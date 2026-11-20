@@ -226,14 +226,14 @@ Paste this on your website:
 
 V2 widgets use a **server-driven architecture**: you create a Product first (or use the bundle endpoint), then associate it with a Widget. The frontend only uses the `widget-id` — no amount or currency exposed.
 
-**Dashboard:** manage products and V2 widgets under **Payment Links → Widgets** (not Stats, and not as the primary User Profile flow).
+**Dashboard:** manage products and V2 widgets under **Payment Links → Widgets**. Create products on the Products sub-tab, then in **New Widget** select an existing product (or create one inline if the list is empty). The dashboard does not use the bundle endpoint.
 
 **Two API paths:**
 
 | Path | Endpoints | Best for |
 |------|-----------|----------|
-| **Bundle (recommended)** | `POST /api/v1/widgets/bundle` | New product + widget in one step |
-| **Separate** | `POST /api/v1/products` → `POST /api/v1/widgets` | Reusing an existing product |
+| **Separate (matches dashboard)** | `POST /api/v1/products` → `POST /api/v1/widgets` | Reusing an existing product across widgets |
+| **Bundle** | `POST /api/v1/widgets/bundle` | API-only: new product + widget in one request |
 
 ---
 

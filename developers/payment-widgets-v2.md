@@ -45,26 +45,30 @@ Products and Widget v2 are managed only from the **Payment Links** page (`/payme
 
 Inside that tab you can manage **Products** and **Widgets** (V2), including embed codes and domain whitelists.
 
+**Typical dashboard flow:** create or reuse a **Product** → **New Widget** → select that product → optional origins → generate. One product can power many widgets.
+
 > **Note:** **User Profile → Payment Widgets** may still show legacy V1 shortcuts. For products and V2 widgets, use **Payment Links → Widgets** only. API Keys stay under **User Profile → Developer API Keys**.
 
 ---
 
 ## Step 1 – Create a Product
 
-Before creating a widget with an existing product, you need to define the product (unless you use the [bundle endpoint](#create-widget--product-in-one-request-recommended) below).
+The dashboard creates widgets by **reusing an existing product**. Create the product first (Products sub-tab), then link it from the Widgets wizard. If you have no products yet, the wizard blocks the next step until you create one.
+
+> **API tip:** To create a product and a widget in a single HTTP call (without using the dashboard), use the [bundle endpoint](#create-widget--product-in-one-request-api).
 
 ### Via Dashboard
 
 1. Go to **Payment Links → Widgets**
 2. Open the **Products** sub-tab
-3. Click **"Create Product"**
+3. Click **"New Product"**
 4. Fill in:
    - **Name**: Product name (e.g., "Monthly Subscription")
-   - **Description**: Detailed description
-   - **Amount**: Fixed amount in USDC (e.g., `29.99`)
-   - **Currency**: Always `USDC`
-   - **Allow Custom Amount**: Check if you want customers to enter the amount
-5. Copy the **Product ID** (starts with `prod_`)
+   - **Description**: Optional description
+   - **Amount**: Fixed amount in USDC (e.g., `29.99`) — leave empty if you enable custom amount
+   - **Allow Custom Amount**: Check for tips/donations (payers enter the amount)
+   - **Fundraising goal (USDC)** *(optional)*: Only when custom amount is on — enables the donation progress bar
+5. Click **Create Product** and copy the **Product ID** (starts with `prod_`) if you need it for the API
 
 ### Via API
 
@@ -93,23 +97,24 @@ console.log('Product ID:', product.id); // prod_abc12345
 
 ## Step 2 – Create the Widget
 
-Associate a product with a widget, or create both in a single API call (see [bundle](#create-widget--product-in-one-request-recommended)).
+In the dashboard, pick an existing product (or payment link) and generate the widget. Via API you can either link an existing product (`POST /api/v1/widgets`) or create product + widget together ([bundle](#create-widget--product-in-one-request-api)).
 
 ### Via Dashboard
 
 1. Go to **Payment Links → Widgets**
 2. Open the **Widgets** sub-tab
-3. Click **"Create Widget"**
-4. Configure:
-   - **Resource Type**: Select `Product`
-   - **Product**: Choose the product created earlier
-   - **Origin Whitelist** *(optional)*: Add domains where you'll use the widget. Leave empty to allow embedding from any domain (public widget).
-     - `https://yourstore.com`
-     - `https://www.yourstore.com`
-     - `https://checkout.yourstore.com`
-5. Click **"Create"**
-6. Copy the **Widget ID** (starts with `wgt_`)
-7. Copy the generated **Embed Code**
+3. Click **"New Widget"**
+4. **Step 1 — Choose source**
+   - **Use Product**: Select a product from your list. If you have none, create one in the wizard (required before continuing).
+   - **Use Payment Link**: Paste an existing Payment Link ID.
+5. **Step 2 — Allowed origins** *(optional)*: Add domains where the widget may be embedded. Leave empty for a public widget (any domain).
+   - `https://yourstore.com`
+   - `https://www.yourstore.com`
+   - `https://checkout.yourstore.com`
+6. **Step 3 — Widget settings**: Confirm payout address and optional webhook URL, then click **Generate widget**
+7. Copy the **Widget ID** (starts with `wgt_`) and the **Embed Code**
+
+> You no longer redefine product fields inside the widget wizard — amounts, custom amount, and goals live on the product. Edit them under **Products**.
 
 ### Via API
 
@@ -147,9 +152,11 @@ console.log('Widget ID:', widget.id); // wgt_def67890
 
 ---
 
-## Create Widget + Product in One Request (Recommended)
+## Create Widget + Product in One Request (API)
 
-If you do not need a standalone product record first, use the **bundle** endpoint. It creates the product and the widget in a single request — the same flow used by the dashboard when you create a Widget v2 with a new product.
+If you do not need a standalone product in the dashboard first, use the **bundle** endpoint. It creates the product and the widget in a single API request.
+
+> The Achylo dashboard links widgets to products you already created (or creates a product first, then links it). Bundle is the **API shortcut** for backends that want one round-trip.
 
 ### Via API
 
@@ -185,8 +192,8 @@ console.log('Embed code:', widget.embedCode);
 
 | Endpoint | Use case |
 |----------|----------|
-| `POST /api/v1/widgets/bundle` | New product + widget in one step (simplest) |
-| `POST /api/v1/products` + `POST /api/v1/widgets` | Reuse an existing product across multiple widgets |
+| `POST /api/v1/products` + `POST /api/v1/widgets` | Dashboard flow / reuse one product across many widgets |
+| `POST /api/v1/widgets/bundle` | API-only: create a new product and widget in one request |
 
 **Bundle request body parameters:**
 
@@ -256,7 +263,11 @@ Turn any product into a **donation / fundraising widget** by giving it a **goal*
 - "Raised" is computed automatically from confirmed (paid) payments generated by the widget
 - Combine with `allowCustomAmount: true` so donors can enter any amount (**required** when `goalAmount` is set — the widget prompts for the amount before checkout)
 
-### Create a donation widget (bundle)
+### Create a donation product + widget (API bundle)
+
+From the dashboard: create the donation product under **Products** (custom amount + goal), then **New Widget → Use Product** and select it.
+
+Via API in one request:
 
 ```javascript
 await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
@@ -280,10 +291,10 @@ await fetch('https://api.achylo.com/api/v1/widgets/bundle', {
 
 ### Dashboard
 
-Set **"Fundraising goal (USDC)"** when creating a product or a Widget v2 bundle:
+Set **"Fundraising goal (USDC)"** on the product (custom amount must be enabled):
 
-- **Payment Links → Widgets → Products** (create/edit product)
-- **Payment Links → Widgets → Widgets** (create widget / product bundle; product details step)
+- **Payment Links → Widgets → Products** — create or edit the product
+- **Payment Links → Widgets → Widgets → New Widget** — if you have no products yet, the wizard asks you to create one (including an optional goal) before you can continue
 
 When `goalAmount` is set, the embed shows the donation progress bar automatically.
 

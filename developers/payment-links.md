@@ -31,9 +31,11 @@ Ideal for merchants who don't want to integrate APIs. Embed a payment button on 
 1. Go to [achylo.com](https://achylo.com) and connect your wallet
 2. Open **Payment Links** (`/payment-links`)
 3. Select the **Widgets** tab
-4. Create a **Product** (Products sub-tab) and/or a **Widget** (Widgets sub-tab)
-5. Add allowed origins if you want to restrict embed domains
+4. Create a **Product** under the **Products** sub-tab (name, amount or custom amount, optional fundraising goal)
+5. Open **Widgets** → **New Widget** → choose **Use Product**, select that product, set optional origins, then generate the widget
 6. Copy the **Widget ID** and embed code, then paste them on your website
+
+> If you have no products yet, the New Widget wizard requires creating one before you can continue.
 
 > **Legacy V1:** old `achylo-button` widgets may still appear under **User Profile → Payment Widgets**. New integrations should use [Payment Widgets V2](/developers/payment-widgets-v2) from **Payment Links → Widgets**.
 

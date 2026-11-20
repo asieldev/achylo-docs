@@ -14,7 +14,7 @@ You configure webhooks when creating resources on that host (payment links, widg
 
 ## Setup
 
-When creating a **payment link**, a **widget (V1)**, or a **widget bundle (V2)**, include these optional fields:
+When creating a **payment link**, a **widget (V1)**, a **V2 widget** (`POST /api/v1/widgets`), or a **widget bundle (V2)**, include these optional fields:
 
 ```json
 {
