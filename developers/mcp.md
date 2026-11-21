@@ -2,7 +2,7 @@
 
 **Achylo MCP** is the remote Model Context Protocol server for Achylo. It exposes **read and write** tools that call the Achylo API. It does not hold CDP signing keys; P2P writes still need on-chain OperatorForwarder grants.
 
-> **Summary:** New here? Start at **[Connect step by step](#connect-step-by-step-start-here)** (Cursor, Claude Code, Claude Desktop, or your own server with an API key). Endpoint: `https://api.achylo.com/mcp`. Auth: bound API key or OAuth. Writes need Forwarder grants; poll `get_operation` after async P2P tools.
+> **Summary:** New here? Start at **[Connect step by step](#connect-step-by-step-start-here)** (Cursor, Claude Code, Claude Desktop, DeepSeek, or your own server with an API key). Endpoint: `https://api.achylo.com/mcp`. Auth: bound API key or OAuth. Writes need Forwarder grants; poll `get_operation` after async P2P tools.
 
 The same scopes / Forwarder grants also power the **Automation REST** API (`/api/v1/automation`) if you call Achylo from your own backend instead of an MCP host.
 
@@ -10,7 +10,7 @@ The same scopes / Forwarder grants also power the **Automation REST** API (`/api
 
 ## Who this is for
 
-- Junior / mid developers wiring Cursor, Claude Code, or OpenAI agents to Achylo
+- Junior / mid developers wiring Cursor, Claude Code, DeepSeek, or OpenAI agents to Achylo
 - Backend services that call Achylo with an API key (no MCP host required)
 - Anyone already using [API Keys](/developers/api-keys) or [Payment Links](/developers/payment-links)
 
@@ -18,12 +18,12 @@ The same scopes / Forwarder grants also power the **Automation REST** API (`/api
 
 ## Connect step by step (start here)
 
-Think of Achylo MCP as a **remote toolbox**. Your AI host (Cursor, Claude Code, …) does **not** run Achylo code on your laptop — it calls our public URL and must prove who you are with an **API key** (or OAuth).
+Think of Achylo MCP as a **remote toolbox**. Your AI host (Cursor, Claude Code, DeepSeek Harness / DSH, …) does **not** run Achylo code on your laptop — it calls our public URL and must prove who you are with an **API key** (or OAuth).
 
 ```text
-You  →  Cursor / Claude / your server  →  https://api.achylo.com/mcp
-                                         (header: X-API-Key: achylo_…)
-                                         → Achylo API → (optional) on-chain Forwarder
+You  →  Cursor / Claude / DSH / your server  →  https://api.achylo.com/mcp
+                                               (header: X-API-Key: achylo_…)
+                                               → Achylo API → (optional) on-chain Forwarder
 ```
 
 You need **two things** before any host works:
@@ -56,6 +56,7 @@ export ACHYLO_API_KEY='achylo_your_key_here'
 | Use **Claude Code** in the terminal | [B. Claude Code](#b-connect-from-claude-code) |
 | Use **Claude Desktop / claude.ai** connectors | [C. Claude Desktop](#c-claude-desktop-claudeai) |
 | Call Achylo from **my Node/Python server** with the API key | [D. Your server (API key)](#d-use-the-api-key-from-your-own-server) |
+| Use **DeepSeek** as the model (Claude Code, DSH, or API tools) | [E. DeepSeek](#e-connect-with-deepseek) |
 | Avoid storing a long-lived key in the IDE | [OAuth](#oauth-21-mcp-hosts) (browser consent) |
 
 ---
@@ -233,9 +234,258 @@ The model should never see the raw key.
 
 ---
 
+### E. Connect with DeepSeek
+
+DeepSeek is the **model**. Achylo MCP is still the **toolbox**. You need both:
+
+1. A **DeepSeek API key** from [platform.deepseek.com](https://platform.deepseek.com) (`sk-…`) — pays for the model.
+2. Your **Achylo bound key** from [Step 1](#step-1-create-the-api-key-in-achylo-5-minutes) (`achylo_…`) — unlocks Achylo tools.
+
+```text
+You  →  Claude Code / DSH / your agent
+           │
+           ├─ model calls → https://api.deepseek.com  (DEEPSEEK_API_KEY)
+           └─ MCP / REST  → https://api.achylo.com/mcp  (ACHYLO_API_KEY)
+```
+
+> DeepSeek’s Anthropic-compatible API **ignores** `mcp_servers` in the request body. The host (Claude Code, [DSH](https://github.com/deepseek-ai/deepseek-harness), your server) must connect to Achylo MCP — DeepSeek only reasons and asks for tool calls.
+
+Pick one path below.
+
+#### E1. Recommended — Claude Code + DeepSeek model + Achylo MCP
+
+Official DeepSeek path: point Claude Code at DeepSeek, then add Achylo like in [B](#b-connect-from-claude-code).
+
+**1. Install Claude Code** (Node.js 18+):
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude --version
+```
+
+**2. Point Claude Code at DeepSeek** ([DeepSeek → Claude Code](https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code/)):
+
+```bash
+# macOS / Linux — put in ~/.zshrc or ~/.bashrc, then open a new terminal
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN="$DEEPSEEK_API_KEY"   # your sk-… key
+export ANTHROPIC_MODEL=deepseek-flash
+export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-flash
+export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-flash
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-flash
+export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-flash
+```
+
+Windows (PowerShell):
+
+```powershell
+$env:ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
+$env:ANTHROPIC_AUTH_TOKEN=$env:DEEPSEEK_API_KEY
+$env:ANTHROPIC_MODEL="deepseek-flash"
+$env:ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-flash"
+$env:ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-flash"
+$env:ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-flash"
+$env:CLAUDE_CODE_SUBAGENT_MODEL="deepseek-flash"
+```
+
+**3. Add Achylo MCP** (same as Claude Code):
+
+```bash
+export ACHYLO_API_KEY='achylo_your_key_here'
+
+claude mcp add --transport http achylo https://api.achylo.com/mcp \
+  --header "X-API-Key: ${ACHYLO_API_KEY}"
+
+claude mcp get achylo
+```
+
+Or project file `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "achylo": {
+      "type": "http",
+      "url": "https://api.achylo.com/mcp",
+      "headers": {
+        "X-API-Key": "${ACHYLO_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+**4. Run and test:**
+
+```bash
+cd /path/to/your-project
+claude
+```
+
+Ask: *“Use Achylo MCP: list fiat currencies”* or *“Call `list_fiat_currencies`”*.
+
+You should see Achylo tools; the model answering is DeepSeek.
+
+#### E2. DeepSeek Harness (DSH) + Achylo MCP
+
+Official DeepSeek agent runtime: [deepseek-harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). MCP is added with the shipped plugin `@deepseek-ai/dsh-mcp-client` (no separate install on current DSH versions).
+
+**1.** Finish [Step 1](#step-1-create-the-api-key-in-achylo-5-minutes) and export both keys:
+
+```bash
+export ACHYLO_API_KEY='achylo_your_key_here'
+export DEEPSEEK_API_KEY='sk-your_deepseek_key'
+```
+
+**2.** Add Achylo as a Streamable HTTP MCP server. For the `web` profile, put this in `~/.dsh/profiles/web/cordis.patch.yml` (or `~/.dsh/cordis.patch.yml` for every profile). If the file is just `[]`, **replace** that `[]` with the block below (do not append under it — invalid YAML):
+
+```yaml
+- insert:
+    - id: mcp-achylo
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: achylo
+        transport: streamable-http
+        url: https://api.achylo.com/mcp
+        headers:
+          X-API-Key: !!js process.env.ACHYLO_API_KEY
+        failOnStartupError: false
+```
+
+One-shot without editing the profile:
+
+```bash
+# save the YAML block above to /tmp/achylo-mcp.yml, then:
+dsh web --patch /tmp/achylo-mcp.yml
+```
+
+**3.** Confirm the entry is composed, then run:
+
+```bash
+dsh --profile web --dump-config   # look for id: mcp-achylo
+pnpm dsh web                      # or: dsh web
+```
+
+Tools appear as `mcp__achylo__<tool>` (e.g. `mcp__achylo__list_fiat_currencies`). Ask: *“Call Achylo list_fiat_currencies”* or *“Use mcp__achylo__get_oracle_price for currency 0”*.
+
+| Gotcha | Fix |
+|--------|-----|
+| `dsh` parse error on `cordis.patch.yml` | File must be a single YAML list — replace `[]`, don’t stack two roots |
+| Plugin peer dependency errors | Don’t `dsh plugin` an old `@deepseek-ai/dsh-mcp-client`; use the version bundled with your `dsh` |
+| Tools missing after start | `failOnStartupError: false` keeps DSH up but hides tools — check key / URL / network, then `--dump-config` |
+
+Plugin field reference: [dsh-mcp-client README](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
+
+#### E3. DeepSeek API + your own tools (no MCP host)
+
+Use DeepSeek’s OpenAI-compatible Chat Completions API and register Achylo REST as functions. The model never sees `ACHYLO_API_KEY` — only your server does.
+
+```bash
+export DEEPSEEK_API_KEY='sk-…'
+export ACHYLO_API_KEY='achylo_…'
+export BASE='https://api.achylo.com'
+```
+
+```javascript
+import OpenAI from 'openai';
+
+const deepseek = new OpenAI({
+  baseURL: 'https://api.deepseek.com',
+  apiKey: process.env.DEEPSEEK_API_KEY,
+});
+
+const tools = [
+  {
+    type: 'function',
+    function: {
+      name: 'list_fiat_currencies',
+      description: 'List Achylo fiat currencies (needs fiat:read)',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_oracle_price',
+      description: 'Get Achylo oracle price for a currency id',
+      parameters: {
+        type: 'object',
+        properties: {
+          currencyId: { type: 'integer', minimum: 0, maximum: 255 },
+        },
+        required: ['currencyId'],
+      },
+    },
+  },
+];
+
+async function runAchyloTool(name, args) {
+  const key = process.env.ACHYLO_API_KEY;
+  if (name === 'list_fiat_currencies') {
+    const res = await fetch(`${process.env.BASE || 'https://api.achylo.com'}/api/v1/market/fiat-currencies`, {
+      headers: { 'X-API-Key': key },
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+  if (name === 'get_oracle_price') {
+    const id = args.currencyId ?? 0;
+    const res = await fetch(`${process.env.BASE || 'https://api.achylo.com'}/api/v1/market/oracle/${id}`, {
+      headers: { 'X-API-Key': key },
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+  throw new Error(`Unknown tool: ${name}`);
+}
+
+const completion = await deepseek.chat.completions.create({
+  model: 'deepseek-flash',
+  messages: [{ role: 'user', content: 'What fiat currencies does Achylo support?' }],
+  tools,
+});
+
+const call = completion.choices[0].message.tool_calls?.[0];
+if (call) {
+  const args = JSON.parse(call.function.arguments || '{}');
+  console.log(await runAchyloTool(call.function.name, args));
+}
+```
+
+For P2P writes, wrap the same REST curls as [D3](#d3-nodejs-example-async-p2p-write--poll) / [Automation REST](#automation-rest-same-scopes-forwarder) — still need scopes + Forwarder.
+
+#### E4. Smoke-test both keys
+
+```bash
+# DeepSeek model alive
+curl -sS https://api.deepseek.com/chat/completions \
+  -H "Authorization: Bearer $DEEPSEEK_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-flash","messages":[{"role":"user","content":"ping"}],"max_tokens":16}'
+
+# Achylo MCP tools list
+curl -sS https://api.achylo.com/mcp \
+  -H "X-API-Key: $ACHYLO_API_KEY" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+| Symptom | Fix |
+|---------|-----|
+| Claude Code talks but no Achylo tools | `claude mcp get achylo` — missing MCP add / wrong `ACHYLO_API_KEY` |
+| `401` from Achylo | Bad/revoked Achylo key |
+| `403 SCOPE_DENIED` | Bind key to an agent and enable the scope |
+| DeepSeek auth errors in Claude Code | Check `ANTHROPIC_BASE_URL` + `ANTHROPIC_AUTH_TOKEN` = DeepSeek `sk-…` |
+| Model invents Achylo data | Force a tool call: *“Call Achylo `list_fiat_currencies`”* |
+
+More DeepSeek host recipes: [Agent Integrations](https://api-docs.deepseek.com/quick_start/agent_integrations/).
+
+---
+
 ### Smoke test with curl
 
-Streamable HTTP requires this `Accept` header (Cursor/Claude set it for you):
+Streamable HTTP requires this `Accept` header (Cursor/Claude/DeepSeek hosts set it for you):
 
 ```bash
 curl -sS https://api.achylo.com/mcp \
