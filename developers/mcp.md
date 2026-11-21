@@ -628,16 +628,195 @@ Prefer OAuth when the host should not store a long-lived API key (e.g. team lapt
 | :--- | :--- |
 | Authorization Server metadata | `GET https://api.achylo.com/.well-known/oauth-authorization-server` |
 | Protected resource (MCP) | `GET https://api.achylo.com/.well-known/oauth-protected-resource` |
+| Also under MCP path | `GET https://api.achylo.com/mcp/.well-known/oauth-protected-resource` |
 
 Flow:
 
 1. **DCR** — `POST /oauth/register` with `redirect_uris` → `client_id` (public client)
 2. **Authorize** — `GET /oauth/authorize?…&code_challenge=…&code_challenge_method=S256` → Achylo **`/oauth/consent`**
-3. **Consent** — sign in, pick an **API Agent**, approve overlapping scopes → `code`
-4. **Token** — `POST /oauth/token` → short-lived AT + refresh token
+3. **Consent** — sign in (wallet JWT), pick an **API Agent**, approve overlapping scopes → `code`
+4. **Token** — `POST /oauth/token` → short-lived AT (~15m) + refresh token
 5. **MCP** — `Authorization: Bearer <access_token>`
 
 Scopes on the grant are **request ∩ agent scopes**. Disabled agent / revoked grant → `401`.
+
+### How to test OAuth
+
+**Before any path:** create an **API Agent** in Profile → Developer with at least read scopes (`fiat:read`, `oracle:read`, …). You do **not** need a bound API key for OAuth — consent binds the grant to the agent you pick.
+
+#### Path A — Cursor / Claude (easiest)
+
+1. MCP config with **no** `X-API-Key` header:
+
+```json
+{
+  "mcpServers": {
+    "achylo": {
+      "url": "https://api.achylo.com/mcp"
+    }
+  }
+}
+```
+
+2. Restart the host. On first tool call it should discover OAuth (RFC 9728), open a browser, and land on `https://achylo.com/oauth/consent`.
+3. Connect wallet → pick agent → Approve.
+4. Host stores AT/RT and calls MCP with `Authorization: Bearer …`.
+5. Ask: *“Use Achylo: list fiat currencies”*.
+
+If the host never opens a browser, it may not support remote OAuth yet — use Path B or fall back to API key headers.
+
+#### Path B — Manual curl (PKCE end-to-end)
+
+Use this to verify the AS without an IDE. Needs a local redirect catcher and a wallet session JWT for the consent `POST` (or complete consent in the browser UI).
+
+```bash
+export BASE='https://api.achylo.com'
+export REDIRECT='http://127.0.0.1:8765/callback'
+```
+
+**1. Discovery**
+
+```bash
+curl -sS "$BASE/.well-known/oauth-authorization-server" | jq .
+curl -sS "$BASE/.well-known/oauth-protected-resource" | jq .
+```
+
+Expect `authorization_endpoint`, `token_endpoint`, `registration_endpoint`, and `code_challenge_methods_supported: ["S256"]`.
+
+**2. Dynamic Client Registration**
+
+```bash
+curl -sS -X POST "$BASE/oauth/register" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"client_name\": \"Achylo OAuth smoke test\",
+    \"redirect_uris\": [\"$REDIRECT\"],
+    \"token_endpoint_auth_method\": \"none\"
+  }" | tee /tmp/achylo-oauth-client.json
+
+export CLIENT_ID=$(jq -r .client_id /tmp/achylo-oauth-client.json)
+echo "CLIENT_ID=$CLIENT_ID"
+```
+
+**3. PKCE + authorize URL**
+
+```bash
+# code_verifier (43–128 chars) + S256 challenge
+export CODE_VERIFIER=$(openssl rand -base64 32 | tr -d '=+/' | cut -c1-64)
+export CODE_CHALLENGE=$(printf '%s' "$CODE_VERIFIER" | openssl dgst -binary -sha256 | openssl base64 -A | tr '+/' '-_' | tr -d '=')
+export STATE=$(openssl rand -hex 8)
+
+# optional: start a tiny catcher in another terminal
+# python3 -m http.server 8765   # then watch the browser address bar for ?code=
+
+open "$(python3 - <<'PY'
+import os, urllib.parse
+q = urllib.parse.urlencode({
+  "response_type": "code",
+  "client_id": os.environ["CLIENT_ID"],
+  "redirect_uri": os.environ["REDIRECT"],
+  "scope": "fiat:read oracle:read payment_links:read",
+  "state": os.environ["STATE"],
+  "code_challenge": os.environ["CODE_CHALLENGE"],
+  "code_challenge_method": "S256",
+})
+print(f"{os.environ['BASE']}/oauth/authorize?{q}")
+PY
+)"
+```
+
+Browser flow: `/oauth/authorize` → redirect to `https://achylo.com/oauth/consent?…` → wallet login → select agent → Approve → redirect to `$REDIRECT?code=…&state=…`.
+
+```bash
+export AUTH_CODE='paste_code_from_redirect_here'
+```
+
+**4. Exchange code → tokens**
+
+```bash
+curl -sS -X POST "$BASE/oauth/token" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"grant_type\": \"authorization_code\",
+    \"code\": \"$AUTH_CODE\",
+    \"redirect_uri\": \"$REDIRECT\",
+    \"client_id\": \"$CLIENT_ID\",
+    \"code_verifier\": \"$CODE_VERIFIER\"
+  }" | tee /tmp/achylo-oauth-token.json
+
+export ACCESS_TOKEN=$(jq -r .access_token /tmp/achylo-oauth-token.json)
+export REFRESH_TOKEN=$(jq -r .refresh_token /tmp/achylo-oauth-token.json)
+```
+
+**5. Call MCP with the access token**
+
+```bash
+curl -sS -X POST "$BASE/mcp" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+Also works against REST with the same Bearer:
+
+```bash
+curl -sS "$BASE/api/v1/market/fiat-currencies" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**6. Refresh (optional)**
+
+```bash
+curl -sS -X POST "$BASE/oauth/token" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"grant_type\": \"refresh_token\",
+    \"refresh_token\": \"$REFRESH_TOKEN\",
+    \"client_id\": \"$CLIENT_ID\"
+  }" | jq .
+```
+
+**7. Revoke (optional)**
+
+```bash
+curl -sS -X POST "$BASE/oauth/revoke" \
+  -H "Content-Type: application/json" \
+  -d "{\"token\": \"$REFRESH_TOKEN\"}"
+```
+
+| Symptom | Likely cause |
+|---------|----------------|
+| `invalid_redirect_uri` | URI not in DCR `redirect_uris` (exact match) |
+| `PKCE verification failed` | Wrong `code_verifier` / not S256 |
+| Consent: no overlapping scopes | Agent missing the requested scopes |
+| MCP `401` with AT | Token expired (~15m) — refresh; or agent disabled |
+| Host never prompts OAuth | Config still has `X-API-Key`, or host lacks remote OAuth |
+| Cursor: `Transient error` / `auth=unknown` / empty `Connection failed` | OAuth discovery blocked or incomplete. Need **200** on `/.well-known/oauth-protected-resource` **and** `…/oauth-protected-resource/mcp`, plus `/oauth/register` → **201**. Fully quit Cursor after nginx/API deploy. Until green, use API key headers. |
+
+**Cursor log pattern (OAuth infra down):**
+
+```text
+connecting streamableHttp for "achylo"
+MCP HTTP exchange completed   (× several — 401 without usable metadata)
+Transient error connecting to streamableHttp server:
+Connection failed:
+auth=unknown → conn=failed
+```
+
+Check:
+
+```bash
+curl -sS -o /dev/null -w "%{http_code}\n" https://api.achylo.com/.well-known/oauth-authorization-server
+# Expect 200 — 403 means nginx `location ~ /\.` is denying well-known
+
+curl -sS -o /dev/null -w "%{http_code}\n" -X POST https://api.achylo.com/oauth/register \
+  -H "Content-Type: application/json" \
+  -d '{"client_name":"probe","redirect_uris":["http://127.0.0.1:8765/callback"]}'
+# Expect 201 — 404 not_found means /oauth is not proxied to the API
+```
+
+Unauthenticated MCP should return `401` + `WWW-Authenticate` pointing at protected-resource metadata — that is what triggers hosts to start OAuth. The metadata URL itself must be reachable.
 
 ---
 
