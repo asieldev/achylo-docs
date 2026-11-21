@@ -132,7 +132,7 @@ For programmatic integrations, always use **API Keys**.
 
 ## Next steps
 
-- [API Keys →](/developers/api-keys)
+- [API Keys →](/developers/api-keys) — full endpoint map + curl examples for every route an API Key can call
 - [Achylo MCP →](/developers/mcp) — MCP + P2P automation (scopes, Forwarder, REST curls)
 - [Payment Links API Reference →](/developers/payment-links)
 - [Webhook Events & Verification →](/developers/webhooks)

@@ -33,7 +33,7 @@ Achylo is a Web3 platform with these core superpowers:
 * **API Base URL (production):** `https://api.achylo.com`
 * **Programmatic collections:** Create USDC payment links on Base and share them with your customers.
 * **No customer wallet required:** The payer only needs a Base-compatible wallet.
-* **Flexible authentication:** Use your session JWT or an API Key to create links from your backend.
+* **Flexible authentication:** Use your session JWT or an API Key to create links from your backend. Full API Key endpoint map + curls: [API Keys](/developers/api-keys).
 * **Configurable expiration:** Set the link lifetime (default 24 h).
 * **Custom reference:** Include your own order ID for reconciliation.
 
