@@ -931,17 +931,62 @@
 
   /* ---------- TOC ---------- */
 
+  /** Docsify may prefix digit-leading ids with `_` and collapse `—` to a single `-`. */
+  function headingIdCandidates(raw) {
+    const id = decodeURIComponent(String(raw || '').replace(/^#/, '')).trim();
+    if (!id) return [];
+    const out = [];
+    const push = (v) => {
+      if (v && !out.includes(v)) out.push(v);
+    };
+    push(id);
+    push(id.replace(/--+/g, '-'));
+    if (/^[0-9]/.test(id)) push(`_${id}`);
+    if (/^[0-9]/.test(id.replace(/--+/g, '-'))) push(`_${id.replace(/--+/g, '-')}`);
+    // Legacy mistaken links: 2--enable-… → _2-enable-…
+    const collapsed = id.replace(/--+/g, '-');
+    if (/^\d/.test(collapsed)) push(`_${collapsed}`);
+    return out;
+  }
+
+  function findHeadingEl(rawId) {
+    for (const id of headingIdCandidates(rawId)) {
+      const el = document.getElementById(id);
+      if (el) return el;
+    }
+    return null;
+  }
+
   function scrollToHeadingId(id) {
     if (!id) return false;
-    const el = document.getElementById(id);
+    const el = findHeadingEl(id);
     if (!el) return false;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     // Keep current Docsify path; bare "#id" would navigate to "/#id" and hang on Loading
-    const next = `${location.pathname}${location.search}#${id}`;
+    const canonical = el.id;
+    const params = new URLSearchParams(location.search);
+    if (params.has('id')) params.set('id', canonical);
+    const qs = params.toString();
+    const next = `${location.pathname}${qs ? `?${qs}` : ''}#${canonical}`;
     if (location.pathname + location.search + location.hash !== next) {
       history.replaceState(history.state, '', next);
     }
     return true;
+  }
+
+  /** Honor Docsify `?id=` / `#hash` deep links after render. */
+  function scrollToDeepLink() {
+    const params = new URLSearchParams(location.search);
+    const fromQuery = params.get('id');
+    const fromHash = location.hash ? location.hash.slice(1) : '';
+    const target = fromQuery || fromHash;
+    if (!target) return;
+    // Wait a tick for layout / images
+    requestAnimationFrame(() => {
+      if (!scrollToHeadingId(target)) {
+        setTimeout(() => scrollToHeadingId(target), 200);
+      }
+    });
   }
 
   function bindInPageHashLinks(root) {
@@ -952,9 +997,8 @@
       if (!a) return;
       const href = a.getAttribute('href') || '';
       if (!href.startsWith('#') || href === '#') return;
-      // Only same-page section anchors
       const id = decodeURIComponent(href.slice(1));
-      if (!document.getElementById(id)) return;
+      // Always stop Docsify history from treating "#id" as route "/#id" (infinite Loading)
       e.preventDefault();
       e.stopPropagation();
       scrollToHeadingId(id);
@@ -1277,6 +1321,7 @@
     enhancePager(section);
     enhanceSidebarGroups();
     enhanceSidebarDeprecations();
+    scrollToDeepLink();
 
     // Close mobile nav on route change
     document.body.classList.remove('docs-nav-open');

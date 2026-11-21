@@ -29,11 +29,11 @@ You  →  Cursor / Claude / your server  →  https://api.achylo.com/mcp
 You need **two things** before any host works:
 
 1. An **API Agent + bound key** from the Achylo dashboard (steps below).
-2. For P2P **money** actions (create/accept/release/…): **on-chain Forwarder** permissions activated in the same profile (see [Enable on-chain Forwarder](#2--enable-on-chain-forwarder-actions)).
+2. For P2P **money** actions (create/accept/release/…): **on-chain Forwarder** permissions activated in the same profile (see [Enable on-chain Forwarder](#enable-on-chain-forwarder-actions)).
 
 If you only want to **read** prices / orders / payment links, scopes on the agent are enough — you can skip Forwarder until you need writes that move USDC.
 
-### Step 1 — Create the API key in Achylo (5 minutes)
+### Step 1: Create the API key in Achylo (5 minutes)
 
 1. Go to [achylo.com](https://achylo.com) and connect your wallet.
 2. Open **User Profile → Developer / Agents**.
@@ -48,19 +48,19 @@ export ACHYLO_API_KEY='achylo_your_key_here'
 
 > **Junior tip:** An unbound / legacy key can **read** but **cannot write**. For MCP writes, the key must be **bound** to an agent that has the write scopes.
 
-### Step 2 — Pick how you will connect
+### Step 2: Pick how you will connect
 
 | I want to… | Use this |
 |------------|----------|
-| Chat in **Cursor** and call Achylo tools | [A — Cursor](#a--connect-from-cursor) |
-| Use **Claude Code** in the terminal | [B — Claude Code](#b--connect-from-claude-code) |
-| Use **Claude Desktop / claude.ai** connectors | [C — Claude Desktop](#c--claude-desktop--claudeai) |
-| Call Achylo from **my Node/Python server** with the API key | [D — Your server (API key)](#d--use-the-api-key-from-your-own-server) |
+| Chat in **Cursor** and call Achylo tools | [A. Cursor](#a-connect-from-cursor) |
+| Use **Claude Code** in the terminal | [B. Claude Code](#b-connect-from-claude-code) |
+| Use **Claude Desktop / claude.ai** connectors | [C. Claude Desktop](#c-claude-desktop-claudeai) |
+| Call Achylo from **my Node/Python server** with the API key | [D. Your server (API key)](#d-use-the-api-key-from-your-own-server) |
 | Avoid storing a long-lived key in the IDE | [OAuth](#oauth-21-mcp-hosts) (browser consent) |
 
 ---
 
-### A — Connect from Cursor
+### A. Connect from Cursor
 
 1. Create a config file (pick one):
    - **This project only:** `.cursor/mcp.json` in the repo root  
@@ -90,7 +90,7 @@ If the host supports OAuth instead of a static header, you can omit `headers` an
 
 ---
 
-### B — Connect from Claude Code
+### B. Connect from Claude Code
 
 Claude Code needs an explicit `"type": "http"` for remote servers.
 
@@ -127,7 +127,7 @@ Ask Claude Code something like: *“Call Achylo `list_fiat_currencies`”*.
 
 ---
 
-### C — Claude Desktop / claude.ai
+### C. Claude Desktop / claude.ai
 
 Remote MCP is added as a **custom connector** (not by pasting a Cursor-style block into `claude_desktop_config.json` — that file is for **local** stdio servers).
 
@@ -147,7 +147,7 @@ Otherwise use **OAuth** when prompted (Achylo publishes RFC 9728 metadata on the
 
 ---
 
-### D — Use the API key from your own server
+### D. Use the API key from your own server
 
 You do **not** need Cursor or Claude for this path. Your backend talks to Achylo like any HTTPS API.
 
@@ -156,7 +156,7 @@ You do **not** need Cursor or Claude for this path. Your backend talks to Achylo
 - MCP hosts speak the MCP protocol to `/mcp`.
 - Your server can call the **same capabilities** over REST with the same API key (simpler for juniors writing a bot).
 
-#### D1 — Smoke-test the key with curl
+#### D1. Smoke-test the key with curl
 
 ```bash
 export ACHYLO_API_KEY='achylo_your_key_here'
@@ -169,7 +169,7 @@ curl -sS "$BASE/api/v1/market/fiat-currencies" \
 
 If you get `401`, the key is wrong/revoked. If you get `403 SCOPE_DENIED`, edit the agent scopes in the dashboard and try again.
 
-#### D2 — Node.js example (read)
+#### D2. Node.js example (read)
 
 ```javascript
 const ACHYLO_API_KEY = process.env.ACHYLO_API_KEY;
@@ -186,7 +186,7 @@ async function listFiat() {
 listFiat().then(console.log).catch(console.error);
 ```
 
-#### D3 — Node.js example (async P2P write + poll)
+#### D3. Node.js example (async P2P write + poll)
 
 Writes return `202` with an operation id. You must poll until `success` / `failed` / `unknown`. You also need the matching **scope** + **Forwarder** grant.
 
@@ -219,9 +219,9 @@ async function acceptOrder(orderId, amount, takerPaymentMethodId) {
 }
 ```
 
-Full REST catalog (create / update / release / reclaim / …) is in [Automation REST](#automation-rest-same-scopes--forwarder) below.
+Full REST catalog (create / update / release / reclaim / …) is in [Automation REST](#automation-rest-same-scopes-forwarder) below.
 
-#### D4 — OpenAI Agents / custom orchestration
+#### D4. OpenAI Agents / custom orchestration
 
 If you build an OpenAI (or any) agent that should “use Achylo”:
 
@@ -232,6 +232,20 @@ If you build an OpenAI (or any) agent that should “use Achylo”:
 The model should never see the raw key.
 
 ---
+
+### Smoke test with curl
+
+Streamable HTTP requires this `Accept` header (Cursor/Claude set it for you):
+
+```bash
+curl -sS https://api.achylo.com/mcp \
+  -H "X-API-Key: $ACHYLO_API_KEY" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+Without `text/event-stream` you get `Not Acceptable: Client must accept both application/json and text/event-stream`.
 
 ### Quick checklist after connecting
 
@@ -247,9 +261,9 @@ The model should never see the raw key.
 
 Agent configuration is **UI-only** (wallet session). You do not call an Agents REST API from your app.
 
-### 1 — API Agent + bound key
+### API Agent + bound key
 
-Same as [Step 1](#step-1--create-the-api-key-in-achylo-5-minutes). Toggle scopes carefully; optional policy: `maxAmountUsdc` / `dailyCapUsdc`.
+Same as [Step 1](#step-1-create-the-api-key-in-achylo-5-minutes). Toggle scopes carefully; optional policy: `maxAmountUsdc` / `dailyCapUsdc`.
 
 **Legacy unbound keys** keep full **read** access but **cannot write**. Prefer a bound key for MCP.
 
@@ -274,7 +288,11 @@ Same as [Step 1](#step-1--create-the-api-key-in-achylo-5-minutes). Toggle scopes
 
 Missing scope → `403` `SCOPE_DENIED`. Amount-bearing writes also respect agent policy (`403 POLICY_DENIED`). On-chain Forwarder `maxAmount` is a separate ceiling.
 
-### 2 — Enable on-chain Forwarder actions
+### Enable on-chain Forwarder actions
+
+<!-- Legacy Docsify ids (digit-leading / em-dash slugs) -->
+<a id="_2-enable-on-chain-forwarder-actions"></a>
+<a id="2--enable-on-chain-forwarder-actions"></a>
 
 Same profile section, panel **On-chain Forwarder actions** (independent of off-chain scopes).
 
